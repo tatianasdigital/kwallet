@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kampela — 3D model test</title>
+    <link rel="icon" href="/assets/logo-symbol.svg" type="image/svg+xml" />
+  </head>
+  <body class="model-test">
+    <main class="mt-stage" id="stage" aria-label="Kampela 3D model"></main>
+
+    <aside class="mt-panel" aria-label="Test controls">
+      <p class="mt-title">Kampela 3D · test</p>
+
+      <fieldset class="mt-group">
+        <legend>View</legend>
+        <button type="button" data-angle="0">Front</button>
+        <button type="button" data-angle="90">Side</button>
+        <button type="button" data-angle="180">Back</button>
+        <button type="button" data-angle="270">Side 2</button>
+      </fieldset>
+
+      <label class="mt-row">Speed <output id="speed-out">0.45</output>
+        <input id="speed" type="range" min="0" max="2" step="0.05" value="0.45" />
+      </label>
+      <label class="mt-row">Tilt <output id="tilt-out">25°</output>
+        <input id="tilt" type="range" min="-45" max="45" step="0.5" value="25" />
+      </label>
+
+      <fieldset class="mt-group">
+        <legend>Background</legend>
+        <button type="button" data-bg="#050505" aria-pressed="true">Site black</button>
+        <button type="button" data-bg="#e6e6e4">Light</button>
+        <button type="button" data-bg="#028465">Green</button>
+      </fieldset>
+
+      <label class="mt-check"><input id="card" type="checkbox" checked /> Antenna card in window</label>
+      <button type="button" id="pause" class="mt-wide">Pause</button>
+      <p class="mt-hint">Drag the model to spin it. <span id="fps"></span></p>
+    </aside>
+
+    <script type="module" src="/src/kampela-3d/model-test.js"></script>
+  </body>
+</html>

@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kampela — Cold-Pressed Signing</title>
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="description" content="Kampela is a flat, transparent hardware wallet with no bluetooth, no wi-fi, no battery and no ports." />
+    <link rel="icon" href="/assets/logo-symbol.svg" type="image/svg+xml" />
+    <!-- styles in the <head>: the page is painted styled from the start (no white flash) -->
+    <style>html{background:#050505;color:#fff}</style>
+    <link rel="stylesheet" href="/src/vendor.css" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="stylesheet" href="/src/mobile.css" />
+    <!-- hero device: frame 1 of the 3D turn (src/kampela-3d); the other frames load after the page -->
+    <link rel="preload" as="image" href="/models/kampela-turn/720/kampela_0001.webp" imagesrcset="/models/kampela-turn/720/kampela_0001.webp 1x, /models/kampela-turn/1080/kampela_0001.webp 2x" fetchpriority="high" />
+    <!-- hero entrance (src/hero-intro.js): keep the hero pieces hidden until their start
+         positions are set; never longer than 8 s -->
+    <script>
+      (function () {
+        try {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          var r = document.documentElement;
+          r.classList.add('hero-intro-pending');
+          setTimeout(function () { r.classList.remove('hero-intro-pending'); }, 8000);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Film grain behind the page content: textures only the dark background (see styles.css) -->
+    <div class="grain" aria-hidden="true"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div>
+    <main class="page">
+      <!-- ============================ HERO ============================ -->
+      <section class="hero-section" id="top">
+        <header class="site-header">
+          <div class="header-backdrop" aria-hidden="true"><div class="grain"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div></div>
+          <div class="header-container">
+            <div class="header-brand-and-navigation">
+              <a class="kampela-logo" href="#top" aria-label="Kampela — home">
+                <img class="logo-symbol" src="/assets/logo-symbol.svg" alt="" width="54" height="43" />
+                <img class="logo-wordmark" src="/assets/logo-wordmark.svg" alt="Kampela" width="133" height="29" />
+              </a>
+              <nav class="primary-navigation" aria-label="Primary">
+                <a href="/faq/">[ FAQ ]</a>
+                <a href="/delivery/">[ DELIVERY ]</a>
+                <a href="/about/">[ About us ]</a>
+                <a href="/contact/">[ Contact ]</a>
+              </nav>
+            </div>
+            <div class="header-social-and-cta">
+              <div class="social-links">
+                <a class="ext-link" href="https://twitter.com/kampela_signer" target="_blank" rel="noopener noreferrer">Twitter<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+                <a class="ext-link" href="https://matrix.to/#/%23Kampela:matrix.zymologia.fi" target="_blank" rel="noopener noreferrer">Matrix<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+                <a class="ext-link" href="https://github.com/Kalapaja" target="_blank" rel="noopener noreferrer">Github<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+              </div>
+              <a class="btn btn--green" href="#">order the devkit<img src="/assets/icon-arrow-right-white.svg" alt="" width="20" height="20" /></a>
+            </div>
+            <!-- mobile header (Figma 2859:6624): short order button + menu (src/mobile.js) -->
+            <div class="m-header-actions m-only">
+              <a class="btn btn--green m-order-btn" href="#">order<img src="/assets/icon-arrow-right-white.svg" alt="" width="20" height="20" /></a>
+              <button class="m-menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="m-menu"><i></i><i></i><i></i><i></i></button>
+            </div>
+          </div>
+          <nav class="m-menu m-only" id="m-menu" aria-label="Menu" hidden>
+            <div class="m-menu-links">
+              <a href="/faq/">[ FAQ ]</a>
+              <a href="/delivery/">[ DELIVERY ]</a>
+              <a href="/about/">[ ABOUT US ]</a>
+              <a href="/contact/">[ CONTACT ]</a>
+            </div>
+            <div class="m-menu-social">
+              <a class="ext-link" href="https://twitter.com/kampela_signer" target="_blank" rel="noopener noreferrer">Twitter<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+              <a class="ext-link" href="https://matrix.to/#/%23Kampela:matrix.zymologia.fi" target="_blank" rel="noopener noreferrer">Matrix<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+              <a class="ext-link" href="https://github.com/Kalapaja" target="_blank" rel="noopener noreferrer">Github<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            </div>
+          </nav>
+        </header>
+
+        <div class="hero-content">
+          <div class="hero-container">
+            <h1 class="hero-brand-heading">
+              <span class="visually-hidden">Kampela — Cold-Pressed Signing</span>
+              <span class="hero-tagline" aria-hidden="true">
+                <span class="tagline-text">Cold-Pressed<br />Signing</span>
+                <img class="tagline-stripe" src="/assets/tagline-stripe-decoration.svg" alt="" />
+              </span>
+              <span class="kampela-hero-wordmark" aria-hidden="true">
+                <img style="--x: 0" src="/assets/hero-letter-k.png" alt="" data-w="176.943" />
+                <img style="--x: 192.06" src="/assets/hero-letter-a1.png" alt="" data-w="203.118" />
+                <img style="--x: 408.19" src="/assets/hero-letter-m.png" alt="" data-w="198.232" />
+                <img style="--x: 639.34" src="/assets/hero-letter-p.png" alt="" data-w="170.312" />
+                <img style="--x: 856.52" src="/assets/hero-letter-e.png" alt="" data-w="158.446" />
+                <img style="--x: 1070.22" src="/assets/hero-letter-l.png" alt="" data-w="157.05" />
+                <img style="--x: 1260.53" src="/assets/hero-letter-a2.png" alt="" data-w="203.118" />
+              </span>
+            </h1>
+            <img class="decorative-star-top" src="/assets/star-hero-top.svg" alt="" aria-hidden="true" />
+            <img class="decorative-star-right" src="/assets/star-hero-right.svg" alt="" aria-hidden="true" />
+            <img class="decorative-star-left" src="/assets/star-hero-left.svg" alt="" aria-hidden="true" />
+            <!-- two more twinkling stars (Figma 2855:6510, 2855:6512): same star and stop-motion as decorative-star-left -->
+            <img class="decorative-star-left decorative-star-far-left" src="/assets/star-hero-left.svg" alt="" aria-hidden="true" />
+            <img class="decorative-star-left decorative-star-far-right" src="/assets/star-hero-left.svg" alt="" aria-hidden="true" />
+            <div class="hero-actions">
+              <a class="btn btn--white" href="#about">Explore Kampela<img src="/assets/icon-arrow-right-dark.svg" alt="" width="20" height="20" /></a>
+              <a class="text-link" href="#pricing">Buy from 153 USDT</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-benefits-marquee" aria-label="No bluetooth, no wi-fi, no battery, no ports">
+          <div class="marquee-content" aria-hidden="true">
+            <!-- filled by main.js: two identical halves for a seamless loop -->
+            <div class="marquee-track" data-marquee-items="no bluetooth|no wi-fi|no battery|no ports"></div>
+          </div>
+        </div>
+
+        <!--
+          The device travels from the hero to the flat-design scene.
+          It is position: sticky inside a tall track (height computed in CSS),
+          so it stays put in the viewport while the page scrolls underneath,
+          and the opaque flat-design scene (higher z-index) slides over it.
+        -->
+        <div class="hero-device-track">
+          <div class="hero-device-visual">
+            <div class="hero-device-clip">
+              <div class="hero-device-tilt">
+                <div class="device-rotator">
+                  <img src="/models/kampela-turn/720/kampela_0001.webp" srcset="/models/kampela-turn/720/kampela_0001.webp 1x, /models/kampela-turn/1080/kampela_0001.webp 2x" alt="Kampela device with transparent case and visible circuit board" width="720" height="900" fetchpriority="high" decoding="async" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ ABOUT ============================ -->
+      <section class="about-section" id="about">
+        <!-- decorative-orbit-container (Figma 2792:3748): one ribbon, inlined so it can stream like the ones in device-benefits (src/about-ribbon.js) -->
+        <svg class="about-orbit" aria-hidden="true" focusable="false" overflow="visible" width="1320" height="696" viewBox="0 0 1320 696" fill="none" xmlns="http://www.w3.org/2000/svg"> <g> <path class="orbit-path" d="M162.999 296.48C117.869 300.922 66.3926 305.208 32.0201 307.958C25.1749 308.505 24.2123 319.028 30.8285 320.867C71.1301 332.071 137.348 352.435 197.999 380C293.585 423.442 303.195 332.797 416.899 358.164C530.603 383.53 479.308 458.803 626.153 515.402C772.999 572 1185 466 1185 466L1216 65C1216 65 747.517 296.48 591.999 296.48C436.481 296.48 401.322 230.334 321.999 242C242.676 253.666 238.999 289 162.999 296.48Z" fill="#161616"/> </g> </svg>
+        <img class="about-star-cluster" src="/assets/star-cluster-about.svg" alt="" aria-hidden="true" />
+        <img class="about-star-bottom" src="/assets/star-grey.svg" alt="" aria-hidden="true" />
+        <img class="about-star-top" src="/assets/star-grey.svg" alt="" aria-hidden="true" />
+        <img class="about-planet" src="/assets/about-planet.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+        <div class="about-content">
+          <h2 class="about-heading">Kampela took what other people were doing and squished out all the bullshit.</h2>
+          <ul class="connectivity-benefits-list">
+            <li><img src="/assets/check-icon.svg" alt="" />No bluetooth</li>
+            <li><img src="/assets/check-icon.svg" alt="" />No battery</li>
+            <li><img src="/assets/check-icon.svg" alt="" />No ports</li>
+            <li><img src="/assets/check-icon.svg" alt="" />No wifi</li>
+          </ul>
+        </div>
+        <!-- mobile only (Figma 2859:6868): the device comes in from the right, stays in the
+             middle of the screen (sticky in its track) and dives into the water (src/water-dive.js) -->
+        <div class="m-about-device-track m-only" aria-hidden="true">
+          <div class="m-about-device">
+            <div class="hero-device-clip">
+              <div class="hero-device-tilt">
+                <div class="m-about-device-enter">
+                  <img src="/models/kampela-turn/720/kampela_0001.webp" srcset="/models/kampela-turn/720/kampela_0001.webp 1x, /models/kampela-turn/1080/kampela_0001.webp 2x" alt="" width="720" height="900" loading="lazy" decoding="async" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- flat-design-section stays in place (sticky) while demo-video-section slides up over it;
+           the wrapper ends with the video section, so the stickiness ends there too. -->
+      <div class="flat-demo-stack">
+      <!-- ========================= FLAT DESIGN ========================= -->
+      <section class="flat-design-section" aria-labelledby="flat-heading">
+        <div class="flat-design-scene">
+          <div class="flat-design-scene-container">
+            <!-- New Figma (2774:5372): no background artwork and no stars any more -->
+            <!-- FishGroup1–4 (Figma 2774:5372): small fish that slowly swim left → right (src/flat-sea.js) -->
+            <div class="fish-group" data-group="3" data-left="1411" data-width="457.716" aria-hidden="true">
+              <div class="sea-fish" style="--x:1706.93;--y:125.97;--w:161.389;--h:85.153;--r:178.24deg;--iw:159;--ih:80.314;--il:0.28%;--iw2:1.57%;--ih2:2.33%"><span class="sea-fish-box"><img src="/assets/sea-fish-3a.svg" alt="" /></span></div>
+              <div class="sea-fish" style="--x:1578.6;--y:164.14;--w:121.2;--h:63.948;--r:178.24deg;--iw:119.406;--ih:60.314;--il:0.37%;--iw2:2.09%;--ih2:3.1%"><span class="sea-fish-box"><img src="/assets/sea-fish-3b.svg" alt="" /></span></div>
+              <div class="sea-fish" style="--x:1412.82;--y:82.57;--w:127.104;--h:77.549;--r:-171.37deg;--iw:119.405;--ih:60.314;--il:0.37%;--iw2:2.08%;--ih2:3.1%"><span class="sea-fish-box"><img src="/assets/sea-fish-3c.svg" alt="" /></span></div>
+            </div>
+            <div class="fish-group" data-group="1" data-left="86" data-width="469.96" aria-hidden="true">
+              <div class="sea-fish" style="--x:374.83;--y:100.69;--w:180.134;--h:95.043;--r:178.24deg;--iw:177.469;--ih:89.642;--il:0.25%;--iw2:1.4%;--ih2:2.08%"><span class="sea-fish-box"><img src="/assets/sea-fish-1a.svg" alt="" /></span></div>
+              <div class="sea-fish" style="--x:254.43;--y:167.83;--w:121.199;--h:63.948;--r:178.24deg;--iw:119.405;--ih:60.314;--il:0.37%;--iw2:2.08%;--ih2:3.1%"><span class="sea-fish-box"><img src="/assets/sea-fish-1b.svg" alt="" /></span></div>
+              <div class="sea-fish" style="--x:289.83;--y:48.69;--w:142.562;--h:75.218;--r:178.24deg;--iw:140.452;--ih:70.943;--il:0.31%;--iw2:1.77%;--ih2:2.63%"><span class="sea-fish-box"><img src="/assets/sea-fish-1c.svg" alt="" /></span></div>
+              <div class="sea-fish" style="--x:88.66;--y:86.26;--w:127.104;--h:77.549;--r:-171.37deg;--iw:119.405;--ih:60.314;--il:0.37%;--iw2:2.08%;--ih2:3.1%"><span class="sea-fish-box"><img src="/assets/sea-fish-1d.svg" alt="" /></span></div>
+            </div>
+            <div class="fish-group" data-group="2" data-left="1098" data-width="119.667" aria-hidden="true">
+              <div class="sea-fish" style="--x:1098;--y:-4;--w:119.667;--h:60.834;--r:-179.75deg;--iw:119.405;--ih:60.314;--il:0.37%;--iw2:2.08%;--ih2:3.1%"><span class="sea-fish-box"><img src="/assets/sea-fish-2.svg" alt="" /></span></div>
+            </div>
+            <div class="fish-group" data-group="4" data-left="752" data-width="119.669" aria-hidden="true">
+              <div class="sea-fish sea-fish--bottom" style="--x:752;--y:922;--w:119.669;--h:60.834;--r:-179.75deg;--iw:119.407;--ih:60.314;--il:0.37%;--iw2:2.08%;--ih2:3.1%"><span class="sea-fish-box"><img src="/assets/sea-fish-4.svg" alt="" /></span></div>
+            </div>
+            <!-- seaweed1–3: every blade is its own path and sways on its own in stop-motion (src/flat-sea.js) -->
+            <div class="seaweed seaweed--1" style="--x:-303.97;--w:603.08;--h:597.12;--b:-84.1;--bw:457;--bh:444.5;--tf:rotate(-154.71deg) scaleY(-1)" aria-hidden="true"><div class="seaweed-box"><svg class="seaweed-svg" aria-hidden="true" focusable="false" width="457" height="444.5" viewBox="0 0 457 444.5" fill="none" xmlns="http://www.w3.org/2000/svg"> <g> <path class="sw-blade" d="M29.5 129C28 118.5 33.3221 110.466 33.5 104C33.6779 97.5345 31.6177 90.1903 19.9801 75.0263C8.34245 59.8623 0 50 0 50C0 50 9.88921 53.7429 19.5 63.5C29.1108 73.2571 40.7797 89.6656 47.2797 95.6656C53.7797 101.666 59.5 105.5 63 118.5C66.5 131.5 58 130.5 58 144C58 157.5 66.5 161.5 66.5 172.5C66.5 183.5 58 190.5 58 201C58 211.5 66.5 217.5 66.5 230.5C66.5 243.5 66 248.5 55 257C44 265.5 63 265.5 66.5 280.5C70 295.5 59.5 299 60.5 307C61.5 315 79 307.5 83.5 317C88 326.5 77.5 337 80.5 347.5C83.5 358 90 348.5 97.5 363C105 377.5 97.5 387.5 97.5 397C97.5 406.5 110.5 414.5 110.5 414.5L80.5 444.5C80.5 444.5 75.5 410.5 66.5 393.5C57.5 376.5 39 376 36.5 354C34 332 44.5 329 42 317C39.5 305 29.5 304 25.5 287.5C21.5 271 33.5 269 33.5 257C33.5 245 22.5 237 25.5 223.5C28.5 210 44.5 213.5 47.5 201C50.5 188.5 33.5 181.5 33.5 165.5C33.5 149.5 47.5 156.5 47.5 147.5C47.5 138.5 31 139.5 29.5 129Z" fill="#00664E"/> <path class="sw-blade" d="M333.5 286.5C325.5 293 311.5 289 302.5 293C293.5 297 281.5 320.5 281.5 320.5C281.5 320.5 311 320.5 329 307.5C347 294.5 338 297.5 344 293C350 288.5 359 296 366.5 286.5C374 277 372.5 261.5 380 254C387.5 246.5 400 239 405 227.5C410 216 399 205 405 190.5C411 176 408.5 173.5 408.5 161C408.5 148.5 407.5 123.5 411 108C414.5 92.5 420 100 428 82C436 64 423.5 63 428 51C432.5 39 457 0 457 0C457 0 423.5 17 411 47.5C398.5 78 399 124 392 135C385 146 383.5 144 380 163.5C376.5 183 383.5 190.5 380 202C376.5 213.5 372.5 207 366.5 221C360.5 235 371.5 234 366.5 244C361.5 254 354.5 245.5 344 256.5C333.5 267.5 341.5 280 333.5 286.5Z" fill="#0D3E3C"/> <path class="sw-blade" d="M295.5 207C288 220.5 288 239 288 239L286.5 241L299.5 255.5L307 246.5C307 246.5 331.5 227 334.5 214C337.5 201 336.746 192.743 337.5 178C337.5 178 346 151.5 346.5 142C347 132.5 340.5 116 340.5 108.5C340.5 101 339 96.5 336 85.5C333 74.5 317.5 62.5 317.5 62.5C317.5 62.5 326.5 99 324.5 108.5C322.5 118 315.5 131 313 146C310.5 161 317 174.5 313 185.5C309 196.5 303 193.5 295.5 207Z" fill="#00664E"/> </g> </svg></div></div>
+            <div class="seaweed seaweed--2" style="--x:-215.86;--w:889.61;--h:1042.49;--b:-290.63;--bw:848.14;--bh:1007.85;--tf:rotate(-2.4deg)" aria-hidden="true"><div class="seaweed-box"><svg class="seaweed-svg" aria-hidden="true" focusable="false" width="848.144" height="1007.85" viewBox="0 0 848.144 1007.85" fill="none" xmlns="http://www.w3.org/2000/svg"> <g> <path class="sw-blade" d="M421.587 666.522C420.087 656.022 428.587 649.022 425.587 641.522C424.375 638.491 421.757 626.898 415.39 616.772C407.484 602.428 392.087 587.522 392.087 587.522C392.087 587.522 401.087 592.022 411.587 601.022C422.087 610.022 425.587 619.522 425.587 619.522C425.587 619.522 430.087 632.022 436.587 638.022C443.087 644.022 451.587 643.022 455.087 656.022C458.587 669.022 450.087 668.022 450.087 681.522C450.087 695.022 460.183 695.226 460.183 706.226C460.183 717.226 450.087 728.022 450.087 738.522C450.087 749.022 458.587 755.022 458.587 768.022C458.587 781.022 458.087 786.022 447.087 794.522C436.087 803.022 455.087 803.022 458.587 818.022C462.087 833.022 451.587 836.522 452.587 844.522C453.587 852.522 471.087 845.022 475.587 854.522C480.087 864.022 469.587 874.522 472.587 885.022C475.587 895.522 482.087 886.022 489.587 900.522C497.087 915.022 489.587 925.022 489.587 934.522C489.587 944.022 502.587 952.022 502.587 952.022L472.587 982.022C472.587 982.022 467.587 948.022 458.587 931.022C449.587 914.022 431.087 913.522 428.587 891.522C426.087 869.522 436.587 866.522 434.087 854.522C431.587 842.522 421.587 841.522 417.587 825.022C413.587 808.522 425.587 806.522 425.587 794.522C425.587 782.522 414.587 774.522 417.587 761.022C420.587 747.522 436.587 751.022 439.587 738.522C442.587 726.022 425.588 723.779 425.588 707.779C425.588 691.779 439.587 694.022 439.587 685.022C439.587 676.022 423.087 677.022 421.587 666.522Z" fill="#0D3E3C"/> <path class="sw-blade" d="M611.588 439.52C611.588 457.52 619.141 493.695 618.345 512.678C617.549 531.661 608.813 570.83 604.625 596.177C600.438 621.523 598.05 753.038 598.05 753.038L632.174 754.469C632.174 754.469 659.26 624.99 659.373 598.472C659.485 571.953 654.588 503.02 654.588 503.02C654.588 503.02 664.088 452.02 659.588 432.02C655.088 412.02 642.588 411.52 638.588 399.52C634.588 387.52 651.588 372.02 649.088 351.02C646.588 330.02 635.588 324.52 635.588 314.52C635.588 304.52 646.588 295.02 651.588 280.02C656.588 265.02 636.661 257.403 654.257 242.946C671.852 228.489 673.588 197.02 673.588 187.52C673.588 178.02 693.588 146.02 693.588 146.02C693.588 146.02 680.588 153.02 673.588 162.52C666.588 172.02 669.088 177.52 666.588 184.52C664.088 191.52 641.588 215.52 638.588 223.02C635.588 230.52 638.135 239.467 635.588 249.52C633.042 259.572 624.588 256.52 618.088 275.02C611.588 293.52 625.588 302.52 623.088 314.52C620.588 326.52 611.588 338.52 611.588 355.52C611.588 372.52 623.088 386.02 623.088 399.52C623.088 413.02 611.588 421.52 611.588 439.52Z" fill="#00664E"/> <path class="sw-blade" d="M299.353 389.728C292.148 411.392 268.578 451.908 261.937 475.074C255.297 498.24 250.133 548.878 245.027 581.061C239.922 613.244 190.153 772.486 190.153 772.486L148.51 760.549C148.51 760.549 167.738 593.871 178.217 561.909C188.696 529.948 222.182 448.942 222.182 448.942C222.182 448.942 231.162 383.758 244.584 361.488C258.005 339.218 273.25 343.619 282.868 330.778C292.485 317.936 278.229 292.476 289.644 268.202C301.058 243.928 316.499 241.711 320.502 229.675C324.504 217.64 315.068 201.803 315.054 181.748C315.04 161.693 319.25 159.083 328.063 142.632C336.876 126.181 318.898 81.7673 325.601 61.6121C332.304 41.457 317.018 0 317.018 0C317.018 0 329.862 13.6285 334.485 27.8643C339.107 42.1001 338.099 49.0347 335.227 60.8034C332.355 72.572 352.908 108.121 353.516 118.348C354.125 128.576 347.021 139.488 346.52 151.444C346.018 163.4 356.957 164.272 357.375 189.139C357.793 214.007 337.341 219.235 335.546 234.679C333.752 250.122 339.781 268.168 332.976 288.628C326.171 309.089 306.927 320.734 301.523 336.982C296.119 353.23 306.558 368.063 299.353 389.728Z" fill="#0D3E3C"/> <path class="sw-blade" d="M693.964 804.473C685.299 810.056 671.822 804.544 662.438 807.533C653.053 810.522 638.548 832.564 638.548 832.564C638.548 832.564 667.87 835.8 687.187 824.852C706.505 813.905 697.23 815.9 703.687 812.085C710.145 808.27 718.268 816.712 726.765 808.092C735.261 799.472 735.471 783.901 743.748 777.269C752.025 770.637 765.273 764.553 771.504 753.671C777.735 742.789 768.008 730.649 775.562 716.894C783.116 703.14 788.459 695.419 789.83 682.994C791.201 670.569 780.692 664.533 785.871 649.51C791.05 634.488 800.398 628.586 810.324 611.572C820.251 594.558 810.929 594.669 810.424 581.44C809.919 568.212 814.433 563.392 824.77 553.792C838.33 541.198 848.144 533.248 848.144 533.248C848.144 533.248 820.805 540.034 808.541 557.379C796.277 574.724 783.087 583.328 778.068 599.252C770.201 624.21 776.83 639.023 772.963 651.076C769.096 663.13 759.292 668.317 753.675 687.315C748.057 706.314 754.192 714.536 749.452 725.583C744.711 736.63 741.448 729.73 733.949 742.988C726.45 756.245 737.493 756.458 731.426 765.849C725.36 775.24 719.334 766.023 707.691 775.805C696.048 785.587 702.628 798.889 693.964 804.473Z" fill="#0D3E3C"/> <path class="sw-blade" d="M733.282 725.297C736.83 740.327 731.8 758.13 731.8 758.13L732.7 760.463L716.248 770.882L711.477 760.182C711.477 760.182 696.283 742.486 696.931 729.16C697.578 715.834 710.299 708.702 703.413 693.901C696.527 679.099 698.188 665.156 701.874 648.88C705.561 632.603 715.47 630.35 718.544 619.469C721.618 608.588 717.059 606.395 726.712 594.289C736.364 582.183 751.395 580.258 751.395 580.258C751.395 580.258 741.028 590.212 735.548 601.665C731.853 609.388 732.418 618.722 732.153 622.622C731.495 632.308 734.697 646.722 733.025 661.836C731.353 676.951 721.428 688.176 722.287 699.849C723.145 711.522 729.735 710.266 733.282 725.297Z" fill="#0D3E3C"/> <path class="sw-blade" d="M685.469 462.946C677.574 474.626 659.235 478.476 653.088 509.519C646.941 540.563 653.119 546.108 650.088 558.019C647.057 569.93 638.46 572.072 635.418 584.956C632.375 597.84 639.052 617.637 635.968 631.52C632.884 645.403 613.168 662.092 608.917 679.929C604.666 697.767 611.091 723.559 609.38 740.502C607.669 757.445 603.607 770.787 603.607 770.787L645.485 774.544C645.485 774.544 642.265 755.893 646.679 746.069C651.094 736.245 663.883 705.754 666.719 685.855C669.554 665.957 663.878 646.202 666.835 635.316C669.793 624.43 685.535 607.074 686.662 592.108C687.789 577.142 678.76 565.754 681.588 555.519C684.417 545.284 691.01 538.207 695.088 524.519C699.167 510.832 695.39 479.376 701.588 466.519C707.786 453.663 712.423 455.068 716.588 444.519C720.753 433.97 723.279 410.984 726.088 404.019C728.897 397.054 732.883 391.659 734.359 385.426C735.836 379.192 739.088 357.519 739.088 357.519C739.088 357.519 728.43 368.9 725.224 376.535C722.017 384.17 723.566 388.697 719.681 401.325C715.795 413.953 703.559 419.348 697.359 432.417C691.159 445.487 693.364 451.267 685.469 462.946Z" fill="#00664E"/> <path class="sw-blade" d="M241.752 325.106C243.4 338.322 262.739 354.495 251.541 393.041C240.342 431.587 230.148 434.225 226.609 449.407C223.07 464.589 231.501 472.019 227.406 488.304C223.312 504.588 204.237 522.984 199.607 540.417C194.976 557.851 207.437 588.153 201.812 610.721C196.187 633.289 173.896 658.582 165.933 678.66C157.97 698.739 154.757 716.133 154.757 716.133L105.405 695.92C105.405 695.92 119.919 676.797 120.682 663.158C121.445 649.518 124.841 607.718 133.263 583.655C141.684 559.592 159.608 540.659 162.632 526.675C165.655 512.69 158.059 483.957 165.525 466.446C172.992 448.935 189.807 441.382 192.597 428.205C195.386 415.029 192.093 403.211 195.489 385.416C198.886 367.622 222.003 335.423 222.025 316.309C222.047 297.195 217.974 300.224 217.975 282.78C217.977 265.336 227.418 242.068 230.918 231.628C234.418 221.188 235.001 216.363 235.815 207.022C236.628 197.681 243.421 171.677 243.421 171.677C243.421 171.677 245.43 191.163 245.495 204.793C245.56 218.423 241.739 221.803 241.135 231.21C240.531 240.616 241.192 255.765 244.165 276.354C247.137 296.942 240.104 311.89 241.752 325.106Z" fill="#0D3E3C"/> <path class="sw-blade" d="M555.694 302.06C560.194 285.06 587.588 236.52 587.588 236.52C587.588 236.52 578.588 286.02 578.588 303.02C578.588 320.02 569.588 329.02 572.588 346.02C575.588 363.02 578.088 359.674 584.088 379.52C590.088 399.366 575.088 408.02 578.588 424.02C582.088 440.02 602.087 432.52 612.587 452.52C623.087 472.52 622.383 489.382 619.588 526.52C616.793 563.657 622.167 602.585 621.358 621.9C620.548 641.215 619.831 657.867 615.533 689.215C611.236 720.562 595.048 783.94 595.048 783.94L531.627 768.77C531.627 768.77 556.355 733.275 557.234 712.293C558.114 691.312 527.833 658.014 536.967 641.382C546.1 624.75 568.54 663.724 572.796 648.889C577.053 634.055 544.85 584.663 555.678 565.099C566.506 545.535 575.896 574.954 582.78 566.235C589.664 557.516 587.088 555.52 584.088 535.02C581.088 514.52 570.586 511.52 561.587 493.02C552.588 474.52 560.088 446.02 556.588 430.02C553.088 414.02 538.088 413.02 539.088 389.52C540.088 366.02 548.088 361.02 552.088 346.02C556.088 331.02 551.194 319.06 555.694 302.06Z" fill="#00664E"/> <path class="sw-blade" d="M429.528 267.556C430.916 245.294 415.388 177.717 415.388 177.717C415.388 177.717 398.75 237.74 397.87 258.722C396.99 279.704 403.578 301.624 395.441 316.671C387.303 331.718 377.526 329.743 362.361 351.228C347.195 372.712 361.785 389.132 351.168 406.988C340.551 424.844 319.483 407.812 298.84 427.68C278.197 447.549 272.295 468.126 260.794 513.942C249.292 559.758 227.242 604.458 220.486 628.029C213.729 651.6 207.926 671.93 200.551 711.379C193.176 750.827 187.29 833.586 187.29 833.586L269.694 840.715C269.694 840.715 254.14 788.095 261.48 762.491C268.82 736.886 318.593 708.931 314.257 685.257C309.922 661.584 267.314 699.509 268.129 679.951C268.944 660.393 327.472 613.836 322.271 585.956C317.07 558.076 293.993 589.725 289.198 576.475C284.403 563.225 288.302 561.854 300.118 538.382C311.934 514.91 325.775 515.502 344.011 496.839C362.247 478.175 364.628 440.871 375.245 423.015C385.862 405.159 404.315 409.96 412.518 381.276C420.721 352.592 410.569 341.013 411.759 321.359C412.949 301.704 428.139 289.818 429.528 267.556Z" fill="#0D3E3C"/> </g> </svg></div></div>
+            <div class="seaweed seaweed--3" style="--x:1667.89;--w:515.69;--h:868.56;--b:-177.56;--bw:452.19;--bh:836;--tf:rotate(175.55deg) scaleY(-1)" aria-hidden="true"><div class="seaweed-box"><svg class="seaweed-svg" aria-hidden="true" focusable="false" width="452.188" height="835.999" viewBox="0 0 452.188 835.999" fill="none" xmlns="http://www.w3.org/2000/svg"> <g> <path class="sw-blade" d="M33.5 495.499C30.5 487.999 0 441.499 0 441.499C0 441.499 9 445.999 19.5 454.999C30 463.999 33.5 473.499 33.5 473.499C33.5 473.499 38 485.999 44.5 491.999C51 497.999 59.5 496.999 63 509.999C66.5 522.999 58 521.999 58 535.499C58 548.999 66.5 552.999 66.5 563.999C66.5 574.999 58 581.999 58 592.499C58 602.999 66.5 608.999 66.5 621.999C66.5 634.999 66 639.999 55 648.499C44 656.999 63 656.999 66.5 671.999C70 686.999 59.5 690.499 60.5 698.499C61.5 706.499 79 698.999 83.5 708.499C88 717.999 77.5 728.499 80.5 738.999C83.5 749.499 90 739.999 97.5 754.499C105 768.999 97.5 778.999 97.5 788.499C97.5 797.999 110.5 805.999 110.5 805.999L80.5 835.999C80.5 835.999 75.5 801.999 66.5 784.999C57.5 767.999 39 767.499 36.5 745.499C34 723.499 44.5 720.499 42 708.499C39.5 696.499 29.5 695.499 25.5 678.999C21.5 662.499 33.5 660.499 33.5 648.499C33.5 636.499 22.5 628.499 25.5 614.999C28.5 601.499 44.5 604.999 47.5 592.499C50.5 579.999 33.5 572.999 33.5 556.999C33.5 540.999 47.5 547.999 47.5 538.999C47.5 529.999 31 530.999 29.5 520.499C28 509.999 36.5 502.999 33.5 495.499Z" fill="#0D3E3C"/> <path class="sw-blade" d="M231.001 253.5C231.001 267 219.501 275.5 219.501 293.5C219.501 301.481 215.675 325.246 223.912 350.182C228.54 388.94 225.115 415.787 225.115 415.787C225.115 415.787 189.898 498.268 217.5 501.366C245.102 504.464 266.854 430.092 266.908 405.012C266.962 379.932 261.337 365.826 260.095 349.874C258.854 333.922 272.001 306 267.501 286C263.001 266 250.501 265.5 246.501 253.5C242.501 241.5 259.501 226 257.001 205C254.501 184 243.501 178.5 243.501 168.5C243.501 158.5 254.501 149 259.501 134C264.501 119 262.001 116 259.501 101.5C257.001 87 281.501 51 281.501 41.5C281.501 32 301.501 0 301.501 0C301.501 0 288.501 7 281.501 16.5C274.501 26 277.001 31.5 274.501 38.5C272.001 45.5 249.501 69.5 246.501 77C243.501 84.5 246.275 94.8348 244.378 102.677C242.481 110.519 232.501 110.5 226.001 129C219.501 147.5 233.501 156.5 231.001 168.5C228.501 180.5 219.501 192.5 219.501 209.5C219.501 226.5 231.001 240 231.001 253.5Z" fill="#0D3E3C"/> <path class="sw-blade" d="M328.688 714.321C320.688 720.821 306.688 716.821 297.688 720.821C288.688 724.821 276.688 748.321 276.688 748.321C276.688 748.321 306.188 748.321 324.188 735.321C342.188 722.321 333.188 725.321 339.188 720.821C345.188 716.321 354.188 723.821 361.688 714.321C369.188 704.821 367.688 689.321 375.188 681.821C382.688 674.321 395.188 666.821 400.188 655.321C405.188 643.821 394.188 632.821 400.188 618.321C406.188 603.821 405.487 587.772 405.487 575.272C405.487 562.772 402.688 551.321 406.188 535.821C409.688 520.321 420.481 523.693 423.188 509.821C425.894 495.949 419.68 485.921 424.18 473.921C428.68 461.921 452.188 427.821 452.188 427.821C452.188 427.821 418.688 444.821 406.188 475.321C393.688 505.821 390.47 549.86 387.188 562.821C383.905 575.782 373.085 577.794 372.431 594.394C371.776 610.995 378.688 618.321 375.188 629.821C371.688 641.321 367.688 634.821 361.688 648.821C355.688 662.821 366.688 661.821 361.688 671.821C356.688 681.821 349.688 673.321 339.188 684.321C328.688 695.321 336.688 707.821 328.688 714.321Z" fill="#00664E"/> <path class="sw-blade" d="M295.5 598.499C288 611.999 292.298 621.186 288 630.499C283.702 639.812 273.203 640.235 268.036 651.169C262.869 662.103 258.445 689.027 258.445 689.027L274.972 695.264C274.972 695.264 301.426 674.649 304.54 662.871C307.653 651.093 303.066 643.929 307 637.999C310.934 632.069 331.5 618.499 334.5 605.499C337.5 592.499 335.507 583.73 335.848 575.221C336.189 566.711 345.83 548.824 346.5 533.499C347.17 518.174 340.5 507.499 340.5 499.999C340.5 492.499 339 487.999 336 476.999C333 465.999 317.5 453.999 317.5 453.999C317.5 453.999 326.5 490.499 324.5 499.999C322.5 509.499 316.356 518.018 315.028 533.166C313.699 548.315 318.314 562.5 315.819 573.727C313.325 584.955 303 584.999 295.5 598.499Z" fill="#0D3E3C"/> <path class="sw-blade" d="M292.5 319.501C282.104 330.107 274.205 337.241 268.322 358.763C262.438 380.284 262.346 391.325 259.56 407.59C257.89 417.343 249.401 425.017 246.7 435.672C242.664 451.596 241.966 458.609 241.097 473.22C240.228 487.832 214.307 548.025 214.307 548.025L213.793 676.451C213.793 676.451 252.877 650.34 257.317 629.934C261.757 609.527 252.828 598.187 257.522 581.271C262.216 564.356 277.984 554.102 278.984 528.447C279.985 502.792 266.31 494.328 270.26 482.485C274.21 470.643 289.445 462.938 291.609 452.238C293.774 441.537 291.947 430.647 288.7 414.851C290.476 402.379 299.884 388.22 303 378.501C311.125 353.164 307.811 331.617 309.5 320.501C311.19 309.385 319.679 310.132 324.5 298.501C329.321 286.871 332.754 265.482 334 258.001C335.246 250.52 339.45 248.411 339.5 239.001C339.55 229.591 347 211.501 347 211.501C347 211.501 335.679 225.574 334 231.001C332.321 236.428 332.576 249.022 327 254.001C321.425 258.98 314.514 273.581 308.5 284.501C302.486 295.421 302.896 308.895 292.5 319.501Z" fill="#0D3E3C"/> </g> </svg></div></div>
+            <!-- the scene's film grain lies over the small fish and the seaweed (the flounder is above it) -->
+            <div class="grain grain--scene" aria-hidden="true"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div>
+          </div>
+        </div>
+        <!-- ContainerP (Figma): the flounder lives right under the water line — this layer is
+             masked by the same wave as the scene, but starts at the top of the section,
+             so the fish comes out directly from under decorative-binary-wave-text. -->
+        <div class="flat-fish-container">
+          <div class="flat-device-track">
+            <!-- Animated flounder (src/flat-fish): main.js swaps the PNG for a stop-motion SVG stage. -->
+            <div class="flat-device-illustration" role="img" aria-label="Flounder illustration with a transparent body and visible skeleton">
+              <img src="/assets/flat-fish.webp" alt="" width="1024" height="919" loading="lazy" decoding="async" />
+            </div>
+          </div>
+        </div>
+        <!-- Description (Figma 2732:5570): "kampela [?]." flickers through the italic serifs on its own
+             (like the header links on hover); hovering / focusing it shows the Definition Label. -->
+        <div class="flat-description">
+          <p class="flat-design-description" id="flat-heading">That is why it is so flat, like a <span class="kampela-word" tabindex="0" aria-describedby="kampela-definition" data-flicker-whole>kampela <span class="kampela-sup">[?]</span>.</span></p>
+          <div class="definition-label" id="kampela-definition" role="tooltip">Finnish for “flounder.”</div>
+        </div>
+        <!-- Binary text running along the Figma curve (src/binary-wave.js animates it right → left);
+             the white water-surface line sits 26 px above it. src/water-dive.js ripples both like water. -->
+        <svg class="decorative-binary-wave-text" viewBox="0 0 2058 169.74" aria-hidden="true" focusable="false">
+          <path id="binary-wave-path" d="M 0 169.74 L 217 44.46 C 264.65 16.95 323.35 16.95 371 44.46 L 511 125.29 C 558.65 152.79 617.35 152.79 665 125.29 L 805 44.46 C 852.65 16.95 911.35 16.95 959 44.46 L 1099 125.29 C 1146.65 152.79 1205.35 152.79 1253 125.29 L 1393 44.46 C 1440.65 16.95 1499.35 16.95 1547 44.46 L 1687 125.29 C 1734.65 152.79 1793.35 152.79 1841 125.29 L 2058 0" fill="none" />
+          <path class="water-splash-fill" transform="translate(3 -26)" d="" />
+          <path class="water-surface-line" transform="translate(3 -26)" d="M 0 169.74 L 217 44.46 C 264.65 16.95 323.35 16.95 371 44.46 L 511 125.29 C 558.65 152.79 617.35 152.79 665 125.29 L 805 44.46 C 852.65 16.95 911.35 16.95 959 44.46 L 1099 125.29 C 1146.65 152.79 1205.35 152.79 1253 125.29 L 1393 44.46 C 1440.65 16.95 1499.35 16.95 1547 44.46 L 1687 125.29 C 1734.65 152.79 1793.35 152.79 1841 125.29 L 2058 0" />
+          <text class="binary-wave-text"><textPath href="#binary-wave-path" startOffset="0">010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101 010101</textPath></text>
+        </svg>
+        <div class="flat-fish-cue" aria-hidden="true"></div>
+      </section>
+
+      <!-- ========================== DEMO VIDEO ========================= -->
+      <section class="demo-video-section" aria-label="Kampela product demo video">
+        <!-- Poster: shown until the Vimeo video actually starts playing (or if it never loads) -->
+        <img class="demo-video-poster" src="/assets/demo-video-poster.webp" alt="" aria-hidden="true" width="1920" height="1080" loading="lazy" decoding="async" />
+        <div class="demo-video-frame">
+          <!-- data-src: the player is only created when the section comes close (src/main.js initDemoVideo) -->
+          <iframe
+            data-src="https://player.vimeo.com/video/1240831577?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;autoplay=0&amp;muted=1&amp;loop=1&amp;playsinline=1"
+            frameborder="0"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            title="producing"
+          ></iframe>
+        </div>
+        <p class="demo-video-caption">Demo video</p>
+      </section>
+      </div>
+
+      <!-- =========================== FEATURES ========================== -->
+      <section class="features-section h-scroll-section" aria-labelledby="features-heading">
+        <div class="features-inner">
+          <img class="features-star" src="/assets/star-green.svg" alt="" aria-hidden="true" />
+          <h2 class="section-heading features-heading" id="features-heading">Every device design requires compromises. Ours include:</h2>
+          <div class="h-scroll-viewport">
+            <ul class="feature-cards-track h-scroll-track">
+              <li class="feature-card" tabindex="0">
+                <div class="feature-card-text">
+                  <h3 class="feature-title">Cryptographic Strongbox</h3>
+                  <p class="feature-description">Unmatched encryption for ultimate data security and peace of mind</p>
+                </div>
+                <div class="feature-illustration-container"><img class="feature-illustration is-medium" src="/assets/feature-strongbox.webp" alt="" loading="lazy" /></div>
+              </li>
+              <li class="feature-card" tabindex="0">
+                <div class="feature-card-text">
+                  <h3 class="feature-title">Transparent in Its Core</h3>
+                  <p class="feature-description">Open-source design and see through corpus for trust and integrity</p>
+                </div>
+                <div class="feature-illustration-container"><img class="feature-illustration is-large" src="/assets/feature-transparent.webp" alt="" loading="lazy" /></div>
+              </li>
+              <li class="feature-card" tabindex="0">
+                <div class="feature-card-text">
+                  <h3 class="feature-title">e-Ink Display</h3>
+                  <p class="feature-description">Low-power display technology, perfect for crisp, energy-efficient viewing</p>
+                </div>
+                <div class="feature-illustration-container"><img class="feature-illustration is-large" src="/assets/feature-eink.webp" alt="" loading="lazy" /></div>
+              </li>
+              <li class="feature-card" tabindex="0">
+                <div class="feature-card-text">
+                  <h3 class="feature-title">Unidirectional NFC Powered</h3>
+                  <p class="feature-description">Battery-free, chargeless power for seamless, hassle-free transactions</p>
+                </div>
+                <div class="feature-illustration-container"><img class="feature-illustration is-large is-masked" style="--mask: url(/assets/feature-nfc-mask.webp)" src="/assets/feature-nfc.webp" alt="" loading="lazy" /></div>
+              </li>
+              <li class="feature-card" tabindex="0">
+                <div class="feature-card-text">
+                  <h3 class="feature-title">No firmware updates</h3>
+                  <p class="feature-description">Updating Kampela's firmware is intentionally disabled to minimize security risks</p>
+                </div>
+                <div class="feature-illustration-container"><img class="feature-illustration is-medium is-masked" style="--mask: url(/assets/feature-firmware-mask.webp)" src="/assets/feature-firmware.webp" alt="" loading="lazy" /></div>
+              </li>
+            </ul>
+          </div>
+          <div class="m-carousel-pages m-only" aria-hidden="true"><span class="is-current">[ 01 ]</span><span>[ 02 ]</span><span>[ 03 ]</span><span>[ 04 ]</span><span>[ 05 ]</span></div>
+        </div>
+      </section>
+
+      <!-- ======================= DEVICE BENEFITS ======================= -->
+      <section class="device-benefits-section" aria-label="Device benefits">
+        <!-- decorative-orbit-container (Figma 2789:6357): four ribbons, inlined so each can wave in the wind (src/wind-ribbons.js) -->
+        <svg class="benefits-orbit" aria-hidden="true" focusable="false" overflow="visible" width="3224.1" height="798" viewBox="0 0 3224.1 798" fill="none" xmlns="http://www.w3.org/2000/svg"> <g> <path class="orbit-path" d="M1612.06 502.7C1615.06 488.532 1427 488.595 1361 456C1299 414.004 1297 376 1201 342C1133.36 304.918 998.946 324.774 921.828 313.483C915.937 312.62 910.282 310.655 905.134 307.662C825.468 261.356 829.078 189.013 596.476 158C328.476 122.267 130.476 0 130.476 0V366C130.476 366 401.591 337.801 542.476 376C678.443 412.865 745.373 472.776 797.788 488.595C904.516 520.805 989.576 420.213 1105 436C1220.42 451.787 1201 502.7 1335 526C1444 532 1609.06 516.868 1612.06 502.7Z" fill="#161616"/> <path class="orbit-path" d="M1612.04 502.7C1609.04 488.532 1797.1 488.595 1863.1 456C1925.1 414.004 1927.1 376 2023.1 342C2090.74 304.918 2225.15 324.774 2302.27 313.483C2308.16 312.62 2313.82 310.655 2318.96 307.662C2398.63 261.356 2395.02 189.013 2627.62 158C2895.62 122.267 3093.62 0 3093.62 0V366C3093.62 366 2822.51 337.801 2681.62 376C2545.65 412.865 2478.73 472.776 2426.31 488.595C2319.58 520.805 2234.52 420.213 2119.1 436C2003.67 451.787 2023.1 502.7 1889.1 526C1780.1 532 1615.04 516.868 1612.04 502.7Z" fill="#161616"/> <path class="orbit-path" d="M1265.13 564.587C1265.67 564.776 1266.21 564.913 1266.78 564.995C1387.9 582.534 1582.24 510.27 1580.71 532.751C1579.17 555.283 1445.06 627.889 1339.94 674.872C1234.82 721.856 1083.55 646.107 957.939 674.872C832.331 703.637 857.939 792.872 660.084 781.868C602.286 786.423 509.953 738.167 409.853 725.038C296.417 710.159 96.0017 725.038 96.0017 725.038L-8.39167e-07 448.872C-8.39167e-07 448.872 213.677 427.036 453.425 472.081C671.52 513.058 660.084 607.82 801.017 582.868C884.603 568.069 960.319 501.561 1048.57 511.766C1136.49 521.93 1195.42 540.156 1265.13 564.587Z" fill="#161616"/> <path class="orbit-path" d="M1958.97 564.587C1958.43 564.776 1957.89 564.913 1957.32 564.995C1836.2 582.534 1641.86 510.27 1643.39 532.751C1644.92 555.283 1779.04 627.889 1884.16 674.872C1989.28 721.856 2140.55 646.107 2266.16 674.872C2391.77 703.637 2366.16 792.872 2564.01 781.868C2621.81 786.423 2714.14 738.167 2814.24 725.038C2927.68 710.159 3128.1 725.038 3128.1 725.038L3224.1 448.872C3224.1 448.872 3010.42 427.036 2770.67 472.081C2552.58 513.058 2564.01 607.82 2423.08 582.868C2339.49 568.069 2263.78 501.561 2175.52 511.766C2087.61 521.93 2028.68 540.156 1958.97 564.587Z" fill="#161616"/> </g> </svg>
+        <ul class="benefit-notes">
+          <li class="benefit" style="--x: 542; --y: 157"><img class="benefit-check" src="/assets/check-icon-2.svg" alt="" width="36" height="36" />Very good waterproofness - no joints to fail</li>
+          <li class="benefit" style="--x: 1313; --y: 292"><img class="benefit-check" src="/assets/check-icon-2.svg" alt="" width="36" height="36" />Almost the size of a standard bank card</li>
+          <li class="benefit" style="--x: 1211; --y: 644"><img class="benefit-check" src="/assets/check-icon-2.svg" alt="" width="36" height="36" />Stupid-resistant. We can’t protect you from yourself, but we’ve tried</li>
+          <li class="benefit" style="--x: 389; --y: 415"><img class="benefit-check" src="/assets/check-icon-2.svg" alt="" width="36" height="36" />Inherently produces e-waste at end of product life</li>
+          <li class="benefit" style="--x: 446; --y: 691"><img class="benefit-check" src="/assets/check-icon-2.svg" alt="" width="36" height="36" />Never out of battery</li>
+        </ul>
+        <div class="device-photo-container">
+          <!-- the photo stays as the fallback; src/device-benefits.js puts the test 3D model on top
+               of it (and hides the photo once the model has loaded) -->
+          <div class="device-photo-rotator">
+            <img class="device-photo" src="/assets/device-benefits-photo.webp" alt="Kampela device with e-ink screen showing an ID and QR code" loading="lazy" />
+          </div>
+        </div>
+        <div class="benefits-device-3d" aria-hidden="true"><div class="benefits-device-float"></div></div>
+      </section>
+
+      <!-- ========================= HOW IT WORKS ======================== -->
+      <section class="how-it-works-section h-scroll-section" aria-labelledby="hiw-heading">
+        <div class="how-it-works-container">
+          <h2 class="section-heading" id="hiw-heading">How it works</h2>
+          <div class="h-scroll-viewport">
+            <ol class="transaction-steps-track h-scroll-track">
+              <li class="step step-01-generate-transaction-qr is-active" data-step="1">
+                <span class="step-badge">Step 01</span>
+                <p class="step-description">Generate transaction QR using your non-custodial wallet</p>
+                <div class="step-image-container"><div class="step-fill" aria-hidden="true"><div class="step-fill-shape"><div class="grain grain--fill"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div></div></div><div class="step-photo"><img class="step-image" style="--l: -12; --t: -26; --w: 621; --h: 585" src="/assets/step-01.webp" alt="Hand holding a phone with a wallet app" loading="lazy" decoding="async" /></div></div>
+              </li>
+              <li class="step step-02-scan-qr-with-siltti" data-step="2">
+                <span class="step-badge">Step 02</span>
+                <p class="step-description">Scan the QR using Siltti - Kampela's companion app</p>
+                <div class="step-image-container"><div class="step-fill" aria-hidden="true"><div class="step-fill-shape"><div class="grain grain--fill"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div></div></div><div class="step-photo"><img class="step-image" style="--l: -10.5; --t: -13; --w: 609; --h: 576" src="/assets/step-02.webp" alt="Phone scanning the QR code shown on Kampela" loading="lazy" decoding="async" /></div></div>
+              </li>
+              <li class="step step-03-transfer-via-nfc" data-step="3">
+                <span class="step-badge">Step 03</span>
+                <p class="step-description">Pass transaction data to Kampela using uni-directional NFC</p>
+                <div class="step-image-container"><div class="step-fill" aria-hidden="true"><div class="step-fill-shape"><div class="grain grain--fill"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div></div></div><div class="step-photo"><img class="step-image" style="--l: -106; --t: -10; --w: 798; --h: 573" src="/assets/step-03.webp" alt="Kampela placed on a phone to transfer data over NFC" loading="lazy" decoding="async" /></div></div>
+              </li>
+              <li class="step step-04-scan-qr-with-siltti" data-step="4">
+                <span class="step-badge">Step 04</span>
+                <p class="step-description">Review transaction metadata and sign it on your Kampela</p>
+                <div class="step-image-container"><div class="step-fill" aria-hidden="true"><div class="step-fill-shape"><div class="grain grain--fill"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div></div></div><div class="step-photo"><img class="step-image" style="--l: -47; --t: -58; --w: 704; --h: 668" src="/assets/step-04.webp" alt="Phone scanning the signature QR on Kampela" loading="lazy" decoding="async" /></div></div>
+              </li>
+              <li class="step step-05-sign-transaction" data-step="5">
+                <span class="step-badge">Step 05</span>
+                <p class="step-description">Sign the transaction with the signature QR on Kampela's screen</p>
+                <div class="step-image-container">
+                  <div class="step-fill" aria-hidden="true"><div class="step-fill-shape"><div class="grain grain--fill"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div></div></div>
+                  <!-- Figma 2782:3760: the cut-out photo + the screen image, cropped to the card -->
+                  <div class="step-photo">
+                  <img class="step-image" style="--l: 0; --t: 0; --w: 590; --h: 554" src="/assets/step-05-cutout.webp" alt="Kampela held in a hand, its e-ink screen showing an ID and a QR code" loading="lazy" decoding="async" />
+                  </div>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================== PRICING =========================== -->
+      <section class="pricing-section" id="pricing" aria-labelledby="pricing-heading">
+        <div class="pricing-header">
+          <h2 class="section-heading" id="pricing-heading">Pricing</h2>
+          <div class="shipping-information" id="delivery">
+            <p>Delivery worldwide</p>
+            <a class="text-link text-link--light" href="/delivery/">from <b>€10</b></a>
+          </div>
+        </div>
+        <div class="pricing-cards">
+          <article class="pricing-card">
+            <header class="product-header">
+              <h3>Kampela Devkit</h3>
+              <a class="text-link text-link--small specifications-link" href="#specifications" aria-haspopup="dialog" aria-controls="specifications-modal">Specifications</a>
+            </header>
+            <div class="availability-badge"><span>Available now</span></div>
+            <div class="product-visual"><img class="pv pv--single" src="/assets/pricing-device.webp" alt="Kampela Devkit" loading="lazy" /></div>
+            <div class="purchase-details">
+              <p class="price-row"><span class="price">153 USDT</span><span class="per">/ 1 item</span></p>
+              <a class="btn btn--green btn--block" href="#">order the devkit<img src="/assets/icon-arrow-right-white.svg" alt="" width="20" height="20" /></a>
+            </div>
+          </article>
+          <article class="pricing-card">
+            <header class="product-header">
+              <h3>Kampela</h3>
+              <a class="text-link text-link--small specifications-link" href="#specifications" aria-haspopup="dialog" aria-controls="specifications-modal">Specifications</a>
+            </header>
+            <div class="product-visual"><img class="pv pv--single" src="/assets/pricing-device.webp" alt="Kampela" loading="lazy" /></div>
+            <div class="purchase-details">
+              <p class="price-row"><span class="price">€100</span><span class="per">/ 1 item</span></p>
+              <a class="btn btn--white btn--block" href="#">Preorder<img src="/assets/icon-arrow-right-dark.svg" alt="" width="20" height="20" /></a>
+            </div>
+          </article>
+          <article class="pricing-card">
+            <header class="product-header">
+              <h3>Kampela x 2</h3>
+              <a class="text-link text-link--small specifications-link" href="#specifications" aria-haspopup="dialog" aria-controls="specifications-modal">Specifications</a>
+            </header>
+            <div class="product-visual">
+              <img class="pv pv--pair pv--back" src="/assets/pricing-device.webp" alt="" loading="lazy" />
+              <img class="pv pv--pair pv--front" src="/assets/pricing-device.webp" alt="Two Kampela devices" loading="lazy" />
+            </div>
+            <div class="purchase-details">
+              <p class="price-row"><span class="price">€180</span><span class="per">/ 2 items</span></p>
+              <a class="btn btn--white btn--block" href="#">Preorder<img src="/assets/icon-arrow-right-dark.svg" alt="" width="20" height="20" /></a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ========================= TESTIMONIALS ======================== -->
+      <section class="testimonials-section" aria-labelledby="testimonials-heading">
+        <div class="testimonials-container">
+          <img class="decorative-quotation-mark" src="/assets/quote-mark.svg" alt="" aria-hidden="true" />
+          <div class="testimonial-content">
+            <div class="testimonials-header">
+              <h2 id="testimonials-heading">What people say</h2>
+              <div class="testimonial-slider-controls">
+                <button type="button" class="slider-arrow arrow-prev" aria-label="Previous quote" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M5 12H18M12 18L18 12L12 6" stroke="currentColor"/></svg></button>
+                <span class="testimonial-pagination"><button type="button" class="is-current" aria-label="Quote 1" aria-current="true">[ 01 ]</button><button type="button" aria-label="Quote 2">[ 02 ]</button><button type="button" aria-label="Quote 3">[ 03 ]</button></span>
+                <button type="button" class="slider-arrow arrow-next" aria-label="Next quote"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M5 12H18M12 18L18 12L12 6" stroke="currentColor"/></svg></button>
+              </div>
+            </div>
+            <!-- quotes slider (src/testimonials.js): all quotes share one grid cell, so the block keeps the height of the longest -->
+            <div class="testimonial-slides" aria-live="polite">
+              <figure class="testimonial-slide is-current">
+                <blockquote class="testimonial-quote">They go into security as if they were completely paranoid...The device is truly amazing!</blockquote>
+                <figcaption class="testimonial-author">
+                  <span class="author-avatar"><img src="/assets/avatar-1.webp" alt="" loading="lazy" /></span>
+                  Alex Richardson
+                </figcaption>
+              </figure>
+              <figure class="testimonial-slide" aria-hidden="true">
+                <blockquote class="testimonial-quote">Simple, compact, and incredibly clever. It's amazing how much technology fits into such a tiny device!</blockquote>
+                <figcaption class="testimonial-author">
+                  <span class="author-avatar"><img src="/assets/avatar-2.webp" alt="" loading="lazy" /></span>
+                  Tommy Bryan
+                </figcaption>
+              </figure>
+              <figure class="testimonial-slide" aria-hidden="true">
+                <blockquote class="testimonial-quote">No unnecessary connections, no compromises. Absolutely brilliant!</blockquote>
+                <figcaption class="testimonial-author">
+                  <span class="author-avatar"><img src="/assets/avatar-3.webp" alt="" loading="lazy" /></span>
+                  Charles Hart
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ PRESS ============================ -->
+      <section class="press-section" aria-labelledby="press-heading">
+        <!-- press-illustration (Figma 2673:6432): the ribbon is inlined so it can stream like the other ribbons
+             (src/wind-ribbons.js), the planets are separate pictures so they can pop in (src/press-art.js) -->
+        <div class="press-illustration-container" aria-hidden="true">
+          <svg class="press-orbit" overflow="visible" width="684" height="400" viewBox="0 0 684 400" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false"><path class="orbit-path" d="M150.196 51.2178C83.9298 64.3657 0.000274785 4.47468e-05 0.000274785 4.47468e-05L72.4187 65.5333C72.4187 65.5333 70.2493 71.8937 156.097 132.342C241.945 192.791 257.852 108.539 364.861 154.594C471.871 200.649 433.213 320.48 541.25 347.98C649.288 375.48 888.539 399.997 888.539 399.997L1007.27 78.602C1007.27 78.602 569.565 154.742 497.653 128.247C425.741 101.752 352.308 30.2896 272.199 27.0112C192.09 23.7328 216.462 38.0699 150.196 51.2178Z" fill="#161616"/></svg>
+          <img class="press-planet press-planet--ringed" src="/assets/press-saturn.webp" alt="" loading="lazy" />
+          <img class="press-planet press-planet--green" src="/assets/press-p2.webp" alt="" loading="lazy" />
+          <img class="press-planet press-planet--orange" src="/assets/press-p3.webp" alt="" loading="lazy" />
+        </div>
+        <div class="press-container">
+          <h2 class="section-heading" id="press-heading">Kampela in the Press</h2>
+          <div class="press-cards">
+            <article class="press-card">
+              <h3>Kampela: Bridging Security and Simplicity in the Substrate Ecosystem</h3>
+              <p class="press-date">Nov 2, 2023</p>
+              <a class="text-link text-link--medium" href="https://theastarbulletin.news/kampela-bridging-security-and-simplicity-in-the-substrate-ecosystem-935863aa628f" target="_blank" rel="noopener noreferrer">www.theastarbulletin.news</a>
+            </article>
+            <article class="press-card">
+              <h3>Kampela in Action: Transaction Signing and Firmware Updates | Sub0 2023</h3>
+              <p class="press-date">Sep 22, 2023</p>
+              <a class="text-link text-link--medium" href="https://www.youtube.com/watch?v=0epi-r4ndjA" target="_blank" rel="noopener noreferrer">www.youtube.com</a>
+            </article>
+            <article class="press-card">
+              <h3>The Generic Polkadot Ledger App Proposal Aug 3, 2023</h3>
+              <p class="press-date">Aug 3, 2023</p>
+              <a class="text-link text-link--medium" href="https://zondax.ch/blog/the-generic-polkadot-ledger-app-proposal" target="_blank" rel="noopener noreferrer">www.zondax.ch</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FOOTER =========================== -->
+      <footer class="site-footer" id="contact">
+        <div class="backers-marquee" aria-label="We're backed by Zondax, Parity Ethereum, Nova">
+          <div class="marquee-content" aria-hidden="true">
+            <div class="marquee-track" data-marquee-items="~we’re backed by|zondax|parity ethereum|nova"></div>
+          </div>
+        </div>
+        <div class="footer-container">
+          <div class="footer-brand-and-legal">
+            <p class="footer-wordmark">kampela</p>
+            <p class="footer-tagline">Designed in Finland&nbsp;&nbsp;|&nbsp;&nbsp; Funded by Polkadot Treasury</p>
+            <div class="company-and-legal">
+              <span>Alzymologist Oy, 2024</span>
+              <span class="legal-links">
+                <a class="text-link text-link--muted" href="#">Terms &amp; Conditions</a>
+                <a class="text-link text-link--muted" href="#">Privacy Policy</a>
+              </span>
+            </div>
+          </div>
+          <div class="footer-navigation-and-social">
+            <nav class="footer-navigation" aria-label="Footer" id="faq">
+              <a href="/faq/">[ FAQ ]</a>
+              <a href="/delivery/">[ DELIVERY ]</a>
+              <a href="/about/">[ ABOUT US ]</a>
+              <a href="/contact/">[ CONTACT ]</a>
+            </nav>
+            <div class="social-links">
+              <a class="ext-link" href="https://twitter.com/kampela_signer" target="_blank" rel="noopener noreferrer">Twitter<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+              <a class="ext-link" href="https://matrix.to/#/%23Kampela:matrix.zymologia.fi" target="_blank" rel="noopener noreferrer">Matrix<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+              <a class="ext-link" href="https://github.com/Kalapaja" target="_blank" rel="noopener noreferrer">Github<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+    <!-- ===================== SPECIFICATIONS MODAL (Figma "Pop-up" 490:8421) =====================
+         Opened by .specifications-link (src/specifications-modal.js); product name and CTA are
+         filled in from the pricing card that was clicked. -->
+    <div class="modal-overlay" id="specifications-overlay" hidden>
+      <!-- the page's film grain over the blurred backdrop (Rectangle 1940) -->
+      <div class="grain grain--modal" aria-hidden="true"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div>
+      <div class="specifications-modal" id="specifications-modal" role="dialog" aria-modal="true" aria-labelledby="spec-modal-title" tabindex="-1">
+        <!-- and over the panel background (PopupRight), under its content -->
+        <div class="grain grain--modal" aria-hidden="true"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div>
+        <span class="spec-modal-edge" aria-hidden="true"></span>
+        <button class="spec-modal-close" type="button" aria-label="Close specifications">
+          <span class="grain grain--close" aria-hidden="true"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></span><span class="spec-modal-close-icon"><img src="/assets/icon-close-plus.svg" alt="" width="17" height="17" /></span>
+        </button>
+        <div class="spec-modal-body" data-lenis-prevent>
+          <header class="spec-modal-header">
+            <div class="spec-modal-image" aria-hidden="true">
+              <div class="spec-modal-image-box"><img src="/assets/pricing-device.webp" alt="" width="1024" height="683" loading="lazy" decoding="async" /></div>
+            </div>
+            <div class="spec-modal-intro">
+              <p class="spec-modal-category">Technical Specifications</p>
+              <h2 class="spec-modal-title" id="spec-modal-title">Kampela Devkit</h2>
+            </div>
+          </header>
+          <dl class="spec-list">
+            <div class="spec-row"><dt>Size</dt><dd>62.39 x 17.40 x 8.24mm</dd></div>
+            <div class="spec-row"><dt>Weight</dt><dd>53g</dd></div>
+            <div class="spec-row"><dt>Color</dt><dd>Transparent</dd></div>
+            <div class="spec-row"><dt>Material</dt><dd>Plastic, metal</dd></div>
+            <div class="spec-row"><dt>Connector</dt><dd>USB Type-C</dd></div>
+            <div class="spec-row"><dt>Chips</dt><dd>ST33K1M5</dd></div>
+            <div class="spec-row"><dt>Compatibility</dt><dd>64-bits desktop computers: Windows 10/11, macOs, Ubuntu LTS 20.4 / 22.04</dd></div>
+            <div class="spec-row"><dt>Box contents</dt><dd>1 Kampela, 1 USB-C to USB-A cable</dd></div>
+          </dl>
+        </div>
+        <div class="spec-modal-footer">
+          <a class="btn btn--green btn--block spec-modal-cta" href="#">order the devkit<img src="/assets/icon-arrow-right-white.svg" alt="" width="20" height="20" /></a>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

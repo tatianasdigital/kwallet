@@ -1,0 +1,1564 @@
+/* ==========================================================================
+   Kampela — desktop landing page
+   Reference frame: 1920 × 1080 (Figma "home-page").
+   --u  : 1 Figma px at the current width (100vw / 1920, floored at 1024px wide)
+   --s  : 1 Figma px for viewport-height "stages" — min(width-based, height-based)
+          so full-screen compositions also fit short / tall desktop windows.
+   ========================================================================== */
+
+:root {
+  --black: #050505;
+  --white: #ffffff;
+  --green: #028465;
+  --scene: #161616;
+  --lines: #333333;
+  --lines-hover: #525252;
+  --links-hover: #676767;
+  --step-inactive: #525252;
+
+  --vh: 100vh;
+  --u: calc(max(1024px, 100vw) / 1920);
+  --s: min(var(--u), calc(var(--vh) / 1080));
+
+  /* fluid type (Figma size × --u) with a legibility floor */
+  --fs-14: max(11px, calc(14 * var(--u)));
+  --fs-16: max(12px, calc(16 * var(--u)));
+  --fs-20: max(14px, calc(20 * var(--u)));
+  --fs-36: max(20px, calc(36 * var(--u)));
+  --fs-64: max(32px, calc(64 * var(--u)));
+  --fs-86: max(42px, calc(86 * var(--u)));
+  --fs-96: max(46px, calc(96 * var(--u)));
+  --fs-128: max(64px, calc(128 * var(--u)));
+
+  --gutter: calc(56 * var(--u));
+  --marquee-h: max(34px, calc(48 * var(--u)));
+  --header-h: calc(80 * var(--u));
+
+  /* Hero geometry (shared by the hero device and the flat illustration).
+     hero-container: from header + 72 top padding to marquee - 32 bottom padding.
+     The device centre sits at 43.63% of it (370 / 848, Figma frame 2683:3267). */
+  --hero-container-top: calc(var(--header-h) + 72 * var(--u));
+  --hero-container-h: calc(var(--vh) - var(--header-h) - 104 * var(--u) - var(--marquee-h));
+  --hero-axis: calc(var(--hero-container-top) + 0.4363 * var(--hero-container-h));
+  --device-w: calc(580 * var(--s));
+  --device-h: calc(776 * var(--s));
+  --device-top: calc(var(--hero-axis) - var(--device-h) / 2);
+  --fish-w: calc(890 * var(--s));
+  --fish-h: calc(799 * var(--s));
+}
+
+@supports (height: 100svh) {
+  :root { --vh: 100svh; }
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { background: var(--black); }
+
+body {
+  margin: 0;
+  background: transparent;       /* page colour comes from <html>; the grain layer sits between them */
+  color: var(--white);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+img { display: block; max-width: none; }
+h1, h2, h3, p, ul, ol, blockquote { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.page { position: relative; }
+
+:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; }
+
+/* ----------------------------- shared atoms ----------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(8 * var(--u));
+  height: max(36px, calc(56 * var(--u)));
+  padding: 0 calc(24 * var(--u));
+  border-radius: calc(37 * var(--u));
+  font-size: var(--fs-14);
+  font-weight: 500;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background-color 200ms ease, color 200ms ease, opacity 200ms ease;
+}
+.btn img { flex: none; width: max(14px, calc(20 * var(--u))); height: auto; }
+.btn--green { --btn-bg: var(--green); background: var(--btn-bg); color: var(--white); }
+.btn--white { --btn-bg: var(--white); background: var(--btn-bg); color: var(--black); }
+.btn--green:hover { --btn-bg: #02a07a; }
+.btn--white:hover { --btn-bg: #e6e6e6; }
+/* hover stop-motion (src/btn-hover.js): the shape is a layer of its own under the label */
+.btn.has-btn-bg { position: relative; isolation: isolate; background: transparent; }
+.btn-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--btn-bg);
+  transition: background-color 200ms ease;
+  pointer-events: none;
+}
+.btn--block { width: 100%; }
+/* "Back to top" (src/back-to-top.js, Figma 2829:6236): 56 round, 32px from the corner */
+.back-to-top {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  z-index: 60;
+  width: max(40px, calc(56 * var(--u)));
+  height: max(40px, calc(56 * var(--u)));
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  visibility: hidden;      /* the pop (scale from a point) is src/back-to-top.js */
+}
+.back-to-top.has-btn-bg { position: fixed; }
+.back-to-top.is-shown { visibility: visible; }
+
+.text-link,
+.ext-link {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: calc(2 * var(--u));
+  padding-bottom: calc(2 * var(--u));
+  border-bottom: 1px solid currentColor;
+  font-size: var(--fs-16);
+  line-height: 1.18;
+  white-space: nowrap;
+  transition: color 200ms ease;
+}
+.ext-link { font-weight: 300; }
+.ext-link img { width: max(14px, calc(20 * var(--u))); height: auto; }
+.text-link--light { font-weight: 300; }
+.text-link--light b { font-weight: 400; }
+.text-link--small { font-size: var(--fs-14); line-height: 1.23; }
+.text-link--medium { font-size: var(--fs-16); line-height: 1.23; }
+.text-link--muted { color: var(--links-hover); font-size: var(--fs-14); line-height: 1.23; }
+/* e-mail links (kampela@demo.fi) on every page: 1 px white underline 2 px under
+   the text box; the hover state is the typeface flicker (src/link-jitter.js) */
+.mail-link {
+  display: inline-block;
+  padding-bottom: calc(2 * var(--u));
+  border-bottom: 1px solid var(--white);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.section-heading {
+  font-size: var(--fs-86);
+  font-weight: 400;
+  line-height: 1;
+  width: calc(1046 * var(--u));
+}
+
+/* ------------------------------- marquee -------------------------------- */
+
+.product-benefits-marquee,
+.backers-marquee {
+  position: relative;
+  flex: none;
+  height: var(--marquee-h);
+  overflow: hidden;
+  border-top: 1px solid var(--lines-hover);
+  border-bottom: 1px solid var(--lines-hover);
+  display: flex;
+  align-items: center;
+  background: transparent;
+}
+
+.marquee-content {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 48s linear infinite;
+  will-change: transform;
+}
+
+.marquee-track {
+  display: flex;
+  flex: none;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: var(--fs-16);
+  line-height: 1.23;
+  text-transform: uppercase;
+  white-space: pre;
+}
+.marquee-track .is-muted { color: var(--lines-hover); }
+
+@keyframes marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* ================================ HERO ================================== */
+
+.hero-section {
+  position: relative;            /* no z-index: the device must stack against later sections */
+  height: var(--vh);
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  overflow-x: clip;              /* vertical stays visible so the device can travel down */
+}
+
+.site-header {
+  position: relative;
+  flex: none;
+  height: var(--header-h);
+  padding: calc(12 * var(--u)) var(--gutter);
+  z-index: 6;
+}
+.header-container {
+  height: calc(56 * var(--u));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-brand-and-navigation { display: flex; align-items: center; gap: calc(56 * var(--u)); }
+.kampela-logo { display: flex; align-items: center; gap: calc(15 * var(--u)); width: calc(163 * var(--u)); }
+.logo-symbol { width: calc(40 * var(--u)); height: auto; }
+.logo-wordmark { width: calc(100.13 * var(--u)); height: auto; margin-top: calc(5.2 * var(--u)); }
+.primary-navigation {
+  display: flex;
+  gap: calc(28 * var(--u));
+  font-size: var(--fs-14);
+  line-height: 1.344;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.primary-navigation a,
+.footer-navigation a { transition: color 200ms ease; }
+.header-social-and-cta { display: flex; align-items: center; gap: calc(42 * var(--u)); }
+.social-links { display: flex; align-items: flex-start; gap: calc(32 * var(--u)); }
+/* landing page: the whole header is fixed (src/site-header.js). Its place at the
+   top of the hero stays empty (the hero's ::before), so nothing moves. Scrolling
+   down slides it away, scrolling up brings it back; away from the top it gets a
+   black backdrop with the film grain, so it stays readable over the sections.
+   Layer: above every section (flat-design 10, its successor 11, the dive canvas 12),
+   below the cursor and the modal. */
+.hero-section::before { content: ''; flex: none; height: var(--header-h); }
+/* inner pages (src/subpage.js): the same, the header's place is kept by .page::before */
+.subpage .page::before { content: ''; display: block; height: var(--header-h); }
+.hero-section .site-header,
+.subpage .site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  translate: 0 0;
+  transition: translate 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hero-section .site-header.is-hidden,
+.subpage .site-header.is-hidden { translate: 0 calc(-100% - 2px); transition-duration: 350ms; }
+.header-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--black);
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+.header-backdrop .grain { position: absolute; z-index: auto; }
+.site-header.is-floating .header-backdrop { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .hero-section .site-header, .subpage .site-header { transition: none; } }
+
+.hero-content {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: calc(72 * var(--u)) var(--gutter) calc(32 * var(--u));
+}
+.hero-container { position: relative; height: 100%; }
+
+/* Everything in the hero stage is laid out around the device axis (43.63% of the container). */
+.hero-brand-heading {
+  position: absolute;
+  left: calc(50% + 1.8 * var(--s) - 731.82 * var(--s));
+  top: calc(43.63% - 255 * var(--s));
+  width: calc(1463.65 * var(--s));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: calc(41 * var(--s));
+  font-weight: 400;
+}
+.hero-tagline {
+  position: relative;
+  display: block;
+  width: calc(220 * var(--s));
+  height: calc(66.55 * var(--s));
+}
+/* Live text (Figma "Cold-Pressed Signing", 2714:5520): Space Grotesk 34, line-height 1.
+   src/link-jitter.js loops it through the italic serif faces, like the nav links on hover. */
+.tagline-text {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 400;
+  font-size: calc(34 * var(--s));
+  line-height: 1;
+  color: var(--white);
+  white-space: nowrap;
+}
+.tagline-stripe {
+  position: absolute;
+  left: calc(130 * var(--s));
+  top: calc(40 * var(--s));
+  width: calc(85 * var(--s));
+  height: calc(23 * var(--s));
+}
+.kampela-hero-wordmark {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: calc(244.3 * var(--s));
+}
+.kampela-hero-wordmark img {
+  position: absolute;
+  top: 0;
+  left: calc(var(--x) * var(--s));
+  height: 100%;
+  width: auto;
+}
+
+.decorative-star-top,
+.decorative-star-right,
+.decorative-star-left { position: absolute; height: auto; }
+.decorative-star-top { width: calc(35 * var(--s)); left: calc(50% - 261 * var(--s)); top: calc(43.63% - 306 * var(--s)); }
+.decorative-star-right { width: calc(24 * var(--s)); left: calc(50% + 448 * var(--s)); top: calc(43.63% + 278 * var(--s)); }
+.decorative-star-left { width: calc(24 * var(--s)); left: calc(50% - 460 * var(--s)); top: calc(43.63% + 238 * var(--s)); }
+.decorative-star-left.decorative-star-far-left { left: calc(50% - 884 * var(--s)); top: calc(43.63% - 214 * var(--s)); }    /* Figma 2855:6510 */
+.decorative-star-left.decorative-star-far-right { left: calc(50% + 796 * var(--s)); top: calc(43.63% - 115 * var(--s)); }   /* Figma 2855:6512 */
+
+.hero-actions {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: calc(32 * var(--u));
+  z-index: 6;
+}
+
+/* ---- Hero device: sticky in a track that ends exactly where the flat
+        illustration reaches its resting point in the flat-design scene.
+        Track height = hero (1vh) + about (1vh) + flat section top offset
+        to the fish's resting point (Figma: fish centre 636.5 px below the section top)
+        + half device height → 2vh + 636.5u + device-h / 2 (the device's own top offset cancels out).
+        On the way the device dives under the water line (src/water-dive.js). */
+.hero-device-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(2 * var(--vh) + 636.5 * var(--u) + var(--device-h) / 2);
+  z-index: 5;                     /* above hero + about, below the flat-design section (10) */
+  pointer-events: none;
+}
+.hero-device-visual {
+  position: sticky;
+  top: var(--device-top);
+  width: var(--device-w);
+  height: var(--device-h);
+  margin: var(--device-top) auto 0;
+  overflow: clip;
+}
+/* wrappers used by src/water-dive.js: the clipper cuts the device at the water line,
+   the tilt layer leans it while it falls (the 3D host inside stays untouched) */
+.hero-device-clip,
+.hero-device-tilt { position: absolute; inset: 0; }
+.device-rotator {
+  position: absolute;
+  left: calc(50% - 15.78 * var(--s));
+  top: calc(-46.42 * var(--s));
+  width: calc(686.67 * var(--s));
+  height: calc(868.84 * var(--s));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* the poster is frame 1 of the 3D turn: same box and fit as the canvas, so the switch to 3D is invisible */
+.device-rotator img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+/* 3D model (src/kampela-3d): canvas fills the rotator; the PNG cross-fades out once the model is ready */
+.device-rotator .kampela-3d-canvas {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.device-rotator.is-3d-ready .kampela-3d-canvas { opacity: 1; }
+.device-rotator.has-3d img { transition: opacity 0.6s ease; }
+.device-rotator.is-3d-ready img { opacity: 0; }
+
+/* ================================ ABOUT ================================= */
+
+.about-section {
+  position: relative;            /* no z-index → the hero device (z 5) paints above it */
+  height: var(--vh);
+  background: transparent;
+  overflow: clip;
+}
+.about-orbit { position: absolute; z-index: -2; left: calc(945 * var(--u)); top: 24.07%; width: calc(1320 * var(--u)); height: calc(696 * var(--u)); overflow: visible; }   /* Figma 2792:3748 */
+.about-star-cluster { position: absolute; left: calc(386 * var(--u)); top: 77.13%; width: calc(76 * var(--u)); height: auto; }
+.about-star-bottom { position: absolute; left: calc(1503 * var(--u)); top: 75.56%; width: calc(35 * var(--u)); height: auto; }
+.about-star-top { position: absolute; left: calc(1456 * var(--u)); top: 16.11%; width: calc(35 * var(--u)); height: auto; }
+.about-planet { position: absolute; left: calc(1473 * var(--u)); top: 40.37%; width: calc(259.41 * var(--u)); height: auto; }
+
+.about-content {
+  position: absolute;
+  left: calc(208 * var(--u));
+  top: calc(120 * var(--u));
+  width: calc(586 * var(--u));
+  display: flex;
+  flex-direction: column;
+  gap: calc(56 * var(--u));
+}
+.about-heading { font-size: var(--fs-64); font-weight: 400; line-height: 1; }
+.connectivity-benefits-list {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  column-gap: calc(52 * var(--u));
+  row-gap: calc(16 * var(--u));
+}
+.connectivity-benefits-list li {
+  display: flex;
+  align-items: center;
+  gap: calc(10 * var(--u));
+  font-size: var(--fs-20);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.connectivity-benefits-list img { width: max(24px, calc(36 * var(--u))); height: auto; }
+
+/* ============================= FLAT DESIGN ============================== */
+
+.flat-design-section {
+  z-index: 10;                   /* covers the travelling hero device */
+  height: calc(var(--vh) + 239 * var(--u));   /* Figma flat-design-section-new: 1319 = 1080 + 239 */
+  /* stays put once its bottom reaches the bottom of the screen, while the demo
+     video section (z 11, opaque) slides up over it */
+  position: sticky;
+  top: calc(-239 * var(--u));
+  overflow-x: clip;
+  overflow-y: visible;           /* the splash crown may rise above the section top */
+  background: transparent;       /* the band above the wave stays see-through */
+}
+
+.flat-design-scene {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(246 * var(--u));
+  bottom: 0;
+}
+.flat-design-scene-container {
+  position: absolute;
+  inset: 0;
+  background: var(--black);      /* new Figma (2774:5372): plain black water, no background artwork */
+  overflow: clip;
+  /* wavy top edge from Figma + a solid layer so the scene stays opaque on very tall windows */
+  -webkit-mask-image: url(/assets/flat-scene-mask.svg), linear-gradient(#000, #000);
+  mask-image: url(/assets/flat-scene-mask.svg), linear-gradient(#000, #000);
+  -webkit-mask-size: calc(2021 * var(--u)) calc(1506.14 * var(--u)), 100% 100%;
+  mask-size: calc(2021 * var(--u)) calc(1506.14 * var(--u)), 100% 100%;
+  -webkit-mask-position: calc(-32 * var(--u)) calc(-208.637 * var(--u)), 0 calc(600 * var(--u));
+  mask-position: calc(-32 * var(--u)) calc(-208.637 * var(--u)), 0 calc(600 * var(--u));
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.flat-bg-artwork {
+  position: absolute;
+  left: calc(-278 * var(--u));
+  top: calc(-323 * var(--u));
+  width: calc(2427 * var(--u));
+  height: calc(2314.05 * var(--u));
+}
+
+/* ContainerP (Figma 2718:5561): the whole section, masked by the wave 14 px under the
+   binary text (same mask as the scene, positioned from the section top), so the fish
+   is visible right below the water line instead of only below the scene's top edge. */
+.flat-fish-container {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  pointer-events: none;
+  -webkit-mask-image: url(/assets/flat-scene-mask.svg), linear-gradient(#000, #000);
+  mask-image: url(/assets/flat-scene-mask.svg), linear-gradient(#000, #000);
+  -webkit-mask-size: calc(2021 * var(--u)) calc(1506.14 * var(--u)), 100% 100%;
+  mask-size: calc(2021 * var(--u)) calc(1506.14 * var(--u)), 100% 100%;
+  -webkit-mask-position: calc(-32 * var(--u)) calc(37.363 * var(--u)), 0 calc(846 * var(--u));
+  mask-position: calc(-32 * var(--u)) calc(37.363 * var(--u)), 0 calc(846 * var(--u));
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+/* Flat illustration: rests exactly where Figma puts it inside ContainerP
+   (890 × 799 at 518, 237 → centre 636.5 px below the section top), right under
+   the water line; it drops in from above, through the line (src/water-dive.js cues it). */
+.flat-device-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(636.5 * var(--u) - var(--fish-h) / 2);
+  height: var(--fish-h);
+  pointer-events: none;
+}
+.flat-device-illustration {
+  position: relative;
+  width: var(--fish-w);
+  height: var(--fish-h);
+  margin: 0 auto;
+}
+.flat-device-illustration > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* Animated flounder stage (src/flat-fish). Overflow stays visible so the fish can
+   drop in from the top of the scene; the scene container clips it. */
+.flat-device-illustration .kf-svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+/* Description (Figma 2732:5570), placed from the section: 426 wide at 1275
+   (219 px from the right edge); top 938 in Figma, raised 132 px on request → 806 */
+.flat-description {
+  position: absolute;
+  left: calc(1275 * var(--u));
+  top: calc(806 * var(--u));
+  width: calc(426 * var(--u));
+}
+.flat-design-description {
+  font-size: var(--fs-64);
+  line-height: 1;
+}
+.kampela-word { color: var(--green); cursor: help; outline-offset: 6px; }
+/* "[?]" set as a superscript (raised, small, bold — like the earlier Figma version) */
+.kampela-sup { font-size: 0.4em; font-weight: 700; vertical-align: 1.35em; line-height: 0; }
+/* Definition Label: 245 × 52, #00664E, radius 12, padding 16, Space Grotesk Medium 20,
+   turned −15°; its centre sits at (230.06, 215.82) from the Description's top-left.
+   Appears while "kampela [?]." is hovered or focused. */
+.definition-label {
+  position: absolute;
+  left: calc(230.06 * var(--u));
+  top: calc(215.82 * var(--u));
+  padding: calc(16 * var(--u));
+  border-radius: calc(12 * var(--u));
+  background: #00664e;
+  color: var(--white);
+  font-size: var(--fs-20);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(-15deg) scale(0.6);
+  transform-origin: 30% 50%;
+  transition: opacity 0.18s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.flat-description:has(.kampela-word:hover) .definition-label,
+.flat-description:has(.kampela-word:focus-visible) .definition-label {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(-15deg) scale(1);
+}
+@media (prefers-reduced-motion: reduce) { .definition-label { transition: opacity 0.18s ease; } }
+/* ---- sea life (Figma 2774:5372), positions in Figma px of the 1920 × 1073 scene ----
+   Fish: Figma box (--x/--y/--w/--h) → turned box (--iw/--ih, rotate + flip) → image.
+   FishGroup4 and the seaweed hang from the bottom of the scene, so taller
+   windows don't leave a gap under them. src/flat-sea.js moves them. */
+.fish-group { position: absolute; inset: 0; pointer-events: none; will-change: transform; }
+.sea-fish {
+  position: absolute;
+  left: calc(var(--x) * var(--u));
+  top: calc(var(--y) * var(--u));
+  width: calc(var(--w) * var(--u));
+  height: calc(var(--h) * var(--u));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sea-fish--bottom { top: auto; bottom: calc((1073 - var(--y) - var(--h)) * var(--u)); }
+.sea-fish-box {
+  position: relative;
+  flex: none;
+  width: calc(var(--iw) * var(--u));
+  height: calc(var(--ih) * var(--u));
+  transform: rotate(var(--r)) scaleY(-1);
+}
+.sea-fish-box img { position: absolute; left: calc(-1 * var(--il)); top: 0; width: calc(100% + var(--iw2)); height: calc(100% + var(--ih2)); max-width: none; }
+.seaweed {
+  position: absolute;
+  left: calc(var(--x) * var(--u));
+  bottom: calc(var(--b) * var(--u));
+  width: calc(var(--w) * var(--u));
+  height: calc(var(--h) * var(--u));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.seaweed-box {
+  position: relative;
+  flex: none;
+  width: calc(var(--bw) * var(--u));
+  height: calc(var(--bh) * var(--u));
+  transform: var(--tf);
+}
+.seaweed-svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+.sw-blade { transform-box: view-box; }
+
+/* Text on path, exactly as in Figma (node "decorative-binary-wave-text"):
+   curve box 2058 × 169.74 at (-35, 2), Space Mono 16 px, white. */
+.decorative-binary-wave-text {
+  position: absolute;
+  left: calc(-35 * var(--u));
+  top: calc(2 * var(--u));
+  width: calc(2058 * var(--u));
+  height: calc(169.74 * var(--u));
+  overflow: visible;
+  pointer-events: none;
+}
+.binary-wave-text {
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 16px;               /* in curve units: scales with the SVG like everything else */
+  fill: var(--white);
+  text-transform: uppercase;
+}
+/* Water surface (Figma "Text on path" water layer): a 1 px white line 26 px above
+   the binary text, same curve. src/water-dive.js makes both ripple like water. */
+.water-surface-line { fill: none; stroke: var(--white); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.water-splash-fill { fill: var(--white); stroke: none; }
+/* Splash / bubbles / speed lines of the dive (drawn by src/water-dive.js) */
+.water-dive-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 12; pointer-events: none; }
+/* Cue element the flounder animation watches: water-dive.js moves it on screen
+   at the moment the fish should come out from under the water line. */
+.flat-fish-cue { position: fixed; left: 0; top: -20px; width: 2px; height: 2px; pointer-events: none; visibility: hidden; }
+.flat-fish-cue.is-on { top: 50%; }
+
+/* ============================== DEMO VIDEO ============================== */
+
+.flat-demo-stack { position: relative; }
+.demo-video-section {
+  position: relative;
+  z-index: 11;                   /* slides over the sticky flat-design section */
+  width: 100%;
+  height: var(--vh);
+  overflow: hidden;
+  background: #000;
+}
+.demo-video-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* 16:9 player scaled to *cover* the section (like object-fit: cover) */
+.demo-video-frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, calc(var(--vh) * 16 / 9));
+  aspect-ratio: 16 / 9;
+  transform: translate(-50%, -50%);
+}
+.demo-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+/* The player stays invisible over the poster until the video is really playing (see main.js → initDemoVideo) */
+.demo-video-frame { opacity: 0; pointer-events: none; transition: opacity 0.8s ease; }
+.demo-video-section.is-video-ready .demo-video-frame { opacity: 1; pointer-events: auto; }
+@media (prefers-reduced-motion: reduce) { .demo-video-frame { transition: none; } }
+.demo-video-caption {
+  position: absolute;
+  left: var(--gutter);
+  bottom: calc(36 * var(--u));
+  font-size: var(--fs-16);
+  line-height: 1.18;
+  pointer-events: none;
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
+}
+
+/* ========================= HORIZONTAL SECTIONS ========================== */
+
+.h-scroll-section {
+  position: relative;
+  height: var(--vh);
+  background: transparent;
+  overflow-x: clip;
+}
+.h-scroll-viewport { position: relative; width: 100%; overflow-x: clip; }
+.h-scroll-track { position: relative; display: flex; width: max-content; }
+
+/* ------------------------------ features -------------------------------- */
+
+/* Figma features-section-new (2741:3352): 1227 tall — heading at 72, cards at 394,
+   56 px left under the cards. Pinned once that 56 px gap sits at the bottom of the screen. */
+.features-section { height: calc(1227 * var(--s)); }
+.features-inner {
+  position: relative;
+  height: 100%;
+  padding-top: calc(72 * var(--s));   /* 72 px from the top of the section */
+}
+.features-star { position: absolute; left: calc(1615 * var(--u)); top: calc(144 * var(--s)); width: calc(35 * var(--u)); height: auto; }
+.features-heading { margin-left: var(--gutter); font-size: max(42px, calc(86 * var(--s))); width: calc(1046 * var(--s)); }
+.features-section .h-scroll-viewport { margin-top: calc(64 * var(--s)); }
+
+.feature-cards-track {
+  gap: calc(36 * var(--s));
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+.feature-card {
+  position: relative;
+  flex: none;
+  width: calc(609 * var(--s));
+  height: calc(777 * var(--s));
+  padding: calc(36 * var(--s));
+  border: 1px solid transparent;     /* no outline; keeps the Figma box size */
+  border-radius: calc(12 * var(--s));
+  outline: none;
+}
+.feature-card:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; }
+/* Backside (Figma 2743:4356) shown until the card flips (src/features-reveal.js) */
+.feature-card-back {
+  position: absolute;
+  inset: -1px;
+  z-index: 3;
+  background: var(--green);
+  border: 1px solid var(--lines);
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+}
+.fx-line { display: block; will-change: transform; }
+/* Hover outline of the Tiles, drawn by src/feature-outline.js */
+.feature-outline {
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  overflow: visible;
+  pointer-events: none;
+  z-index: 2;
+}
+.feature-outline path { fill: none; stroke: #525252; stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.feature-card-text { position: relative; display: flex; flex-direction: column; }
+.feature-title { font-size: max(20px, calc(36 * var(--s))); font-weight: 400; line-height: 1; }
+.feature-description {
+  margin-top: calc(20 * var(--s));
+  font-size: max(14px, calc(20 * var(--s)));
+  line-height: 1.2;
+  color: var(--links-hover);
+  opacity: 0;
+  transform: translate3d(0, calc(8 * var(--s)), 0);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+.feature-illustration-container {
+  position: absolute;
+  left: calc(36 * var(--s));
+  bottom: calc(36 * var(--s));
+  width: calc(537 * var(--s));
+  height: calc(545 * var(--s));
+  overflow: clip;
+}
+.feature-illustration {
+  position: absolute;
+  left: calc(-78 * var(--s));
+  top: calc(-29 * var(--s));
+  width: calc(692 * var(--s));
+  height: calc(602 * var(--s));
+  object-fit: cover;
+  transform: scale(0.8);              /* illustrations ~20 % smaller, centred in their frame */
+}
+/* Transparent, e-Ink, NFC: 120 % of that */
+.feature-illustration.is-large { transform: scale(0.96); }
+/* Strongbox, No firmware updates: 110 % */
+.feature-illustration.is-medium { transform: scale(0.88); }
+.feature-illustration.is-masked {
+  top: calc(-25.3 * var(--s));        /* same relative offset as before, scaled to the new size */
+  -webkit-mask-image: var(--mask);
+  mask-image: var(--mask);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+.feature-card:hover .feature-description,
+.feature-card:focus-visible .feature-description,
+.feature-card:has(:focus-visible) .feature-description {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* ---------------------------- how it works ------------------------------ */
+
+.how-it-works-container { position: relative; height: 100%; padding-top: calc(80 * var(--s)); }
+.how-it-works-section .section-heading { margin-left: var(--gutter); font-size: max(42px, calc(86 * var(--s))); }
+.how-it-works-section .h-scroll-viewport { margin-top: calc(64 * var(--s)); }
+
+.transaction-steps-track {
+  gap: calc(120 * var(--s));
+  /* Figma keeps a 662px empty slot (hidden card) before step 01 */
+  padding-left: calc(var(--gutter) + 662 * var(--s));
+  padding-right: var(--gutter);
+}
+.step {
+  position: relative;
+  flex: none;
+  width: calc(590 * var(--s));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(28 * var(--s));
+}
+.step-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: calc(8 * var(--s)) calc(16 * var(--s));
+  border: 1px solid var(--lines);
+  border-radius: calc(27 * var(--s));
+  background: transparent;
+  color: var(--links-hover);
+  font-size: max(11px, calc(14 * var(--s)));
+  line-height: 1.23;
+  white-space: nowrap;
+  transition: color 250ms ease, border-color 250ms ease;
+}
+.step-description {
+  width: calc(586 * var(--s));
+  min-height: calc(108 * var(--s));
+  font-size: max(20px, calc(36 * var(--s)));
+  line-height: 1;
+  color: var(--step-inactive);
+  transition: color 250ms ease;
+}
+.step-image-container {
+  position: relative;
+  margin-top: calc(44 * var(--s));       /* 72 Figma gap minus the 28 column gap */
+  width: calc(590 * var(--s));
+  height: calc(554 * var(--s));
+  border-radius: calc(12 * var(--s));
+  opacity: 0.25;                         /* inactive steps: 75 % transparent */
+  transition: opacity 0.45s ease;
+}
+.step-image {
+  position: absolute;
+  left: calc(var(--l) * var(--s));
+  top: calc(var(--t) * var(--s));
+  width: calc(var(--w) * var(--s));
+  height: calc(var(--h) * var(--s));
+  object-fit: cover;
+}
+.step-image-02-wrap {
+  position: absolute;
+  left: calc(-592 * var(--s));
+  top: calc(-45 * var(--s));
+  width: calc(1339.15 * var(--s));
+  height: calc(1251.44 * var(--s));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step-image-02 {
+  width: calc(1211 * var(--s));
+  height: calc(1110 * var(--s));
+  object-fit: cover;
+  transform: rotate(-172.89deg) scaleY(-1);
+}
+/* the photos (transparent PNGs) are cropped to the card */
+/* z-index + own layer: the photo is always painted above the fill and its grain */
+.step-photo { position: absolute; inset: 0; z-index: 1; border-radius: inherit; overflow: clip; transform: translateZ(0); }
+/* active card: #161616 fill with the page's film grain behind the photo.
+   src/step-fill.js grows it from the centre, then its edges wobble in stop-motion
+   (that's why the fill is not cropped by the card: its edges may move a little) */
+.step-fill { position: absolute; inset: 0; z-index: 0; isolation: isolate; clip-path: circle(0 at 50% 50%); pointer-events: none; }
+/* isolated: the grain's blend modes mix only with the green, never with the photo */
+/* clip-path + paint containment: nothing inside (the moving grain layer is bigger
+   than the card) can ever be painted outside the image container */
+.step-fill-shape { position: absolute; inset: 0; isolation: isolate; border-radius: calc(12 * var(--s)); background: #161616; overflow: hidden; contain: paint; clip-path: inset(0 round calc(12 * var(--s))); }
+.grain--fill { position: absolute; z-index: auto; contain: paint; }
+@media (prefers-reduced-motion: reduce) {
+  .step.is-active .step-fill { clip-path: none; }
+}
+/* single source of truth: .is-active on the step */
+.step.is-active .step-badge { color: var(--white); }
+.step.is-active .step-description { color: var(--white); }
+.step.is-active .step-image-container { opacity: 1; }
+/* badge outlines (grey + white) and the line to the next step are drawn by src/how-it-works.js */
+.hiw-drawn .step-badge { border-color: transparent; }
+.step-connector { position: absolute; height: 0; pointer-events: none; transform-origin: 0 50%; will-change: transform; }
+@media (prefers-reduced-motion: reduce) {
+  .step.is-active .step-badge { border-color: var(--white); }
+  .step-image-container { transition: none; }
+}
+
+/* =========================== DEVICE BENEFITS ============================ */
+
+.device-benefits-section {
+  position: relative;
+  /* 1080 in Figma; 60 px less space above (after features) and 60 px less below
+     (before how-it-works): the section is 120 shorter and its content moves up 60 */
+  height: calc(960 * var(--u));
+  background: transparent;
+  overflow: clip;
+}
+.device-benefits-section > * { translate: 0 calc(-60 * var(--u)); }
+.device-benefits-section {
+  --benefits-shift: 105;
+  /* gap after the feature cards made 20% smaller (215 → 172 px at 1600 wide): the section starts 52 higher */
+  margin-top: calc(-52 * var(--u));
+}
+.benefits-orbit {
+  position: absolute;
+  z-index: -2;                   /* background shape: below the grain layer */
+  /* Figma 2789:6357 (3224.1 × 798): centred on the device, the ribbon tips meet at its middle */
+  left: calc(50% - 1612.05 * var(--u));
+  top: calc(30 * var(--u));      /* 62 in Figma, raised 32 together with the device */
+  width: calc(3224.1 * var(--u));
+  height: calc(798 * var(--u));
+  overflow: visible;
+}
+.benefit {
+  position: absolute;
+  left: calc(var(--x) * var(--u));
+  /* all five notes moved down together so they sit centred around the device and the ribbons */
+  top: calc((var(--y) + var(--benefits-shift, 0)) * var(--u));
+  width: calc(240 * var(--u));
+  font-size: var(--fs-20);
+  line-height: 1.2;
+}
+.benefit-check {
+  display: block;
+  width: max(24px, calc(36 * var(--u)));
+  height: auto;
+  aspect-ratio: 1;
+  margin-bottom: calc(12 * var(--u));
+}
+.device-photo-container {
+  position: absolute;
+  left: calc(50% + 1 * var(--u));
+  top: calc(72 * var(--u));      /* 104 in Figma, raised 32 together with the orbit */
+  width: calc(526 * var(--u));
+  height: calc(862 * var(--u));
+  transform: translateX(-50%);
+  overflow: clip;
+}
+.device-photo-rotator {
+  position: absolute;
+  left: calc(19 * var(--u));
+  top: calc(25 * var(--u));
+  width: calc(476.44 * var(--u));
+  height: calc(812.19 * var(--u));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.device-photo {
+  flex: none;
+  width: calc(762 * var(--u));
+  height: calc(301 * var(--u));
+  border-radius: calc(20 * var(--u));
+  object-fit: fill;
+  transform: rotate(-76deg);
+  box-shadow: 0 4px 8.1px -19px rgba(0, 0, 0, 0.37);
+}
+
+/* test 3D model in place of the photo (src/device-benefits.js); same box as the photo */
+.benefits-device-3d {
+  position: absolute;
+  left: calc(50% + 1 * var(--u));
+  top: calc(72 * var(--u));      /* 104 in Figma, raised 32 together with the orbit */
+  width: calc(526 * var(--u));
+  height: calc(862 * var(--u));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.benefits-device-float { position: absolute; inset: 0; will-change: transform; }
+.benefits-device-float .kampela-3d-canvas { width: 100%; height: 100%; }
+.device-benefits-section.has-3d .device-photo-container { visibility: hidden; }
+
+/* =============================== PRICING ================================ */
+
+.pricing-section { position: relative; padding: calc(80 * var(--u)) var(--gutter); background: transparent; }
+.pricing-header { position: relative; height: calc(86 * var(--u)); width: calc(1434 * var(--u)); }
+.shipping-information { position: absolute; left: calc(1223 * var(--u)); top: calc(20 * var(--u)); width: calc(211 * var(--u)); }
+.shipping-information p { font-size: var(--fs-20); line-height: 1.23; }
+.pricing-cards { display: flex; gap: calc(21 * var(--u)); margin-top: calc(64 * var(--u)); }
+.pricing-card {
+  position: relative;
+  flex: none;
+  width: calc(589 * var(--u));
+  height: calc(743 * var(--u));
+  border: 1px solid var(--lines);
+  border-radius: calc(12 * var(--u));
+}
+.product-header {
+  position: absolute;
+  left: calc(31 * var(--u));
+  top: calc(31 * var(--u));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(12 * var(--u));
+}
+.product-header h3 { font-size: var(--fs-36); font-weight: 400; line-height: 1; }
+.availability-badge {
+  position: absolute;
+  right: calc(31 * var(--u));
+  top: calc(31 * var(--u));
+  width: calc(137 * var(--u));
+  height: calc(144 * var(--u));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url(/assets/availability-badge.svg) center / 100% 100% no-repeat;
+  z-index: 1;
+}
+.availability-badge.has-ab-bg { background: none; }
+.availability-badge .ab-bg {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  margin: 0;
+  background: url(/assets/availability-badge.svg) center / 100% 100% no-repeat;
+  z-index: -1;
+}
+.availability-badge span {
+  width: calc(88 * var(--u));
+  margin-left: calc(-3 * var(--u));
+  font-size: max(10px, calc(14 * var(--u)));
+  font-weight: 700;
+  line-height: 1.04;
+  text-align: center;
+  text-transform: uppercase;
+  color: #000;
+}
+.product-visual {
+  position: absolute;
+  left: calc(31 * var(--u));
+  top: calc(117 * var(--u));
+  width: calc(525 * var(--u));
+  height: calc(440 * var(--u));
+  overflow: clip;
+}
+.pricing-card:first-child .product-visual { filter: drop-shadow(0 4px 2px rgba(0, 0, 0, 0.25)); }
+.pv {
+  position: absolute;
+  left: calc(var(--cx) * var(--u));
+  top: calc(var(--cy) * var(--u));
+  width: calc(var(--w) * var(--u));
+  height: calc(var(--h) * var(--u));
+  object-fit: fill;
+  transform: translate(-50%, -50%) rotate(-41.65deg) skewX(0.43deg);
+}
+.pv--single { --cx: 278.6; --cy: 223.26; --w: 393.2; --h: 264.7; }
+.pv--pair { --cy: 211.67; --w: 325.86; --h: 219.36; }
+.pv--back { --cx: 329.92; }
+.pv--front { --cx: 222.25; }
+.purchase-details {
+  position: absolute;
+  left: calc(31 * var(--u));
+  bottom: calc(31 * var(--u));
+  width: calc(525 * var(--u));
+  display: flex;
+  flex-direction: column;
+  gap: calc(24 * var(--u));
+}
+.price-row { display: flex; align-items: flex-end; gap: calc(8 * var(--u)); white-space: nowrap; }
+.price { font-size: var(--fs-64); font-weight: 500; line-height: 0.75; }
+.per { font-size: var(--fs-14); line-height: 1.23; color: #606060; }
+
+/* ============================= TESTIMONIALS ============================= */
+
+.testimonials-section {
+  display: flex;
+  justify-content: center;
+  padding: calc(122 * var(--u)) var(--gutter) calc(56 * var(--u));   /* top: 90 + 32 */
+  background: transparent;
+}
+.testimonials-container { position: relative; width: calc(1503 * var(--u)); min-height: calc(585 * var(--u)); }
+.decorative-quotation-mark { position: absolute; left: 0; top: calc(87 * var(--u)); width: calc(56 * var(--u)); height: auto; }
+.testimonial-content {
+  margin-left: calc(153 * var(--u));
+  width: calc(1198 * var(--u));
+  display: flex;
+  flex-direction: column;
+  gap: calc(52 * var(--u));
+}
+.testimonials-header { display: flex; align-items: center; gap: calc(93 * var(--u)); }
+.testimonials-header h2 { font-size: var(--fs-14); font-weight: 400; line-height: 1.2; white-space: nowrap; }
+.testimonial-slider-controls { display: flex; align-items: center; gap: calc(20 * var(--u)); }
+/* slider switch (Figma 479:642): enabled #fff, disabled #525252 (arrow) / #676767 (page), hover #c3c3c3 */
+.testimonial-slider-controls button {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--white);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.testimonial-slider-controls button:focus-visible { outline: 1px solid var(--white); outline-offset: 4px; }
+.slider-arrow { display: block; width: max(16px, calc(24 * var(--u))); height: max(16px, calc(24 * var(--u))); }
+.slider-arrow svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.slider-arrow.arrow-prev svg { transform: scaleX(-1); }
+.slider-arrow:disabled { color: #525252; cursor: default; }
+.testimonial-pagination {
+  display: flex;
+  gap: calc(16 * var(--u));
+  font-size: var(--fs-14);
+  line-height: 1.23;
+  white-space: pre;
+}
+.testimonial-pagination button { color: #676767; white-space: pre; }
+.testimonial-pagination button.is-current { color: var(--white); cursor: default; }
+@media (hover: hover) {
+  .slider-arrow:not(:disabled):hover,
+  .testimonial-pagination button:not(.is-current):hover { color: #c3c3c3; }
+}
+/* all quotes in one grid cell: the block is as tall as the longest one, nothing jumps */
+.testimonial-slides { display: grid; }
+.testimonial-slide {
+  grid-area: 1 / 1;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(52 * var(--u));
+  visibility: hidden;
+}
+.testimonial-slide.is-current, .testimonial-slide.is-leaving { visibility: visible; }
+.testimonial-quote { font-size: var(--fs-96); font-weight: 500; line-height: 1; }
+.testimonial-author { display: flex; align-items: center; gap: calc(24 * var(--u)); font-size: var(--fs-20); line-height: 1.2; }
+.author-avatar {
+  position: relative;
+  flex: none;
+  width: calc(56 * var(--u));
+  height: calc(56 * var(--u));
+  border-radius: 50%;
+  overflow: hidden;
+  background: #d9d9d9;
+}
+.author-avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ================================ PRESS ================================= */
+
+/* only the sides are clipped: the planets pop out (overshoot) and jitter right at the
+   section's top edge, so vertically the illustration may paint a little beyond it */
+.press-section { position: relative; height: calc(913 * var(--u)); background: transparent; overflow-x: clip; overflow-y: visible; }
+.press-illustration-container {
+  position: absolute;
+  left: calc(1033 * var(--u));
+  top: calc(-3 * var(--u));
+  width: calc(886 * var(--u));
+  height: calc(541 * var(--u));
+  overflow-x: clip;
+  overflow-y: visible;
+}
+/* z-index -2: under the page's film grain, like the other ribbons (they get the same noise) */
+.press-orbit { position: absolute; z-index: -2; left: calc(202.36 * var(--u)); top: calc(156.33 * var(--u)); width: calc(684 * var(--u)); height: calc(400 * var(--u)); overflow: visible; }
+.press-planet { position: absolute; height: auto; }
+.press-planet--ringed { left: calc(29 * var(--u)); top: calc(5 * var(--u)); width: calc(225 * var(--u)); }
+.press-planet--green { left: calc(130.5 * var(--u)); top: calc(202 * var(--u)); width: calc(57 * var(--u)); }
+.press-planet--orange { left: calc(329 * var(--u)); top: calc(55.5 * var(--u)); width: calc(31.5 * var(--u)); }
+.press-container { position: absolute; left: var(--gutter); top: calc(180 * var(--u)); }
+.press-cards { display: flex; gap: calc(20 * var(--u)); margin-top: calc(64 * var(--u)); }
+.press-card {
+  position: relative;
+  flex: none;
+  width: calc(589 * var(--u));
+  height: calc(403 * var(--u));
+  padding: calc(31 * var(--u));
+  background: transparent;
+  border: 1px solid var(--lines);
+  border-radius: calc(12 * var(--u));
+}
+.press-card h3 { font-size: var(--fs-36); font-weight: 400; line-height: 1; }
+.press-date { margin-top: calc(16 * var(--u)); font-size: var(--fs-14); line-height: 1.23; color: var(--links-hover); }
+.press-card .text-link { position: absolute; left: calc(31 * var(--u)); top: calc(348 * var(--u)); }
+/* whole card is a link: custom cursor (Figma "cursor": green circle with an arrow), hot spot in its centre */
+.press-card.is-card-link,
+.press-card.is-card-link * { cursor: url(/assets/cursor-press.svg) 38 40, pointer; }
+/* with motion: the native cursor is hidden and a live copy follows the pointer (src/press.js) */
+.has-live-cursor .press-card.is-card-link,
+.has-live-cursor .press-card.is-card-link * { cursor: none; }
+.press-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  width: 76px;
+  height: 80px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.press-cursor.is-on { opacity: 1; }
+.press-cursor .pc-inner { display: block; width: 100%; height: 100%; }
+.press-cursor svg { display: block; overflow: visible; }
+/* hand-drawn underline (src/press.js) sits exactly where the border-bottom is */
+.press-card .link-underline { position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; pointer-events: none; }
+.press-card .text-link.has-drawn-underline { border-bottom-color: transparent; }
+
+/* ================================ FOOTER ================================ */
+
+.site-footer { position: relative; height: calc(452 * var(--u)); background: transparent; }
+.backers-marquee { border-top-color: var(--lines-hover); }
+.footer-container {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  top: calc(88 * var(--u));
+  height: calc(332 * var(--u));
+}
+.footer-brand-and-legal { position: absolute; left: 0; top: 0; height: 100%; }
+.footer-wordmark {
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-weight: 700;
+  font-size: var(--fs-128);
+  line-height: 0.9;
+  text-transform: uppercase;
+  height: calc(133 * var(--u));
+  white-space: nowrap;
+}
+.footer-tagline { font-size: var(--fs-14); line-height: 1.23; white-space: nowrap; }
+.company-and-legal {
+  position: absolute;
+  left: 0;
+  top: calc(313 * var(--u));
+  display: flex;
+  align-items: flex-end;
+  gap: calc(64 * var(--u));
+  font-size: var(--fs-14);
+  line-height: 1.23;
+  white-space: nowrap;
+}
+.legal-links { display: flex; gap: calc(24 * var(--u)); }
+.footer-navigation-and-social { position: absolute; right: 0; top: 0; height: 100%; }
+.footer-navigation {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  /* same type, spacing and hover flicker as the header menu (.primary-navigation) */
+  gap: calc(28 * var(--u));
+  font-size: var(--fs-14);
+  line-height: 1.344;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.footer-navigation-and-social .social-links { position: absolute; right: 0; top: calc(310 * var(--u)); }
+
+/* =========================== REDUCED MOTION ============================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-content { animation: none; }
+  /* device stays in the hero, illustration rests in the middle of the scene */
+  .hero-device-visual { position: relative; top: 0; }
+  /* horizontal tracks become natively scrollable instead of scroll-driven */
+  .h-scroll-viewport { overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--lines-hover) transparent; }
+  .feature-description,
+  .feature-card,
+  .step-badge,
+  .step-description { transition: none; }
+}
+
+/* =========================== FILM GRAIN OVERLAY ========================== */
+/* Three tiled SVG-noise layers: light specks (screen), dark specks (multiply)
+   and a fine layer that jumps to a new offset several times per second, so the
+   grain "lives" like film.
+   The grain only textures the dark BACKGROUND: it is fixed *behind* the page
+   (z-index -1, between the <html> colour and the see-through sections), so text,
+   buttons, photos, illustrations, the video and the 3D device all paint on top
+   of it untouched. Decorative background shapes use z-index -2 to sit under it.
+   The flat-design scene is its own stacking context, so it carries a local copy
+   (.grain--scene) between its background artwork and the flounder. */
+.grain {
+  --grain-opacity: 0.6;          /* overall strength: 1 = like nesilnoble.com, lower = subtler */
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+}
+.grain--scene { position: absolute; z-index: auto; }
+.grain i {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background-repeat: repeat;
+}
+.grain-light {
+  opacity: 0.22;
+  mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.62' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.6 -0.55'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.grain-dark {
+  opacity: 0.3;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.5 -0.5'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.grain-flicker {
+  inset: -60% !important;
+  opacity: 0.16;
+  mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='1' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 2 -0.8'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation: grain-flicker 0.7s steps(1) infinite;
+  will-change: transform;
+}
+@keyframes grain-flicker {
+  0%   { transform: translate(0, 0); }
+  14%  { transform: translate(-7%, 4%); }
+  28%  { transform: translate(5%, -8%); }
+  42%  { transform: translate(-11%, -3%); }
+  57%  { transform: translate(9%, 7%); }
+  71%  { transform: translate(-4%, 10%); }
+  85%  { transform: translate(12%, -6%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* keep the texture, drop the flicker */
+  .grain-flicker { animation: none; }
+}
+
+/* ===================== LINK HOVER: TYPEFACE FLICKER ===================== */
+/* Modelled on vploss.com ("partners"): while a text link is hovered or
+   keyboard-focused, its words swap — all at once, every 110 ms — between eight
+   italic serifs (src/link-jitter.js sets data-face). The Space Grotesk original
+   stays in the layout, only hidden; the copy is a zero-size inline-block placed
+   on the same baseline, so the flicker never moves or resizes anything.        */
+.tf-alt { display: none; }
+.is-flickering .tf-base { visibility: hidden; }
+.is-flickering .tf-alt {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  line-height: 0; /* keeps the copy's baseline point inside the line box: no height change */
+  overflow: visible;
+  white-space: nowrap;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  pointer-events: none;
+}
+/* multi-line text (FAQ questions): a word never breaks away from its copy */
+[data-flicker-perword] .tf-word { white-space: nowrap; }
+/* buttons: the label box has the width of its widest face (src/btn-hover.js),
+   the text is centred in it and the flickering copy takes the original's place,
+   so it never runs into the arrow */
+.btn .tf-word { display: inline-block; text-align: center; line-height: 1; }
+.btn.is-flickering .tf-base { display: none; }
+.btn.is-flickering .tf-alt { width: auto; height: auto; line-height: 1; }
+.is-flickering[data-face="0"] .tf-alt { font-family: 'Instrument Serif', serif; }
+.is-flickering[data-face="1"] .tf-alt { font-family: 'Fraunces', serif; }
+.is-flickering[data-face="2"] .tf-alt { font-family: 'Playfair Display', serif; }
+.is-flickering[data-face="3"] .tf-alt { font-family: 'DM Serif Display', serif; }
+.is-flickering[data-face="4"] .tf-alt { font-family: 'EB Garamond', serif; }
+.is-flickering[data-face="5"] .tf-alt { font-family: 'Libre Caslon Text', serif; }
+.is-flickering[data-face="6"] .tf-alt { font-family: 'Bodoni Moda', serif; }
+.is-flickering[data-face="7"] .tf-alt { font-family: 'Cormorant Garamond', serif; }
+/* Text links keep their colour on hover: the typeface flicker is the hover state. */
+
+/* ===================== SPECIFICATIONS MODAL (Figma "Pop-up" 490:8421) =====================
+   Right-hand panel, 645 × full height at 1920, over a dimmed + blurred page.
+   --m: Figma px → screen px; 1 at ≥1920 wide (the Figma size, never bigger),
+   down to 0.72 on a 1024 screen so the panel keeps its proportions.            */
+.modal-overlay {
+  --m: clamp(0.72px, var(--u), 1px);
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  opacity: 0;
+  /* closing: the backdrop fades once the panel has slid out */
+  transition: opacity 300ms ease 560ms;
+}
+.modal-overlay[hidden] { display: none; }
+.modal-overlay.is-visible { opacity: 1; transition: opacity 300ms ease; }
+.specifications-modal {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(calc(645 * var(--m)), 90vw);
+  height: 100%;
+  background: var(--black);
+  color: var(--white);
+  outline: none;
+  /* the panel slides in from the right edge (speeds up, then slows down softly);
+     its content rises a moment later (below). Closing: the content fades, the
+     panel slides back out. */
+  transform: translateX(calc(100% + 30 * var(--m)));   /* + the close button sticking out on the left */
+  transition: transform 550ms cubic-bezier(0.55, 0, 0.45, 1) 260ms;
+}
+.modal-overlay.is-visible .specifications-modal { transform: none; transition: transform 800ms cubic-bezier(0.65, 0, 0.35, 1); }
+.spec-modal-header,
+.spec-list,
+.spec-modal-footer .btn {
+  opacity: 0;
+  translate: 0 calc(56 * var(--m));
+  /* closing: the content slides back down and fades (speeding up), the panel follows */
+  transition: opacity 320ms ease-in, translate 380ms cubic-bezier(0.55, 0, 0.75, 0.25);
+}
+.modal-overlay:not(.is-visible) .spec-modal-footer .btn { transition-delay: 0ms; }
+.modal-overlay:not(.is-visible) .spec-list { transition-delay: 40ms, 40ms; }
+.modal-overlay:not(.is-visible) .spec-modal-header { transition-delay: 80ms, 80ms; }
+.modal-overlay.is-visible :is(.spec-modal-header, .spec-list, .spec-modal-footer .btn) {
+  opacity: 1;
+  translate: 0 0;
+  transition: opacity 600ms ease 480ms, translate 900ms cubic-bezier(0.22, 1, 0.36, 1) 480ms;
+}
+.modal-overlay.is-visible .spec-list { transition-delay: 560ms, 560ms; }
+.modal-overlay.is-visible .spec-modal-footer .btn { transition-delay: 640ms, 640ms; }
+@media (prefers-reduced-motion: reduce) {
+  .specifications-modal, .modal-overlay.is-visible .specifications-modal { transform: none; transition: none; }
+  .spec-modal-header, .spec-list, .spec-modal-footer .btn { translate: none; }
+}
+/* film grain (same layers as the page background) over the blurred backdrop and
+   over the panel background; it keeps flickering while the page is paused */
+.grain--modal { position: absolute; z-index: 0; }
+html.anims-paused .grain--modal .grain-flicker { animation-play-state: running !important; }
+.spec-modal-body, .spec-modal-footer { position: relative; z-index: 1; }
+/* the 1px line along the left edge */
+.spec-modal-edge { position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--lines); pointer-events: none; }
+/* close: 48 circle sitting on the edge line, 54 from the top */
+.spec-modal-close {
+  position: absolute;
+  left: calc(-24 * var(--m));
+  top: calc(54 * var(--m));
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: calc(48 * var(--m));
+  height: calc(48 * var(--m));
+  padding: 0;
+  border: 1px solid var(--lines);
+  border-radius: 50px;
+  background: var(--black);
+  cursor: pointer;
+  transition: border-color 200ms ease;
+}
+.spec-modal-close:hover,
+.spec-modal-close:focus-visible { border-color: var(--white); }
+/* the film grain inside the round close button too (same layers as the page) */
+.spec-modal-close { overflow: hidden; isolation: isolate; }
+.grain--close { position: absolute; inset: 0; z-index: 0; border-radius: inherit; }
+.spec-modal-close-icon { position: relative; z-index: 1; display: grid; place-items: center; width: calc(24 * var(--m)); height: calc(24 * var(--m)); }
+.spec-modal-close-icon img { display: block; width: calc(17 * var(--m)); height: calc(17 * var(--m)); transform: rotate(45deg); }
+/* scrolls on its own when the screen is too short; the page behind never moves */
+.spec-modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: calc(56 * var(--m)) calc(56 * var(--m)) calc(24 * var(--m));
+  scrollbar-width: thin;
+  scrollbar-color: var(--lines) transparent;
+}
+.spec-modal-header {   /* Figma 490:8579 "Product Header": no background of its own */
+  position: relative;
+  height: calc(253 * var(--m));
+  border-radius: calc(12 * var(--m));
+  overflow: clip;
+}
+.spec-modal-image { position: absolute; left: calc(219 * var(--m)); top: 0; width: calc(314 * var(--m)); height: 100%; }
+.spec-modal-image-box {
+  position: absolute;
+  left: calc(-93 * var(--m));
+  top: calc(-49 * var(--m));
+  width: calc(499.241 * var(--m));
+  height: calc(477.614 * var(--m));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.spec-modal-image-box img {
+  flex: none;
+  width: calc(413.806 * var(--m));
+  height: calc(278.103 * var(--m));
+  max-width: none;
+  object-fit: cover;
+  object-position: bottom;
+  transform: rotate(-41.21deg) skewX(1.3deg);
+}
+.spec-modal-intro {
+  position: absolute;
+  left: 0;
+  top: calc(150 * var(--m));
+  display: flex;
+  flex-direction: column;
+  gap: calc(8 * var(--m));
+}
+.spec-modal-category { font-size: calc(14 * var(--m)); line-height: 1.23; white-space: nowrap; }
+.spec-modal-title { width: calc(475 * var(--m)); font-size: calc(64 * var(--m)); font-weight: 400; line-height: 1; min-height: calc(67 * var(--m)); white-space: nowrap; }
+.spec-list { margin: calc(24 * var(--m)) 0 0; }
+.spec-row {
+  display: grid;
+  grid-template-columns: calc(186 * var(--m)) 1fr;
+  min-height: calc(48 * var(--m));
+  padding: calc(14 * var(--m)) 0 calc(13 * var(--m));
+  border-bottom: 1px solid var(--lines);
+  font-size: calc(16 * var(--m));
+  line-height: 1.23;
+}
+.spec-row dt { color: var(--links-hover); white-space: nowrap; }
+.spec-row dd { margin: 0; max-width: calc(346 * var(--m)); }
+.spec-modal-footer { flex: none; padding: calc(24 * var(--m)) calc(56 * var(--m)) calc(56 * var(--m)); }
+.spec-modal-footer .btn {
+  height: calc(56 * var(--m));
+  gap: calc(8 * var(--m));
+  padding: 0 calc(24 * var(--m));
+  border-radius: calc(37 * var(--m));
+  font-size: calc(14 * var(--m));
+}
+.spec-modal-footer .btn img { width: calc(20 * var(--m)); }
+/* page behind the open modal: no scrolling, no layout jump where the scrollbar was */
+html.modal-open { overflow: hidden; }
+html.modal-open body { padding-right: var(--scrollbar-w, 0px); }
+@media (prefers-reduced-motion: reduce) {
+  .modal-overlay, .specifications-modal { transition: none; }
+}
+
+/* modal open: all CSS animations of the page hold their frame (src/site-pause.js) */
+html.anims-paused *,
+html.anims-paused *::before,
+html.anims-paused *::after { animation-play-state: paused !important; }
+
+/* hero entrance (src/hero-intro.js): hidden until the start positions are set */
+html.hero-intro-pending .site-header,
+html.hero-intro-pending .kampela-hero-wordmark,
+html.hero-intro-pending .hero-tagline,
+html.hero-intro-pending .hero-actions,
+html.hero-intro-pending .hero-device-visual,
+html.hero-intro-pending .decorative-star-top,
+html.hero-intro-pending .decorative-star-right,
+html.hero-intro-pending .decorative-star-left,
+html.hero-intro-pending .product-benefits-marquee { visibility: hidden; }

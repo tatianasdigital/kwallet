@@ -1,0 +1,6 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="check-icon-artwork">
+<path id="check-circle" d="M36 15.7021C36 25.2202 22.9624 36 13.0213 36C3.08015 36 0 25.2202 0 15.7021C0 6.18403 11.5057 0 21.4468 0C31.3879 0 36 6.18403 36 15.7021Z" fill="#028465"/>
+<path id="check-mark" d="M13.7181 11.8235L17.2433 18.4118M17.2433 18.4118L24 11M17.2433 18.4118L21.1631 25M17.2433 18.4118L13 22.5294" stroke-width="2" stroke-linecap="square" stroke="white"/>
+</g>
+</svg>

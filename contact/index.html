@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact — Kampela</title>
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="description" content="Get in touch with the Kampela team." />
+    <link rel="icon" href="/assets/logo-symbol.svg" type="image/svg+xml" />
+    <!-- styles in the <head>: the page is painted styled from the start (no white flash) -->
+    <style>html{background:#050505;color:#fff}</style>
+    <link rel="stylesheet" href="/src/vendor.css" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="stylesheet" href="/src/subpages.css" />
+    <!-- page entrance (src/subpage.js): title, the block under it and the right column stay hidden until
+         their start positions are set; never longer than 4 s -->
+    <script>
+      (function () {
+        try {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          var r = document.documentElement;
+          r.classList.add('sp-intro-pending');
+          setTimeout(function () { r.classList.remove('sp-intro-pending'); }, 4000);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="subpage subpage--contact">
+    <!-- Film grain behind the page content: textures only the dark background (see styles.css) -->
+    <div class="grain" aria-hidden="true"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div>
+    <main class="page">
+        <header class="site-header">
+      <div class="header-container">
+        <div class="header-brand-and-navigation">
+          <a class="kampela-logo" href="/" aria-label="Kampela — home">
+            <img class="logo-symbol" src="/assets/logo-symbol.svg" alt="" width="54" height="43" />
+            <img class="logo-wordmark" src="/assets/logo-wordmark.svg" alt="Kampela" width="133" height="29" />
+          </a>
+          <nav class="primary-navigation" aria-label="Primary">
+            <a href="/faq/">[ FAQ ]</a>
+            <a href="/delivery/">[ DELIVERY ]</a>
+            <a href="/about/">[ About us ]</a>
+            <a aria-current="page" href="/contact/">[ Contact ]</a>
+          </nav>
+        </div>
+        <div class="header-social-and-cta">
+          <div class="social-links">
+            <a class="ext-link" href="https://twitter.com/kampela_signer" target="_blank" rel="noopener noreferrer">Twitter<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            <a class="ext-link" href="https://matrix.to/#/%23Kampela:matrix.zymologia.fi" target="_blank" rel="noopener noreferrer">Matrix<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            <a class="ext-link" href="https://github.com/Kalapaja" target="_blank" rel="noopener noreferrer">Github<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+          </div>
+          <a class="btn btn--green" href="#">order the devkit<img src="/assets/icon-arrow-right-white.svg" alt="" width="20" height="20" /></a>
+        </div>
+      </div>
+    </header>
+      <!-- Contact (Figma 2820:6047) -->
+      <section class="sp-section sp-contact-page" aria-labelledby="contact-title">
+        <div class="sp-split">
+          <div class="sp-split-aside sp-contact-info">
+            <h1 class="sp-title" id="contact-title">Contact</h1>
+            <div class="sp-contact-details">
+              <p class="sp-text">Have a question about Kampela, our technology, or your order? We’d love to hear from you. Get in touch and we’ll get back to you.</p>
+              <ul class="sp-contact-list">
+                <li><img src="/assets/icon-arrow-right-white.svg" alt="" width="20" height="20" /><a class="mail-link" href="mailto:kampela@demo.fi">kampela@demo.fi</a></li>
+                <li><img src="/assets/icon-arrow-right-white.svg" alt="" width="20" height="20" /><span>Kuopio, Finland</span></li>
+              </ul>
+            </div>
+          </div>
+          <form class="sp-split-main sp-contact-form" action="mailto:kampela@demo.fi" method="post" enctype="text/plain" novalidate>
+            <div class="sp-form-row">
+              <label class="sp-field"><span class="sp-label">Name*</span><input class="sp-input" type="text" name="name" autocomplete="name" required /></label>
+              <label class="sp-field"><span class="sp-label">Email*</span><input class="sp-input" type="email" name="email" autocomplete="email" required /></label>
+            </div>
+            <label class="sp-field"><span class="sp-label">Message*</span><textarea class="sp-input sp-textarea" name="message" required></textarea></label>
+            <p class="sp-form-status" role="status" aria-live="polite"></p>
+            <button class="btn btn--green sp-submit" type="submit">submit<img src="/assets/icon-arrow-right-white.svg" alt="" width="20" height="20" /></button>
+          </form>
+        </div>
+      </section>
+      <footer class="site-footer">
+        <div class="backers-marquee" aria-label="We're backed by Zondax, Parity Ethereum, Nova">
+          <div class="marquee-content" aria-hidden="true">
+            <div class="marquee-track" data-marquee-items="~we’re backed by|zondax|parity ethereum|nova"></div>
+          </div>
+        </div>
+        <div class="footer-container">
+          <div class="footer-brand-and-legal">
+            <p class="footer-wordmark">kampela</p>
+            <p class="footer-tagline">Designed in Finland&nbsp;&nbsp;|&nbsp;&nbsp; Funded by Polkadot Treasury</p>
+            <div class="company-and-legal">
+              <span>Alzymologist Oy, 2024</span>
+              <span class="legal-links">
+                <a class="text-link text-link--muted" href="#">Terms &amp; Conditions</a>
+                <a class="text-link text-link--muted" href="#">Privacy Policy</a>
+              </span>
+            </div>
+          </div>
+          <div class="footer-navigation-and-social">
+            <nav class="footer-navigation" aria-label="Footer">
+              <a href="/faq/">[ FAQ ]</a>
+              <a href="/delivery/">[ DELIVERY ]</a>
+              <a href="/about/">[ ABOUT US ]</a>
+              <a aria-current="page" href="/contact/">[ CONTACT ]</a>
+            </nav>
+            <div class="social-links">
+              <a class="ext-link" href="https://twitter.com/kampela_signer" target="_blank" rel="noopener noreferrer">Twitter<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+              <a class="ext-link" href="https://matrix.to/#/%23Kampela:matrix.zymologia.fi" target="_blank" rel="noopener noreferrer">Matrix<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+              <a class="ext-link" href="https://github.com/Kalapaja" target="_blank" rel="noopener noreferrer">Github<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+    <script type="module" src="/src/subpage.js"></script>
+  </body>
+</html>

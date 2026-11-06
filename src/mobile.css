@@ -1,0 +1,522 @@
+/* ==========================================================================
+   Kampela — mobile version of the landing page (Figma 2870:5063).
+   Reference frame: 390 × 844. Everything here is inside one media query, so the
+   desktop page (styles.css) is not touched.
+   --m : 1 Figma px at the current width (100vw / 390)
+   Mobile-only markup carries .m-only (hidden on desktop).
+   ========================================================================== */
+
+.m-only { display: none; }
+
+@media (max-width: 767px) {
+  :root {
+    --m: calc(100vw / 390);
+    --gutter: calc(20 * var(--m));
+    --header-h: 64px;
+    --marquee-h: 32px;
+    --fs-14: 14px;
+    --fs-16: 16px;
+    --fs-20: 20px;
+  }
+  .m-only { display: revert; }
+  /* nothing may widen the page (wide decorations are clipped, not scrolled to) */
+  html { overflow-x: hidden; }
+  .d-only { display: none !important; }
+
+  /* -------------------------------- atoms -------------------------------- */
+  .btn {
+    gap: 6px;
+    height: 48px;
+    padding: 0 20px;
+    border-radius: 37px;
+    font-size: 14px;
+  }
+  .btn img { width: 20px; }
+  .text-link,
+  .ext-link { gap: 2px; padding-bottom: 2px; font-size: 16px; }
+  .ext-link img { width: 20px; }
+  .text-link--small { font-size: 14px; }
+  .text-link--medium { font-size: 14px; }
+  .text-link--muted { font-size: 14px; }
+  .section-heading { width: auto; font-size: 36px; line-height: 1; }
+  .back-to-top { right: 20px; bottom: 20px; width: 48px; height: 48px; }
+
+  /* ------------------------------- marquees ------------------------------ */
+  .product-benefits-marquee,
+  .backers-marquee { height: 32px; }
+  .marquee-track { font-size: 14px; }
+
+  /* ================================ HEADER ================================ */
+  .site-header { height: 64px; padding: 12px 20px; }
+  .header-container { height: 40px; }
+  .header-brand-and-navigation { gap: 0; }
+  .primary-navigation,
+  .header-social-and-cta { display: none; }
+  /* Logo 128 × 32: fish symbol + wordmark */
+  .kampela-logo { width: 128px; gap: 9px; }
+  .logo-symbol { width: 34px; }
+  .logo-wordmark { width: 85px; margin-top: 4px; }
+  .m-header-actions { display: flex; align-items: center; gap: 16px; }
+  .m-order-btn { height: 40px; padding: 0 20px; gap: 6px; font-size: 12px; }
+  .m-menu-btn {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .m-menu-btn i {
+    position: absolute;
+    left: 4px;
+    width: 24px;
+    height: 1px;
+    background: var(--white);
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
+  }
+  .m-menu-btn i:nth-child(1) { top: 7.5px; }
+  .m-menu-btn i:nth-child(2) { top: 12.83px; }
+  .m-menu-btn i:nth-child(3) { top: 18.17px; }
+  .m-menu-btn i:nth-child(4) { top: 23.5px; }
+  .m-menu-btn[aria-expanded="true"] i:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .m-menu-btn[aria-expanded="true"] i:nth-child(4) { transform: translateY(-8px) rotate(-45deg); }
+  .m-menu-btn[aria-expanded="true"] i:nth-child(2),
+  .m-menu-btn[aria-expanded="true"] i:nth-child(3) { opacity: 0; }
+
+  /* menu panel: under the header, over the page (src/mobile.js) */
+  .m-menu {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 64px;
+    height: calc(var(--vh) - 64px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px 20px 40px;
+    background: var(--black);
+    opacity: 0;
+    translate: 0 -12px;
+    transition: opacity 250ms ease, translate 350ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .m-menu[hidden] { display: none; }
+  .m-menu.is-open { opacity: 1; translate: 0 0; }
+  .m-menu-links { display: flex; flex-direction: column; gap: 28px; font-size: 24px; line-height: 1; }
+  .m-menu-social { display: flex; gap: 32px; }
+  html.m-menu-open { overflow: hidden; }
+  html.m-menu-open .site-header { translate: 0 0 !important; }
+  html.m-menu-open .site-header .header-backdrop { opacity: 1; }
+
+  /* ================================= HERO ================================= */
+  /* full screen; header 64 (its place kept by ::before), content, marquee 32 */
+  .hero-section { height: var(--vh); min-height: 560px; }
+  .hero-content { padding: calc(24px - 8px) 20px 32px; }
+  .hero-container { display: flex; flex-direction: column; justify-content: space-between; }
+  /* the middle of the stage (between the tagline and the actions): device + wordmark axis */
+  .hero-section {
+    --m-stage-top: calc(64px + 16px + 40px + 27px);
+    --m-stage-bottom: calc(32px + 32px + 87px + 28px);
+    --m-stage-h: calc(var(--vh) - var(--m-stage-top) - var(--m-stage-bottom));
+    --m-axis: calc(var(--m-stage-top) + var(--m-stage-h) / 2);
+    /* the device: its rendered box is 720 × 900, the device itself ~750 tall in it;
+       Figma: ~403 tall on a 390 × 844 screen, never taller than the stage */
+    --m-dev-h: min(calc(483 * var(--m)), calc(var(--m-stage-h) * 0.93));
+  }
+  .hero-brand-heading { position: static; width: auto; display: block; }
+  .hero-tagline { width: 137px; height: 40px; }
+  .tagline-text { font-size: 20px; line-height: 1; }
+  .tagline-stripe { left: 76px; top: 22px; width: 51px; height: 18px; }
+  /* KAMPELA (Space Mono Bold 156 in Figma): the letter pictures, 655 wide, centred on the axis */
+  .kampela-hero-wordmark {
+    position: absolute;
+    left: calc(50% - 327.5 * var(--m));
+    top: calc(var(--m-axis) - 64px - 16px - 109.3 * var(--m) / 2);
+    width: calc(655 * var(--m));
+    height: calc(109.3 * var(--m));
+  }
+  .kampela-hero-wordmark img { left: calc(var(--x) * 109.3 / 244.3 * var(--m)); }
+  /* stars (Figma 2859:6826 / 6832 / 6829) placed from the axis */
+  .decorative-star-right,
+  .decorative-star-far-left { display: none; }
+  .decorative-star-top { width: 24px; left: calc(50% - 135 * var(--m)); top: calc(var(--m-axis) - 64px - 16px - var(--m-stage-h) * 0.378); }
+  .decorative-star-left { width: 20px; left: calc(50% + 104 * var(--m)); top: calc(var(--m-axis) - 64px - 16px - var(--m-stage-h) * 0.571); }
+  .decorative-star-left.decorative-star-far-right { width: 28px; left: calc(50% + 85 * var(--m)); top: calc(var(--m-axis) - 64px - 16px + var(--m-stage-h) * 0.295); }
+  .hero-actions {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column-reverse;
+    gap: 20px;
+  }
+  .hero-actions .btn { width: 100%; }
+  .hero-actions .text-link { font-size: 14px; line-height: 1.2; }
+  /* the device stays in the hero (no travelling with the page on mobile) */
+  .hero-device-track { height: 100%; }
+  .hero-device-visual {
+    position: absolute;
+    left: calc(50% - var(--m-dev-h) * 0.4);
+    top: calc(var(--m-axis) - var(--m-dev-h) / 2);
+    width: calc(var(--m-dev-h) * 0.8);
+    height: var(--m-dev-h);
+    margin: 0;
+    overflow: visible;
+  }
+  .device-rotator { left: 0; top: 0; width: 100%; height: 100%; transform: none; }
+
+  /* ================================ ABOUT ================================= */
+  /* Figma 2859:6835: text + benefits; below them the device (2859:6868, 426 tall) */
+  .about-section { height: auto; overflow: visible; padding: 40px 20px calc(40px + 8px + 426 * var(--m) + 8px); }
+  .about-orbit,
+  .about-star-cluster,
+  .about-star-bottom { display: none; }
+  .about-content { position: relative; left: auto; top: auto; width: auto; gap: 32px; }
+  .about-heading { font-size: 24px; line-height: 1.1; }
+  .connectivity-benefits-list { grid-template-columns: 154px 154px; column-gap: 20px; row-gap: 8px; }
+  .connectivity-benefits-list li { gap: 10px; font-size: 14px; line-height: 1.2; }
+  .connectivity-benefits-list img { width: 24px; }
+  /* star + planet around the device (Figma 2859:6927, 2859:6873) */
+  .about-star-top { left: calc(65 * var(--m)); top: auto; bottom: calc(426 * var(--m) + 8px - 70 * var(--m) - 20px); width: 20px; z-index: 6; }
+  .about-planet { left: calc(276 * var(--m)); top: auto; bottom: calc(426 * var(--m) + 8px - 295 * var(--m) - 84 * var(--m)); width: calc(89.35 * var(--m)); z-index: 6; }
+
+  /* the device: sticky in a track that runs from its place in about down to the
+     flounder's resting place, so it stays in the middle of the screen until the
+     water reaches it (src/water-dive.js) */
+  .about-section {
+    --m-adev-h: min(calc(483 * var(--m)), calc(var(--vh) * 0.62));
+    --m-adev-w: calc(var(--m-adev-h) * 0.8);
+  }
+  .m-about-device-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    /* top = the device's place (its centre 17.6 above the middle of the 426 block),
+       bottom = the flounder's centre in the flat section + half the device */
+    bottom: calc(-1 * (323.5 * var(--m) + var(--m-adev-h) / 2));
+    height: calc(8px + 230.6 * var(--m) + 323.5 * var(--m) + var(--m-adev-h));
+    z-index: 5;
+    pointer-events: none;
+  }
+  .m-about-device {
+    position: sticky;
+    top: calc((var(--vh) - var(--m-adev-h)) / 2);
+    width: var(--m-adev-w);
+    height: var(--m-adev-h);
+    margin: 0 auto;
+  }
+  .m-about-device-enter { position: absolute; inset: 0; }
+  .m-about-device-enter img { width: 100%; height: 100%; object-fit: contain; }
+
+  /* ============================== FLAT DESIGN ============================= */
+  /* Figma "Marine illustration" (2859:7000, 389 × 556) + Description (72) */
+  .flat-demo-stack { position: relative; }
+  .flat-design-section {
+    position: relative;
+    top: auto;
+    z-index: 10;
+    height: calc(556 * var(--m) + 8px + 72px + 56px);
+  }
+  /* the binary water line: the desktop curve at 0.8 (a crest a little left of the middle) */
+  .flat-design-section {
+    --wave-k: 0.8;
+    --wave-l: -540;
+    --wave-t: -13;
+  }
+  .decorative-binary-wave-text {
+    left: calc(var(--wave-l) * var(--m));
+    top: calc(var(--wave-t) * var(--m));
+    width: calc(2058 * var(--wave-k) * var(--m));
+    height: calc(169.74 * var(--wave-k) * var(--m));
+  }
+  /* the water starts at the wave box (the mask cuts it along the line), so the small
+     fish can swim right under the surface */
+  .flat-design-scene { top: calc(var(--wave-t) * var(--m)); }
+  .flat-design-scene-container,
+  .flat-fish-container {
+    -webkit-mask-size: calc(2021 * var(--wave-k) * var(--m)) calc(1506.14 * var(--wave-k) * var(--m)), 100% 100%;
+    mask-size: calc(2021 * var(--wave-k) * var(--m)) calc(1506.14 * var(--wave-k) * var(--m)), 100% 100%;
+  }
+  .flat-design-scene-container {
+    -webkit-mask-position: calc((var(--wave-l) + 3 * var(--wave-k)) * var(--m)) calc(35.363 * var(--wave-k) * var(--m)), 0 calc(844 * var(--wave-k) * var(--m));
+    mask-position: calc((var(--wave-l) + 3 * var(--wave-k)) * var(--m)) calc(35.363 * var(--wave-k) * var(--m)), 0 calc(844 * var(--wave-k) * var(--m));
+  }
+  .flat-fish-container {
+    -webkit-mask-position: calc((var(--wave-l) + 3 * var(--wave-k)) * var(--m)) calc((var(--wave-t) + 35.363 * var(--wave-k)) * var(--m)), 0 calc((var(--wave-t) + 844 * var(--wave-k)) * var(--m));
+    mask-position: calc((var(--wave-l) + 3 * var(--wave-k)) * var(--m)) calc((var(--wave-t) + 35.363 * var(--wave-k)) * var(--m)), 0 calc((var(--wave-t) + 844 * var(--wave-k)) * var(--m));
+  }
+  /* the flounder (Figma 2859:6936): 389 × 349, 149 below the top */
+  .flat-device-track { top: calc(149 * var(--m)); height: calc(349 * var(--m)); }
+  .flat-device-illustration { width: calc(389 * var(--m)); height: calc(349 * var(--m)); }
+  /* seaweed: right = seaweed3, left = seaweed2 (Figma 2859:7008 / 7022) */
+  .seaweed--1 { display: none; }
+  .seaweed { bottom: auto; }
+  .seaweed--3 { left: calc(263.42 * var(--m)); top: calc(181.76 * var(--m)); width: calc(279.11 * var(--m)); height: calc(423.76 * var(--m)); }
+  .seaweed--3 .seaweed-box { width: calc(212.04 * var(--m)); height: calc(392.01 * var(--m)); transform: rotate(169.63deg) scaleY(-1); }
+  .seaweed--2 { left: calc(-196.6 * var(--m)); top: calc(181.75 * var(--m)); width: calc(330 * var(--m)); height: calc(418.06 * var(--m)); }
+  .seaweed--2 .seaweed-box { width: calc(330 * var(--m)); height: calc(392 * var(--m)); transform: rotate(10.37deg); }
+  /* small fish: FishGroup3 (Figma 2859:6937) = the desktop group 3 at 0.681,
+     a copy of it off to the right (2859:6968, added by src/mobile.js), one fish at the bottom (2859:7030) */
+  .fish-group[data-group="1"],
+  .fish-group[data-group="2"] { display: none; }
+  .fish-group[data-group="3"] .sea-fish {
+    width: calc(var(--w) * 0.681 * var(--m));
+    height: calc(var(--h) * 0.681 * var(--m));
+  }
+  .fish-group[data-group="3"] .sea-fish-box,
+  .fish-group[data-group="4"] .sea-fish-box { width: calc(var(--iw) * var(--fk) * var(--m)); height: calc(var(--ih) * var(--fk) * var(--m)); }
+  .fish-group[data-group="3"] { --fk: 0.681; }
+  .fish-group[data-group="4"] { --fk: 0.6897; }
+  .fish-group[data-group="3"] .sea-fish:nth-child(1) { left: calc(67.52 * var(--m)); top: calc(124.8 * var(--m)); }
+  .fish-group[data-group="3"] .sea-fish:nth-child(2) { left: calc(-19.88 * var(--m)); top: calc(150.79 * var(--m)); }
+  .fish-group[data-group="3"] .sea-fish:nth-child(3) { left: calc(-132.76 * var(--m)); top: calc(95.24 * var(--m)); }
+  .fish-group.m-fish-copy { translate: calc(437 * var(--m)) calc(16 * var(--m)); }
+  .fish-group[data-group="4"] .sea-fish {
+    left: calc(54 * var(--m));
+    top: calc(484 * var(--m));
+    bottom: auto;
+    width: calc(82.537 * var(--m));
+    height: calc(43.548 * var(--m));
+  }
+  /* sea positions are relative to the marine illustration, which starts at the section top */
+  .flat-design-scene .fish-group,
+  .flat-design-scene .seaweed { margin-top: calc(-1 * var(--wave-t) * var(--m)); }
+  /* description (Figma 2859:7040): 260 wide, centred, 10 below the illustration */
+  .flat-description { left: calc(50% - 130px); top: calc(556 * var(--m) + 8px + 10px); width: 260px; }
+  .flat-design-description { font-size: 24px; line-height: 1.1; }
+  .definition-label { left: 150px; top: 78px; padding: 10px; border-radius: 10px; font-size: 14px; }
+
+  /* =============================== DEMO VIDEO ============================= */
+  /* Figma 2870:5058: full width 16:9, caption at the bottom left */
+  .demo-video-section { height: calc(100vw * 9 / 16); z-index: 11; }
+  .demo-video-frame { width: 100%; }
+  .demo-video-caption { left: 20px; bottom: 13px; font-size: 12px; }
+
+  /* ================================ FEATURES ============================== */
+  /* Figma 2864:7045: heading, a carousel of Tiles (310 wide, the middle one centred),
+     pagination, then the device benefits as a list (the desktop device-benefits section) */
+  .features-section { height: auto; padding-bottom: 0; }
+  .features-inner { height: auto; padding-top: 20px; }
+  .features-star { display: none; }
+  .features-heading { margin: 0 20px; width: auto; font-size: 36px; line-height: 1; }
+  .features-section .h-scroll-viewport {
+    margin-top: 32px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .features-section .h-scroll-viewport::-webkit-scrollbar { display: none; }
+  .feature-cards-track {
+    gap: calc(20 * var(--m));
+    padding: 0 calc(40 * var(--m));
+  }
+  .feature-card {
+    width: calc(310 * var(--m));
+    height: calc(435 * var(--m));
+    padding: calc(20 * var(--m));
+    border: 1px solid var(--lines);
+    border-radius: 12px;
+    scroll-snap-align: center;
+  }
+  .feature-outline { display: none; }
+  .feature-title { font-size: 24px; line-height: 1.1; }
+  .feature-description { margin-top: 8px; font-size: 16px; line-height: 1.2; opacity: 1; transform: none; }
+  /* pic: 270 × 270 under the text; the desktop illustrations at half size */
+  .feature-illustration-container {
+    left: calc(20 * var(--m));
+    bottom: calc(20 * var(--m));
+    width: calc(270 * var(--m));
+    height: calc(270 * var(--m));
+  }
+  .feature-illustration {
+    left: calc(-38 * var(--m));
+    top: calc(-16 * var(--m));
+    width: calc(346 * var(--m));
+    height: calc(301 * var(--m));
+  }
+  .feature-illustration.is-masked { top: calc(-14 * var(--m)); }
+  .m-carousel-pages {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+    font-size: 12px;
+    line-height: 1.23;
+    white-space: pre;
+    color: rgba(255, 255, 255, 0.31);
+  }
+  .m-carousel-pages span { cursor: pointer; transition: color 200ms ease; }
+  .m-carousel-pages .is-current { color: var(--white); }
+
+  /* device benefits → "Additional features" list (Figma 2864:7260) */
+  .device-benefits-section { height: auto; margin-top: 32px; padding: 20px 20px 20px; overflow: visible; }
+  .device-benefits-section > * { translate: none; }
+  .benefits-orbit,
+  .device-photo-container,
+  .benefits-device-3d { display: none; }
+  .benefit-notes { display: flex; flex-direction: column; gap: 10px; }
+  .benefit {
+    position: static;
+    width: auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: calc(344 * var(--m));
+    padding: 8px 25px 8px 12px;
+    font-size: 16px;
+    line-height: 1.2;
+  }
+  .benefit-check { width: 24px; margin: 0; flex: none; }
+  .benefit:nth-child(3) { order: 5; }   /* "Stupid-resistant" last, as in Figma */
+
+  /* ============================== HOW IT WORKS ============================ */
+  /* Figma 2870:4527: badges joined by a line, text, picture 241 × 251; a native carousel */
+  .how-it-works-section { height: auto; }
+  .how-it-works-container { height: auto; padding: 20px 0; }
+  .how-it-works-section .section-heading { margin: 0 20px; font-size: 36px; }
+  .how-it-works-section .h-scroll-viewport {
+    margin-top: 20px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 20px;
+    scrollbar-width: none;
+  }
+  .how-it-works-section .h-scroll-viewport::-webkit-scrollbar { display: none; }
+  .transaction-steps-track { gap: calc(20 * var(--m)); padding: 0 20px; }
+  .step { width: calc(241 * var(--m)); gap: 12px; scroll-snap-align: start; }
+  .step-badge { padding: 4px 8px; border-radius: 27px; font-size: 12px; background: var(--black); }
+  .step-badge::after {
+    content: '';
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    width: calc(261 * var(--m) - 100%);
+    height: 1px;
+    background: var(--lines);
+    pointer-events: none;
+  }
+  .step:last-child .step-badge::after { width: calc(241 * var(--m) - 100%); }
+  .step.is-active .step-badge { border-color: var(--white); }
+  .step-description { width: auto; min-height: 66px; font-size: 20px; line-height: 1.1; }
+  .step-image-container { margin-top: 8px; width: calc(241 * var(--m)); height: calc(251 * var(--m)); border-radius: 12px; }
+  .step-fill-shape { border-radius: 12px; clip-path: inset(0 round 12px); }
+  /* the desktop photos at 0.43, centred in the smaller picture */
+  .step-image {
+    left: calc((var(--l) * 0.43 - 6.35) * var(--m));
+    top: calc((var(--t) * 0.43 + 6.4) * var(--m));
+    width: calc(var(--w) * 0.43 * var(--m));
+    height: calc(var(--h) * 0.43 * var(--m));
+  }
+
+  /* ================================= PRICING ============================== */
+  /* Figma 2870:4554: heading, delivery line, three Tiles one under another */
+  .pricing-section { padding: 20px; }
+  .pricing-header { height: auto; width: auto; display: flex; flex-direction: column; gap: 20px; }
+  .shipping-information { position: static; width: auto; display: flex; gap: 0.3em; flex-wrap: wrap; }
+  .shipping-information p { font-size: 16px; line-height: 1.2; }
+  .shipping-information .text-link { font-size: 16px; }
+  .pricing-cards { flex-direction: column; gap: 16px; margin-top: 20px; }
+  .pricing-card {
+    width: 100%;
+    height: auto;
+    padding: 17px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+  }
+  .product-header { position: static; gap: 8px; }
+  .product-header h3 { font-size: 24px; line-height: 1.1; }
+  .availability-badge { right: 17px; top: 17px; width: 77px; height: 80px; margin-top: 4px; }
+  .availability-badge span { width: 58px; margin-left: 1px; font-size: 10px; }
+  .product-visual { position: relative; left: auto; top: auto; width: 100%; height: calc(256 * var(--m)); margin-top: 8px; }
+  /* the photo (234.93 × 158.15, turned) centred where Figma puts it in the 316 × 256 box */
+  .pv { left: calc(var(--cx) * var(--m)); top: calc(var(--cy) * var(--m)); width: calc(var(--w) * var(--m)); height: calc(var(--h) * var(--m)); }
+  .pv--single { --cx: 162.45; --cy: 127.4; --w: 234.93; --h: 158.15; }
+  .pv--pair { --cy: 127.4; --w: 234.93; --h: 158.15; }
+  .pv--back { --cx: 193.77; }
+  .pv--front { --cx: 130.77; }
+  .purchase-details { position: static; width: 100%; margin-top: 16px; gap: 16px; }
+  .price-row { gap: 8px; }
+  .price { font-size: 40px; }
+  .per { font-size: 14px; }
+
+  /* ============================== TESTIMONIALS ============================ */
+  /* Figma 2870:4819: "What people say", quote mark + quote, author, then the slider */
+  .testimonials-section { padding: 20px 16px; }
+  .testimonials-container { width: 100%; min-height: 0; }
+  .decorative-quotation-mark { top: 37px; width: 40px; }
+  .testimonial-content { margin-left: 0; width: auto; gap: 20px; }
+  .testimonials-header { display: contents; }
+  .testimonials-header h2 { order: 0; padding-left: 52px; font-size: 14px; }
+  .testimonial-slides { order: 1; }
+  .testimonial-slider-controls { order: 2; justify-content: center; gap: 20px; margin-top: 12px; }
+  .slider-arrow { width: 32px; height: 32px; padding: 4px !important; }
+  .testimonial-pagination { gap: 16px; font-size: 16px; }
+  .testimonial-slide { gap: 20px; }
+  .testimonial-quote { padding-left: 52px; font-size: 32px; line-height: 1; }
+  .testimonial-author { padding-left: 52px; gap: 13px; font-size: 14px; }
+  .author-avatar { width: 28px; height: 28px; }
+
+  /* ================================== PRESS =============================== */
+  /* Figma 2870:4873: heading, cards 241 wide in a row (swiped) */
+  .press-section { height: auto; padding: 20px 0; }
+  .press-illustration-container { display: none; }
+  .press-container { position: static; }
+  .press-container .section-heading { margin: 0 20px; width: calc(329 * var(--m)); }
+  .press-cards {
+    gap: 12px;
+    margin-top: 20px;
+    padding: 0 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 20px;
+    scrollbar-width: none;
+  }
+  .press-cards::-webkit-scrollbar { display: none; }
+  .press-card { width: 241px; height: 280px; padding: 20px; border-radius: 12px; scroll-snap-align: start; }
+  .press-card h3 { font-size: 20px; line-height: 1.1; }
+  .press-date { margin-top: 16px; font-size: 14px; color: rgba(255, 255, 255, 0.53); }
+  .press-card .text-link { left: 20px; top: auto; bottom: 25px; font-size: 14px; }
+
+  /* ================================== FOOTER ============================== */
+  /* Figma 2870:5057: marquee, wordmark + tagline, links in two columns, socials, legal */
+  .site-footer { height: auto; }
+  .footer-container {
+    position: static;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 20px;
+  }
+  .footer-brand-and-legal,
+  .footer-navigation-and-social { display: contents; }
+  .footer-wordmark { order: 0; height: auto; font-size: 48px; }
+  .footer-tagline { order: 1; margin-top: 8px; width: 190px; white-space: normal; color: #9d9d9d; font-size: 14px; line-height: 1.2; }
+  .footer-navigation {
+    order: 2;
+    position: static;
+    margin-top: 42px;
+    display: grid;
+    grid-template-columns: 154px 154px;
+    grid-auto-flow: column;
+    grid-template-rows: auto auto;
+    column-gap: 20px;
+    row-gap: 20px;
+    font-size: 16px;
+    line-height: 0.91;
+  }
+  .footer-navigation-and-social .social-links { order: 3; position: static; margin-top: 100px; gap: 32px; }
+  .company-and-legal {
+    order: 4;
+    position: static;
+    margin-top: 30px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+  .legal-links { gap: 32px; }
+}

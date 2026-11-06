@@ -1,0 +1,35 @@
+:root { --mt-bg: #050505; --green: #028465; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body.model-test {
+  background: var(--mt-bg);
+  color: #fff;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  transition: background 0.3s;
+}
+.mt-stage { position: fixed; inset: 0; }
+.mt-panel {
+  position: fixed; top: 16px; right: 16px; width: 248px;
+  display: grid; gap: 12px; padding: 16px;
+  background: rgba(20, 20, 20, 0.78); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px;
+  font-size: 13px;
+}
+.mt-title { margin: 0; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: #9ad7c3; }
+.mt-group { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; border: 0; }
+.mt-group legend { width: 100%; margin-bottom: 6px; color: #aaa; }
+.mt-panel button {
+  font: inherit; color: #fff; cursor: pointer;
+  padding: 6px 10px; border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.mt-panel button:hover { background: rgba(255, 255, 255, 0.16); }
+.mt-panel button[aria-pressed='true'] { background: var(--green); border-color: var(--green); }
+.mt-panel .mt-wide { width: 100%; }
+.mt-row { display: grid; grid-template-columns: 1fr auto; gap: 4px; color: #aaa; }
+.mt-row input { grid-column: 1 / -1; accent-color: var(--green); }
+.mt-row output { color: #fff; font-family: 'Space Mono', monospace; }
+.mt-check { display: flex; gap: 8px; align-items: center; }
+.mt-check input { accent-color: var(--green); }
+.mt-hint { margin: 0; color: #888; font-size: 12px; }
+.mt-hint span { float: right; font-family: 'Space Mono', monospace; }

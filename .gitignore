@@ -1,0 +1,11 @@
+# dependencies and build output (Vercel installs and builds by itself)
+node_modules/
+dist/
+
+# local backups
+_backup-before-fish/
+
+# system files
+.DS_Store
+Thumbs.db
+desktop.ini

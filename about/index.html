@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About us — Kampela</title>
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="description" content="About Kampela and Alzymologist Oy." />
+    <link rel="icon" href="/assets/logo-symbol.svg" type="image/svg+xml" />
+    <!-- styles in the <head>: the page is painted styled from the start (no white flash) -->
+    <style>html{background:#050505;color:#fff}</style>
+    <link rel="stylesheet" href="/src/vendor.css" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="stylesheet" href="/src/subpages.css" />
+    <!-- page entrance (src/subpage.js): title and the blocks under it stay hidden until
+         their start positions are set; never longer than 4 s -->
+    <script>
+      (function () {
+        try {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          var r = document.documentElement;
+          r.classList.add('sp-intro-pending');
+          setTimeout(function () { r.classList.remove('sp-intro-pending'); }, 4000);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="subpage subpage--about">
+    <!-- Film grain behind the page content: textures only the dark background (see styles.css) -->
+    <div class="grain" aria-hidden="true"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div>
+    <main class="page">
+        <header class="site-header">
+      <div class="header-container">
+        <div class="header-brand-and-navigation">
+          <a class="kampela-logo" href="/" aria-label="Kampela — home">
+            <img class="logo-symbol" src="/assets/logo-symbol.svg" alt="" width="54" height="43" />
+            <img class="logo-wordmark" src="/assets/logo-wordmark.svg" alt="Kampela" width="133" height="29" />
+          </a>
+          <nav class="primary-navigation" aria-label="Primary">
+            <a href="/faq/">[ FAQ ]</a>
+            <a href="/delivery/">[ DELIVERY ]</a>
+            <a aria-current="page" href="/about/">[ About us ]</a>
+            <a href="/contact/">[ Contact ]</a>
+          </nav>
+        </div>
+        <div class="header-social-and-cta">
+          <div class="social-links">
+            <a class="ext-link" href="https://twitter.com/kampela_signer" target="_blank" rel="noopener noreferrer">Twitter<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            <a class="ext-link" href="https://matrix.to/#/%23Kampela:matrix.zymologia.fi" target="_blank" rel="noopener noreferrer">Matrix<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            <a class="ext-link" href="https://github.com/Kalapaja" target="_blank" rel="noopener noreferrer">Github<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+          </div>
+          <a class="btn btn--green" href="#">order the devkit<img src="/assets/icon-arrow-right-white.svg" alt="" width="20" height="20" /></a>
+        </div>
+      </div>
+    </header>
+      <!-- About us (Figma 878:10314) -->
+      <section class="sp-section sp-about-page" aria-labelledby="about-title">
+        <div class="sp-about-intro">
+          <h1 class="sp-title sp-title--medium" id="about-title">About us</h1>
+          <div class="sp-about-details">
+            <p class="sp-lead">Finland has a long tradition of engineering things differently. We believe good technology should be accessible, transparent, and built to last. Kampela is our take on a hardware wallet: simple on the outside, uncompromising on security.</p>
+            <p class="sp-text sp-about-company">Kampela is a project by Alzymologist Oy, a Finnish company exploring the intersection of hardware, software, and digital security. We bring together engineering expertise and open-source principles to build tools that give people more control over their digital assets.</p>
+          </div>
+        </div>
+        <!-- autoplay + loop; browsers only autoplay muted video, the sound can be turned on in the player -->
+        <div class="sp-about-video">
+          <!-- poster: shown until the Vimeo video really plays, and stays if the player never loads (src/subpage.js) -->
+          <img class="sp-about-video-poster" src="/assets/demo-video-poster.webp" alt="" aria-hidden="true" width="1920" height="1080" decoding="async" />
+          <iframe
+            src="https://player.vimeo.com/video/1240831577?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1&amp;muted=1&amp;loop=1&amp;playsinline=1"
+            frameborder="0"
+            loading="lazy"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            title="How Kampela devices are produced"
+          ></iframe>
+        </div>
+        <div class="sp-about-manufacturing">
+          <p class="sp-lead sp-about-manufacturing-text">Every Kampela device is built with precision, care, and attention to detail. Our team combines engineering expertise with a hands-on approach to hardware development, carefully considering every component and production stage.</p>
+          <img class="sp-about-planet" src="/assets/about/planet-illustration.png" alt="" aria-hidden="true" width="260" height="197" />
+        </div>
+        <div class="sp-about-gallery">
+          <img class="sp-gallery-1" src="/assets/about/gallery-1.jpg" alt="Kampela circuit boards with USB-C connectors in a production tray" loading="lazy" />
+          <img class="sp-gallery-2" src="/assets/about/gallery-2.jpg" alt="Close-up of a transparent Kampela device with its NFC coil and display connector" loading="lazy" />
+          <img class="sp-gallery-3" src="/assets/about/gallery-3.jpg" alt="Kampela boards lined up in a tray" loading="lazy" />
+          <img class="sp-gallery-4" src="/assets/about/gallery-4.jpg" alt="Kampela devices with e-ink displays and signing pads" loading="lazy" />
+          <img class="sp-gallery-5" src="/assets/about/gallery-feature.jpg" alt="Rows of Kampela boards in a production tray" loading="lazy" />
+        </div>
+      </section>
+      <footer class="site-footer">
+        <div class="backers-marquee" aria-label="We're backed by Zondax, Parity Ethereum, Nova">
+          <div class="marquee-content" aria-hidden="true">
+            <div class="marquee-track" data-marquee-items="~we’re backed by|zondax|parity ethereum|nova"></div>
+          </div>
+        </div>
+        <div class="footer-container">
+          <div class="footer-brand-and-legal">
+            <p class="footer-wordmark">kampela</p>
+            <p class="footer-tagline">Designed in Finland&nbsp;&nbsp;|&nbsp;&nbsp; Funded by Polkadot Treasury</p>
+            <div class="company-and-legal">
+              <span>Alzymologist Oy, 2024</span>
+              <span class="legal-links">
+                <a class="text-link text-link--muted" href="#">Terms &amp; Conditions</a>
+                <a class="text-link text-link--muted" href="#">Privacy Policy</a>
+              </span>
+            </div>
+          </div>
+          <div class="footer-navigation-and-social">
+            <nav class="footer-navigation" aria-label="Footer">
+              <a href="/faq/">[ FAQ ]</a>
+              <a href="/delivery/">[ DELIVERY ]</a>
+              <a aria-current="page" href="/about/">[ ABOUT US ]</a>
+              <a href="/contact/">[ CONTACT ]</a>
+            </nav>
+            <div class="social-links">
+              <a class="ext-link" href="https://twitter.com/kampela_signer" target="_blank" rel="noopener noreferrer">Twitter<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+              <a class="ext-link" href="https://matrix.to/#/%23Kampela:matrix.zymologia.fi" target="_blank" rel="noopener noreferrer">Matrix<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+              <a class="ext-link" href="https://github.com/Kalapaja" target="_blank" rel="noopener noreferrer">Github<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+    <script type="module" src="/src/subpage.js"></script>
+  </body>
+</html>

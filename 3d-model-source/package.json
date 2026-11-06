@@ -1,0 +1,17 @@
+{
+  "name": "kampela-3d-source",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "export": "node tools/render.mjs export",
+    "shots": "node tools/render.mjs shots"
+  },
+  "dependencies": {
+    "three": "^0.186.1",
+    "three-bvh-csg": "^0.0.18",
+    "three-mesh-bvh": "^0.9.17"
+  },
+  "devDependencies": {
+    "playwright": "^1.55.0"
+  }
+}

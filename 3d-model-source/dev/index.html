@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kampela 3D — dev</title>
+<style>
+  html, body { margin: 0; height: 100%; background: var(--bg, #050505); }
+  #stage { width: 100vw; height: 100vh; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "/node_modules/three/build/three.module.js",
+  "three/addons/": "/node_modules/three/examples/jsm/",
+  "three-bvh-csg": "/node_modules/three-bvh-csg/src/index.js",
+  "three-mesh-bvh": "/node_modules/three-mesh-bvh/src/index.js"
+} }
+</script>
+</head>
+<body>
+<div id="stage"></div>
+<script type="module">
+  import { createKampelaModel } from '/src/kampela-model.js';
+  import { mountKampelaViewer } from '/src/kampela-viewer.js';
+  import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+
+  const q = new URLSearchParams(location.search);
+  const bg = q.get('bg');
+  if (bg) document.body.style.setProperty('--bg', bg);
+  const opts = {
+    background: q.get('opaque') ? (bg || '#050505') : null,
+    speed: q.has('speed') ? +q.get('speed') : 0.45,
+    tilt: q.has('tilt') ? +q.get('tilt') : 6.18,
+    elevation: q.has('el') ? +q.get('el') : 8,
+    fill: q.has('fill') ? +q.get('fill') : 0.86,
+    startAngle: q.has('angle') ? +q.get('angle') : -0.35,
+  };
+  if (q.get('src')) opts.src = q.get('src');
+  else opts.object = createKampelaModel({ withCard: q.get('card') !== '0' });
+
+  window.viewer = mountKampelaViewer(document.getElementById('stage'), {
+    ...opts, onLoad: () => { window.__ready = true; },
+  });
+
+  // used by tools/export.mjs
+  window.exportGLB = async () => {
+    const root = createKampelaModel({ withCard: true });
+    const buf = await new GLTFExporter().parseAsync(root, { binary: true, maxTextureSize: 2048 });
+    const bytes = new Uint8Array(buf); let s = '';
+    for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(s);
+  };
+</script>
+</body>
+</html>

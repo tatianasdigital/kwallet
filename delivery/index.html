@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shipping — Kampela</title>
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="description" content="Kampela shipping and delivery details." />
+    <link rel="icon" href="/assets/logo-symbol.svg" type="image/svg+xml" />
+    <!-- styles in the <head>: the page is painted styled from the start (no white flash) -->
+    <style>html{background:#050505;color:#fff}</style>
+    <link rel="stylesheet" href="/src/vendor.css" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="stylesheet" href="/src/subpages.css" />
+    <!-- page entrance (src/subpage.js): title, the block under it and the right column stay hidden until
+         their start positions are set; never longer than 4 s -->
+    <script>
+      (function () {
+        try {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          var r = document.documentElement;
+          r.classList.add('sp-intro-pending');
+          setTimeout(function () { r.classList.remove('sp-intro-pending'); }, 4000);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="subpage subpage--delivery">
+    <!-- Film grain behind the page content: textures only the dark background (see styles.css) -->
+    <div class="grain" aria-hidden="true"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div>
+    <main class="page">
+        <header class="site-header">
+      <div class="header-container">
+        <div class="header-brand-and-navigation">
+          <a class="kampela-logo" href="/" aria-label="Kampela — home">
+            <img class="logo-symbol" src="/assets/logo-symbol.svg" alt="" width="54" height="43" />
+            <img class="logo-wordmark" src="/assets/logo-wordmark.svg" alt="Kampela" width="133" height="29" />
+          </a>
+          <nav class="primary-navigation" aria-label="Primary">
+            <a href="/faq/">[ FAQ ]</a>
+            <a aria-current="page" href="/delivery/">[ DELIVERY ]</a>
+            <a href="/about/">[ About us ]</a>
+            <a href="/contact/">[ Contact ]</a>
+          </nav>
+        </div>
+        <div class="header-social-and-cta">
+          <div class="social-links">
+            <a class="ext-link" href="https://twitter.com/kampela_signer" target="_blank" rel="noopener noreferrer">Twitter<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            <a class="ext-link" href="https://matrix.to/#/%23Kampela:matrix.zymologia.fi" target="_blank" rel="noopener noreferrer">Matrix<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            <a class="ext-link" href="https://github.com/Kalapaja" target="_blank" rel="noopener noreferrer">Github<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+          </div>
+          <a class="btn btn--green" href="#">order the devkit<img src="/assets/icon-arrow-right-white.svg" alt="" width="20" height="20" /></a>
+        </div>
+      </div>
+    </header>
+      <!-- Delivery / Shipping (Figma 2820:5796) -->
+      <section class="sp-section sp-delivery-page" aria-labelledby="delivery-title">
+        <div class="sp-split">
+          <div class="sp-split-aside">
+            <h1 class="sp-title" id="delivery-title">Shipping</h1>
+            <p class="sp-text">Need help with your delivery? Get in touch with us at <a class="mail-link" href="mailto:kampela@demo.fi">kampela@demo.fi</a>.</p>
+          </div>
+          <div class="sp-split-main sp-delivery-main">
+            <div class="sp-shipping-card">
+              <p class="sp-shipping-price">Shipping from €10</p>
+              <p class="sp-shipping-time">Delivered from Finland within 5-12 business days on average</p>
+            </div>
+            <p class="sp-text">Your Kampela device is prepared and shipped from Finland. We offer international shipping, so you can order your device wherever you are. Below you’ll find everything you need to know about shipping options, delivery times, and tracking your order.</p>
+            <section class="sp-faq-group" aria-labelledby="delivery-details-h">
+              <h2 class="sp-h3" id="delivery-details-h">Delivery details</h2>
+              <div class="sp-faq-list">
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="d1-a" id="d1-q"><span class="sp-faq-q-text">Where do you ship?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="d1-a" role="region" aria-labelledby="d1-q" hidden><div class="sp-faq-a-inner"><p>We offer worldwide shipping. Available delivery options depend on your destination and are displayed during checkout. If your country is not available at checkout, please contact us at <a class="mail-link" href="mailto:kampela@demo.fi">kampela@demo.fi</a> and we'll help you find a solution.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="d2-a" id="d2-q"><span class="sp-faq-q-text">How much does shipping cost?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="d2-a" role="region" aria-labelledby="d2-q" hidden><div class="sp-faq-a-inner"><p>Shipping costs depend on your delivery address and the available shipping methods. The exact price will be displayed at checkout before you complete your purchase. International shipping starts from €10.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="d3-a" id="d3-q"><span class="sp-faq-q-text">How long does delivery take?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="d3-a" role="region" aria-labelledby="d3-q" hidden><div class="sp-faq-a-inner"><p>Delivery times depend on your destination and the shipping method selected at checkout. Orders are dispatched from Finland, and international deliveries may take longer due to customs processing or local postal services.</p><p>You'll receive an estimated delivery timeframe when placing your order.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="d4-a" id="d4-q"><span class="sp-faq-q-text">Can I track my order?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="d4-a" role="region" aria-labelledby="d4-q" hidden><div class="sp-faq-a-inner"><p>If tracking is available for your selected shipping method, you'll receive a tracking number once your order has been dispatched. You can use this number on the shipping carrier's website to check the status of your delivery.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="d5-a" id="d5-q"><span class="sp-faq-q-text">Do I have to pay customs duties or import taxes?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="d5-a" role="region" aria-labelledby="d5-q" hidden><div class="sp-faq-a-inner"><p>International orders may be subject to customs duties, import taxes, or other fees depending on the destination country. These charges are determined by local authorities and are not necessarily included in the product or shipping price. Please check your country's import regulations before placing an order.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="d6-a" id="d6-q"><span class="sp-faq-q-text">What if my package is delayed or lost?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="d6-a" role="region" aria-labelledby="d6-q" hidden><div class="sp-faq-a-inner"><p>If your package hasn't arrived within the estimated delivery timeframe, first check its tracking information for the latest updates. If there are no updates or you believe your package may be lost, contact us at <a class="mail-link" href="mailto:kampela@demo.fi">kampela@demo.fi</a> with your order number. We'll help you investigate the issue with the shipping provider.</p></div></div>
+            </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+      <footer class="site-footer">
+        <div class="backers-marquee" aria-label="We're backed by Zondax, Parity Ethereum, Nova">
+          <div class="marquee-content" aria-hidden="true">
+            <div class="marquee-track" data-marquee-items="~we’re backed by|zondax|parity ethereum|nova"></div>
+          </div>
+        </div>
+        <div class="footer-container">
+          <div class="footer-brand-and-legal">
+            <p class="footer-wordmark">kampela</p>
+            <p class="footer-tagline">Designed in Finland&nbsp;&nbsp;|&nbsp;&nbsp; Funded by Polkadot Treasury</p>
+            <div class="company-and-legal">
+              <span>Alzymologist Oy, 2024</span>
+              <span class="legal-links">
+                <a class="text-link text-link--muted" href="#">Terms &amp; Conditions</a>
+                <a class="text-link text-link--muted" href="#">Privacy Policy</a>
+              </span>
+            </div>
+          </div>
+          <div class="footer-navigation-and-social">
+            <nav class="footer-navigation" aria-label="Footer">
+              <a href="/faq/">[ FAQ ]</a>
+              <a aria-current="page" href="/delivery/">[ DELIVERY ]</a>
+              <a href="/about/">[ ABOUT US ]</a>
+              <a href="/contact/">[ CONTACT ]</a>
+            </nav>
+            <div class="social-links">
+              <a class="ext-link" href="https://twitter.com/kampela_signer" target="_blank" rel="noopener noreferrer">Twitter<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+              <a class="ext-link" href="https://matrix.to/#/%23Kampela:matrix.zymologia.fi" target="_blank" rel="noopener noreferrer">Matrix<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+              <a class="ext-link" href="https://github.com/Kalapaja" target="_blank" rel="noopener noreferrer">Github<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+    <script type="module" src="/src/subpage.js"></script>
+  </body>
+</html>

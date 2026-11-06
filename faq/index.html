@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ — Kampela</title>
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="description" content="Answers to frequently asked questions about the Kampela hardware signing device." />
+    <link rel="icon" href="/assets/logo-symbol.svg" type="image/svg+xml" />
+    <!-- styles in the <head>: the page is painted styled from the start (no white flash) -->
+    <style>html{background:#050505;color:#fff}</style>
+    <link rel="stylesheet" href="/src/vendor.css" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="stylesheet" href="/src/subpages.css" />
+    <!-- FAQ entrance (src/subpage.js): title, navigation and questions stay hidden until
+         their start positions are set; never longer than 4 s -->
+    <script>
+      (function () {
+        try {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          var r = document.documentElement;
+          r.classList.add('sp-intro-pending');
+          setTimeout(function () { r.classList.remove('sp-intro-pending'); }, 4000);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="subpage subpage--faq">
+    <!-- Film grain behind the page content: textures only the dark background (see styles.css) -->
+    <div class="grain" aria-hidden="true"><i class="grain-light"></i><i class="grain-dark"></i><i class="grain-flicker"></i></div>
+    <main class="page">
+        <header class="site-header">
+      <div class="header-container">
+        <div class="header-brand-and-navigation">
+          <a class="kampela-logo" href="/" aria-label="Kampela — home">
+            <img class="logo-symbol" src="/assets/logo-symbol.svg" alt="" width="54" height="43" />
+            <img class="logo-wordmark" src="/assets/logo-wordmark.svg" alt="Kampela" width="133" height="29" />
+          </a>
+          <nav class="primary-navigation" aria-label="Primary">
+            <a aria-current="page" href="/faq/">[ FAQ ]</a>
+            <a href="/delivery/">[ DELIVERY ]</a>
+            <a href="/about/">[ About us ]</a>
+            <a href="/contact/">[ Contact ]</a>
+          </nav>
+        </div>
+        <div class="header-social-and-cta">
+          <div class="social-links">
+            <a class="ext-link" href="https://twitter.com/kampela_signer" target="_blank" rel="noopener noreferrer">Twitter<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            <a class="ext-link" href="https://matrix.to/#/%23Kampela:matrix.zymologia.fi" target="_blank" rel="noopener noreferrer">Matrix<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            <a class="ext-link" href="https://github.com/Kalapaja" target="_blank" rel="noopener noreferrer">Github<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+          </div>
+          <a class="btn btn--green" href="#">order the devkit<img src="/assets/icon-arrow-right-white.svg" alt="" width="20" height="20" /></a>
+        </div>
+      </div>
+    </header>
+      <!-- FAQ (Figma 878:8853) -->
+      <section class="sp-section sp-faq-page" aria-labelledby="faq-title">
+        <div class="sp-faq-columns">
+          <aside class="sp-faq-aside">
+            <h1 class="sp-title" id="faq-title">Frequently Asked Questions</h1>
+            <nav class="sp-faq-nav" aria-label="FAQ sections">
+              <a href="#general">General</a>
+              <a href="#purchase">Purchase</a>
+              <a href="#other-questions">Other questions</a>
+            </nav>
+          </aside>
+          <div class="sp-faq-content">
+            <section class="sp-faq-group" id="general" aria-labelledby="general-h">
+              <h2 class="sp-h3" id="general-h">General</h2>
+              <div class="sp-faq-list">
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="g1-a" id="g1-q"><span class="sp-faq-q-text">What is Kampela?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="g1-a" role="region" aria-labelledby="g1-q" hidden><div class="sp-faq-a-inner"><p>Kampela is a hardware signing device designed to securely store private keys and sign transactions for the Polkadot and Substrate ecosystems. It keeps sensitive cryptographic operations separate from your everyday computer or smartphone, allowing you to review and approve transactions on the device itself.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="g2-a" id="g2-q"><span class="sp-faq-q-text">How does Kampela work?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="g2-a" role="region" aria-labelledby="g2-q" hidden><div class="sp-faq-a-inner"><p>Kampela works alongside a compatible wallet or dApp and the Siltti companion application. First, you generate a transaction in your wallet. Siltti transfers the transaction data to Kampela via NFC. You can then review the transaction on the device's e-Ink display and approve it. Kampela generates a QR code containing the signature, which can be scanned by your wallet to complete the process.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="g3-a" id="g3-q"><span class="sp-faq-q-text">Does Kampela need a battery or charging?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="g3-a" role="region" aria-labelledby="g3-q" hidden><div class="sp-faq-a-inner"><p>No. Kampela has no built-in battery. It receives the power it needs through NFC, so there is no need to charge it or worry about battery degradation during storage.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="g4-a" id="g4-q"><span class="sp-faq-q-text">Can Kampela connect to the internet?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="g4-a" role="region" aria-labelledby="g4-q" hidden><div class="sp-faq-a-inner"><p>No. Kampela has no Wi-Fi or Bluetooth connectivity. Transaction data is transferred through unidirectional NFC, while signed transactions are exported as QR codes. This design limits the available communication channels and helps isolate private keys from internet-connected devices.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="g5-a" id="g5-q"><span class="sp-faq-q-text">Does Kampela store my cryptocurrency?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="g5-a" role="region" aria-labelledby="g5-q" hidden><div class="sp-faq-a-inner"><p>No. Kampela does not store cryptocurrency or manage account balances. Your digital assets remain on their respective blockchains, while Kampela securely stores your private keys and uses them to sign transactions. You remain in control of your assets at all times.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="g6-a" id="g6-q"><span class="sp-faq-q-text">Which cryptocurrencies and networks does Kampela support?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="g6-a" role="region" aria-labelledby="g6-q" hidden><div class="sp-faq-a-inner"><p>Kampela is designed for the Polkadot and Substrate ecosystems. It supports cryptographic operations for compatible Substrate-based networks, including Polkadot and Kusama. Network compatibility depends on the supported signing protocols and metadata.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="g7-a" id="g7-q"><span class="sp-faq-q-text">Is Kampela open source?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="g7-a" role="region" aria-labelledby="g7-q" hidden><div class="sp-faq-a-inner"><p>Kampela is developed with an open-source approach. Its hardware and software designs are intended to be publicly available, allowing developers and the community to inspect, understand, and contribute to the project. You can explore the available source code and documentation on our GitHub.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="g8-a" id="g8-q"><span class="sp-faq-q-text">Can I update Kampela’s firmware?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="g8-a" role="region" aria-labelledby="g8-q" hidden><div class="sp-faq-a-inner"><p>No. Firmware updates are intentionally disabled in Kampela's current design. This is a deliberate security decision intended to reduce the risks associated with modifying the device's software after manufacturing.</p></div></div>
+            </div>
+              </div>
+            </section>
+            <section class="sp-faq-group" id="purchase" aria-labelledby="purchase-h">
+              <h2 class="sp-h3" id="purchase-h">Purchase</h2>
+              <div class="sp-faq-list">
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="p1-a" id="p1-q"><span class="sp-faq-q-text">What is included in the Kampela Devkit?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="p1-a" role="region" aria-labelledby="p1-q" hidden><div class="sp-faq-a-inner"><p>The Kampela Devkit includes the Kampela device, a USB-C to USB-A cable, and a getting started leaflet. It is intended for users who want to explore the hardware and software or experiment with the device's functionality. Please check the product specifications for the latest package contents.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="p2-a" id="p2-q"><span class="sp-faq-q-text">Where do you ship?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="p2-a" role="region" aria-labelledby="p2-q" hidden><div class="sp-faq-a-inner"><p>Your Kampela device is prepared and shipped from Finland. We offer international shipping, so you can order your device wherever you are.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="p3-a" id="p3-q"><span class="sp-faq-q-text">Can I return my Kampela device?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="p3-a" role="region" aria-labelledby="p3-q" hidden><div class="sp-faq-a-inner"><p>If you're not satisfied with your purchase, you may be eligible to return your device in accordance with our Return and Refund Policy. Please contact us at <a class="mail-link" href="mailto:kampela@demo.fi">kampela@demo.fi</a> before sending anything back.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="p4-a" id="p4-q"><span class="sp-faq-q-text">Can I cancel or change my order after placing it?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="p4-a" role="region" aria-labelledby="p4-q" hidden><div class="sp-faq-a-inner"><p>If you need to cancel or make changes to your order, please contact us as soon as possible at <a class="mail-link" href="mailto:kampela@demo.fi">kampela@demo.fi</a>. We'll do our best to help, provided your order hasn't been dispatched yet.</p></div></div>
+            </div>
+              </div>
+            </section>
+            <section class="sp-faq-group" id="other-questions" aria-labelledby="other-h">
+              <h2 class="sp-h3" id="other-h">Other questions</h2>
+              <div class="sp-faq-list">
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="o1-a" id="o1-q"><span class="sp-faq-q-text">What happens if I lose my Kampela?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="o1-a" role="region" aria-labelledby="o1-q" hidden><div class="sp-faq-a-inner"><p>Your cryptocurrency remains on the blockchain, even if you lose your Kampela. However, you may lose access to the private keys stored on the device. Make sure you securely back up your recovery phrase during initial setup. It is essential for recovering access to your accounts if your device is lost or damaged.</p></div></div>
+            </div>
+            <div class="sp-faq-item">
+              <h3 class="sp-faq-q"><button type="button" class="sp-faq-toggle" aria-expanded="false" aria-controls="o2-a" id="o2-q"><span class="sp-faq-q-text">Is Kampela compatible with other hardware wallets or software wallets?</span><span class="sp-faq-icon" aria-hidden="true"><i></i><i></i></span></button></h3>
+              <div class="sp-faq-a" id="o2-a" role="region" aria-labelledby="o2-q" hidden><div class="sp-faq-a-inner"><p>Kampela is designed to work with compatible wallets and dApps in the Polkadot and Substrate ecosystems. Integration depends on the wallet's support for Kampela's signing workflow and communication protocol.</p></div></div>
+            </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+      <footer class="site-footer">
+        <div class="backers-marquee" aria-label="We're backed by Zondax, Parity Ethereum, Nova">
+          <div class="marquee-content" aria-hidden="true">
+            <div class="marquee-track" data-marquee-items="~we’re backed by|zondax|parity ethereum|nova"></div>
+          </div>
+        </div>
+        <div class="footer-container">
+          <div class="footer-brand-and-legal">
+            <p class="footer-wordmark">kampela</p>
+            <p class="footer-tagline">Designed in Finland&nbsp;&nbsp;|&nbsp;&nbsp; Funded by Polkadot Treasury</p>
+            <div class="company-and-legal">
+              <span>Alzymologist Oy, 2024</span>
+              <span class="legal-links">
+                <a class="text-link text-link--muted" href="#">Terms &amp; Conditions</a>
+                <a class="text-link text-link--muted" href="#">Privacy Policy</a>
+              </span>
+            </div>
+          </div>
+          <div class="footer-navigation-and-social">
+            <nav class="footer-navigation" aria-label="Footer">
+              <a aria-current="page" href="/faq/">[ FAQ ]</a>
+              <a href="/delivery/">[ DELIVERY ]</a>
+              <a href="/about/">[ ABOUT US ]</a>
+              <a href="/contact/">[ CONTACT ]</a>
+            </nav>
+            <div class="social-links">
+              <a class="ext-link" href="https://twitter.com/kampela_signer" target="_blank" rel="noopener noreferrer">Twitter<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+              <a class="ext-link" href="https://matrix.to/#/%23Kampela:matrix.zymologia.fi" target="_blank" rel="noopener noreferrer">Matrix<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+              <a class="ext-link" href="https://github.com/Kalapaja" target="_blank" rel="noopener noreferrer">Github<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+    <script type="module" src="/src/subpage.js"></script>
+  </body>
+</html>

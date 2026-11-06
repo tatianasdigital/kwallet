@@ -1,0 +1,183 @@
+/* ==========================================================================
+   Inner pages — FAQ (Figma 878:8853), Delivery / Shipping (2820:5796),
+   About us (878:10314), Contact (2820:6047).
+   Same 1920 reference frame and units as the landing page (styles.css):
+   1 Figma px = var(--u). Header and footer come from styles.css unchanged.
+   ========================================================================== */
+
+:root {
+  --fs-32: max(20px, calc(32 * var(--u)));
+  --fs-40: max(24px, calc(40 * var(--u)));
+}
+
+.sp-section {
+  position: relative;
+  padding: calc(120 * var(--u)) var(--gutter) calc(180 * var(--u));
+}
+
+/* ------------------------------ typography ------------------------------ */
+.sp-title { font-size: var(--fs-96); font-weight: 400; line-height: 1; }
+.sp-title--medium { font-weight: 500; }
+.sp-h3 { font-size: var(--fs-64); font-weight: 400; line-height: 1; }
+.sp-text { font-size: var(--fs-20); line-height: 1.2; }
+.sp-lead { font-size: var(--fs-36); line-height: 1; }
+
+/* current page in the header / footer menus */
+.primary-navigation a[aria-current="page"],
+.footer-navigation a[aria-current="page"] { color: var(--links-hover); }
+
+/* ---------------------------- two-column pages -------------------------- */
+.sp-split { display: flex; justify-content: space-between; align-items: flex-start; }
+.sp-split-aside { display: flex; flex-direction: column; gap: calc(56 * var(--u)); width: calc(437 * var(--u)); }
+.sp-split-main { display: flex; flex-direction: column; gap: calc(72 * var(--u)); width: calc(889 * var(--u)); }
+
+/* --------------------------------- FAQ ---------------------------------- */
+/* entrance (src/subpage.js): hidden until the start positions are set */
+html.sp-intro-pending .sp-faq-page .sp-title,
+html.sp-intro-pending .sp-faq-nav,
+html.sp-intro-pending .sp-faq-content,
+html.sp-intro-pending .sp-split .sp-title,
+html.sp-intro-pending .sp-split-aside > .sp-text,
+html.sp-intro-pending .sp-contact-details,
+html.sp-intro-pending .sp-split-main,
+html.sp-intro-pending .sp-about-page .sp-title,
+html.sp-intro-pending .sp-about-page > * { visibility: hidden; }
+.sp-faq-columns { display: flex; align-items: flex-start; gap: calc(176 * var(--u)); }
+.sp-faq-aside {
+  position: sticky;
+  top: calc(40 * var(--u));
+  transition: top 450ms cubic-bezier(0.22, 1, 0.36, 1);
+  display: flex;
+  flex-direction: column;
+  gap: calc(64 * var(--u));
+  width: calc(740 * var(--u));
+}
+/* the fixed header is showing over the page (src/site-header.js): stay clear of it */
+html.header-over .sp-faq-aside { top: calc(var(--header-h) + 40 * var(--u)); }
+.sp-faq-nav { display: flex; flex-direction: column; align-items: flex-start; gap: calc(16 * var(--u)); font-size: var(--fs-20); line-height: 1.2; }
+.sp-faq-nav a { transition: color 200ms ease; }
+.sp-faq-nav a[aria-current="true"] { color: #5e5e5e; }
+.sp-faq-content { display: flex; flex-direction: column; gap: calc(72 * var(--u)); width: calc(896 * var(--u)); }
+.sp-faq-group { display: flex; flex-direction: column; gap: calc(44 * var(--u)); scroll-margin-top: calc(40 * var(--u)); }
+.sp-faq-list { display: flex; flex-direction: column; gap: calc(32 * var(--u)); }
+.sp-faq-item { padding-bottom: calc(32 * var(--u)); border-bottom: 1px solid var(--lines); }
+.sp-faq-q { font: inherit; }
+.sp-faq-toggle {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: calc(24 * var(--u));
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+.sp-faq-q-text { max-width: calc(762 * var(--u)); font-size: var(--fs-32); line-height: 1; }
+/* "+" → "−": the vertical bar folds away */
+.sp-faq-icon { position: relative; flex: none; width: max(18px, calc(24 * var(--u))); height: max(18px, calc(24 * var(--u))); }
+.sp-faq-icon i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(17 / 24 * 100%);
+  height: 1px;
+  background: var(--white);
+  transform: translate(-50%, -50%);
+  transition: transform 350ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.sp-faq-icon i + i { transform: translate(-50%, -50%) rotate(90deg); }
+.sp-faq-item.is-open .sp-faq-icon i + i { transform: translate(-50%, -50%) rotate(90deg) scaleX(0); }
+.sp-faq-a { overflow: hidden; }
+.sp-faq-a-inner { display: flex; flex-direction: column; gap: 1em; padding-top: calc(28 * var(--u)); font-size: var(--fs-20); line-height: 1.2; }
+
+/* ------------------------------ Delivery -------------------------------- */
+.sp-delivery-page { padding-left: calc(55 * var(--u)); }
+.sp-shipping-card {
+  display: flex;
+  align-items: center;
+  gap: calc(20 * var(--u));
+  min-height: calc(132 * var(--u));
+  padding: calc(32 * var(--u));
+  border-radius: calc(12 * var(--u));
+  background: var(--white);
+  color: var(--black);
+}
+/* stop-motion (src/subpage.js): the white shape is a layer of its own, so only it "boils" */
+.sp-shipping-card { position: relative; isolation: isolate; }
+.sp-shipping-card.has-bg { background: none; }
+.sp-shipping-bg { position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--white); }
+.sp-shipping-price { flex: 1 1 0; font-size: var(--fs-40); font-weight: 700; line-height: 1; text-transform: uppercase; }
+.sp-shipping-time { flex: 1 1 0; font-size: var(--fs-20); line-height: 1.2; }
+
+/* ------------------------------- About ---------------------------------- */
+.sp-about-page { display: flex; flex-direction: column; gap: calc(120 * var(--u)); padding-bottom: calc(180 * var(--u)); }
+.sp-about-intro { display: flex; flex-direction: column; gap: calc(56 * var(--u)); }
+.sp-about-details { display: flex; align-items: flex-start; gap: calc(64 * var(--u)); }
+.sp-about-details .sp-lead { width: calc(744 * var(--u)); }
+.sp-about-company { width: calc(546 * var(--u)); }
+.sp-about-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1808 / 1017;
+  border-radius: calc(12 * var(--u));
+  overflow: hidden;
+  background: var(--scene);
+}
+.sp-about-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.sp-about-video-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* the player fades in over the poster once the video plays (src/subpage.js) */
+.sp-about-video iframe { opacity: 0; pointer-events: none; transition: opacity 0.8s ease; }
+.sp-about-video.is-video-ready iframe { opacity: 1; pointer-events: auto; }
+@media (prefers-reduced-motion: reduce) { .sp-about-video iframe { transition: none; } }
+.sp-about-manufacturing { display: flex; align-items: center; gap: calc(138 * var(--u)); }
+.sp-about-manufacturing-text { width: calc(870 * var(--u)); }
+.sp-about-planet { width: calc(259.4 * var(--u)); height: auto; }
+.sp-about-gallery { position: relative; width: 100%; height: calc(1176 * var(--u)); }
+.sp-about-gallery img { position: absolute; object-fit: cover; border-radius: calc(12 * var(--u)); }
+.sp-gallery-1 { left: 0; top: 0; width: calc(589 * var(--u)); height: calc(578 * var(--u)); }
+.sp-gallery-2 { left: calc(609 * var(--u)); top: 0; width: calc(1199 * var(--u)); height: calc(462 * var(--u)); }
+.sp-gallery-3 { left: 0; top: calc(598 * var(--u)); width: calc(589 * var(--u)); height: calc(578 * var(--u)); }
+.sp-gallery-4 { left: calc(609 * var(--u)); top: calc(482 * var(--u)); width: calc(437 * var(--u)); height: calc(694 * var(--u)); }
+.sp-gallery-5 { left: calc(1066 * var(--u)); top: calc(482 * var(--u)); width: calc(742 * var(--u)); height: calc(694 * var(--u)); }
+
+/* ------------------------------- Contact -------------------------------- */
+.sp-contact-info { width: calc(595 * var(--u)); }
+.sp-contact-details { display: flex; flex-direction: column; gap: calc(20 * var(--u)); width: calc(459 * var(--u)); }
+.sp-contact-details .sp-text { width: calc(441 * var(--u)); }
+.sp-contact-list { display: flex; flex-direction: column; gap: calc(16 * var(--u)); }
+.sp-contact-list li { display: flex; align-items: center; gap: calc(8 * var(--u)); font-size: var(--fs-20); line-height: 1.2; }
+.sp-contact-list img { width: max(14px, calc(20 * var(--u))); height: auto; }
+.sp-contact-form { width: calc(897 * var(--u)); gap: calc(12 * var(--u)); align-items: stretch; }
+.sp-form-row { display: flex; gap: calc(23 * var(--u)); }
+.sp-form-row .sp-field { flex: 1 1 0; }
+.sp-field { display: flex; flex-direction: column; gap: calc(8 * var(--u)); }
+.sp-label { font-size: var(--fs-16); line-height: 1.23; }
+.sp-input {
+  width: 100%;
+  height: max(40px, calc(56 * var(--u)));
+  padding: 0 calc(16 * var(--u));
+  border: 1px solid var(--lines);
+  border-radius: calc(8 * var(--u));
+  background: transparent;
+  color: var(--white);
+  font: inherit;
+  font-size: var(--fs-20);
+  line-height: 1.2;
+  outline: none;
+  transition: border-color 200ms ease;
+}
+.sp-textarea { height: max(120px, calc(180 * var(--u))); padding-top: calc(14 * var(--u)); padding-bottom: calc(14 * var(--u)); resize: vertical; }
+.sp-input:hover { border-color: var(--lines-hover); }
+.sp-input:focus-visible { border-color: var(--white); outline: none; }
+.sp-input[aria-invalid] { border-color: #d9534f; }
+.sp-form-status { order: 3; min-height: 1.23em; font-size: var(--fs-14); line-height: 1.23; color: var(--links-hover); text-align: right; }
+.sp-submit {
+  align-self: flex-end;
+  width: calc(438 * var(--u));
+  margin-top: calc(20 * var(--u));   /* + the 12 gap = 32 under the fields */
+  border: 0;
+  cursor: pointer;
+}
