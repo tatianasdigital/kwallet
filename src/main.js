@@ -95,7 +95,7 @@ function px(value) {
  * @param {string} [start] ScrollTrigger start (default: section top at the top of the screen)
  * @param {(ctx) => number} [getBase] translateX the track starts from (default 0)
  */
-function createHorizontalScroll(section, getDistance, onMove, start = 'top top', getBase = null) {
+function createHorizontalScroll(section, getDistance, onMove, start = 'top top', getBase = null, speed = 1) {
   const track = section.querySelector('.h-scroll-track');
   const viewport = section.querySelector('.h-scroll-viewport');
   let distance = 0;
@@ -113,7 +113,7 @@ function createHorizontalScroll(section, getDistance, onMove, start = 'top top',
     scrollTrigger: {
       trigger: section,
       start,
-      end: () => `+=${distance}`,
+      end: () => `+=${distance / speed}`,   // speed > 1: less page scroll per px of sideways movement
       pin: true,
       scrub: 0.4,
       anticipatePin: 1,
@@ -129,7 +129,7 @@ function createHorizontalScroll(section, getDistance, onMove, start = 'top top',
     const st = tween.scrollTrigger;
     const first = track.firstElementChild;
     const target = Math.min(distance, Math.max(0, item.offsetLeft - first.offsetLeft));
-    jumpTo(st.start + target);
+    jumpTo(st.start + target / speed);
   };
   section.addEventListener('focusin', onFocusIn);
 
@@ -431,7 +431,8 @@ const mm = gsap.matchMedia();
 
 mm.add('(prefers-reduced-motion: no-preference) and (min-width: 768px)', () => {
   // features: pinned when the 56 px gap under the cards reaches the bottom of the screen
-  const killFeatures = createHorizontalScroll(features, featuresDistance, undefined, 'bottom bottom', featuresBase);
+  // speed 1.8: the cards move 1.8 px sideways per px of scroll (it took too many scrolls at 1:1)
+  const killFeatures = createHorizontalScroll(features, featuresDistance, undefined, 'bottom bottom', featuresBase, 1.8);
   // how it works: cartoon-like stepper (src/how-it-works.js) instead of a plain scrubbed slide
   const killSteps = initHowItWorks(howItWorks, {
     jumpTo,

@@ -31,16 +31,16 @@ import { createStepFill } from './step-fill.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const MOVE = 1.05;         // s — one step: all cards glide together (power2.inOut: gentle start, gentle stop)
-const ACTIVATE_AT = 0.35;  // s into the move when the new step becomes active
-const SETTLE_AT = 0.56;    // s into a backward move when the badges / lines settle (unchanged timing)
+const MOVE = 0.75;         // s — one step: all cards glide together (power2.inOut: gentle start, gentle stop)
+const ACTIVATE_AT = 0.25;  // s into the move when the new step becomes active
+const SETTLE_AT = 0.4;     // s into a backward move when the badges / lines settle
 const LAG = 0.07;          // s — intro only: each following card starts this much later
 const INTRO_FROM = 560;    // --s units right of centre where the cards wait before the intro
 const INTRO_AT = 0.72;     // the cards start when the heading reveal is this far through
 const GREY_OUTLINE = '#333333';   // = --lines, the badge border colour
 const GREY_LINE = '#676767';      // unlit part of a line / lines left behind
 const LINE_LEAD = 0.8;            // the active step's line is white this far, grey after
-const FILL_TICKS = 18;            // drawings a full length takes when the last part fills in
+const FILL_TICKS = 10;            // drawings a full length takes when the last part fills in
 
 export function initHowItWorks(section, { jumpTo, glideTo, scrollTarget = () => window.scrollY } = {}) {
   const heading = section.querySelector('.section-heading');
@@ -261,7 +261,9 @@ export function initHowItWorks(section, { jumpTo, glideTo, scrollTarget = () => 
     let released = false;
     const release = () => {
       if (id !== stepId || released) return;
-      if (performance.now() - lastInput < QUIET && performance.now() - t0 < 4000) {
+      // a scroll that keeps going steps on (not one step per gesture any more): the
+      // wait for the gesture to end is capped just after the glide
+      if (performance.now() - lastInput < QUIET && performance.now() - t0 < 950) {
         gsap.delayedCall(0.05, release);
         return;
       }
@@ -269,7 +271,7 @@ export function initHowItWorks(section, { jumpTo, glideTo, scrollTarget = () => 
       anchor = window.scrollY;
       snapping = false;
     };
-    if (glideTo) glideTo(beatPos(k), 0.9, release);
+    if (glideTo) glideTo(beatPos(k), 0.6, release);
     else { jumpTo?.(beatPos(k)); release(); }
     gsap.delayedCall(4.2, () => { if (!released) { lastInput = 0; release(); } });   // never stay locked
   };
