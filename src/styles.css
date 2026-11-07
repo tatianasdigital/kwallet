@@ -981,13 +981,15 @@ button { font: inherit; color: inherit; }
   box-shadow: 0 4px 8.1px -19px rgba(0, 0, 0, 0.37);
 }
 
-/* test 3D model in place of the photo (src/device-benefits.js); same box as the photo */
+/* 3D model in place of the photo (src/device-benefits.js): the photo's box scaled
+   up 25 % around the same centre (526 × 862 → 657.5 × 1077.5; the centre stays at
+   72 + 431 = 503 from the top) */
 .benefits-device-3d {
   position: absolute;
   left: calc(50% + 1 * var(--u));
-  top: calc(72 * var(--u));      /* 104 in Figma, raised 32 together with the orbit */
-  width: calc(526 * var(--u));
-  height: calc(862 * var(--u));
+  top: calc((503 - 538.75) * var(--u));
+  width: calc(657.5 * var(--u));
+  height: calc(1077.5 * var(--u));
   transform: translateX(-50%);
   pointer-events: none;
 }
