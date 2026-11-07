@@ -94,17 +94,21 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 40px 20px 40px;
+    padding: 20px 16px 32px;   /* Figma Menu 558:6722 */
     background: var(--black);
+    isolation: isolate;
     opacity: 0;
     translate: 0 -12px;
     transition: opacity 250ms ease, translate 350ms cubic-bezier(0.22, 1, 0.36, 1);
   }
   .m-menu[hidden] { display: none; }
   .m-menu.is-open { opacity: 1; translate: 0 0; }
-  .m-menu-links { display: flex; flex-direction: column; gap: 28px; font-size: 24px; line-height: 1; }
-  .m-menu-social { display: flex; gap: 32px; }
-  .m-menu-links a[aria-current="page"] { color: var(--links-hover); }
+  /* the same film grain as the page background (src/styles.css .grain) */
+  .grain--menu { position: absolute; z-index: 0; }
+  .m-menu-links,
+  .m-menu-social { position: relative; z-index: 1; }
+  .m-menu-links { display: flex; flex-direction: column; align-items: flex-start; gap: 32px; font-size: 16px; line-height: 0.91; }
+  .m-menu-social { display: flex; justify-content: center; gap: 32px; font-size: 16px; line-height: 1.2; }
   html.m-menu-open { overflow: hidden; }
   html.m-menu-open .site-header { translate: 0 0 !important; }
   html.m-menu-open .site-header .header-backdrop { opacity: 1; }
