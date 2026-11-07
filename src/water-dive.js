@@ -33,6 +33,7 @@ import { isPaused } from './site-pause.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const LITE = window.matchMedia('(max-width: 767px)').matches;   // phones
 const BUBBLE_POP = 0.2;   // s: a bubble grows from a point to its size (cartoon pop)
 const BUBBLE_BURST = 0.22; // s: at the end a bubble swells a little and bursts (cartoon pop, no fade)
 const FPS = 12;                 // stop-motion drawings per second (splash crown, drops, speed lines)
@@ -567,7 +568,7 @@ export function initWaterDive({ section, device, fishCue, scrollTo, diveLine = n
   }
 
   /* ---------------------------------------------------------- the loop */
-  let running = false, raf = 0, t0 = 0, acc = 0, last = 0;
+  let running = false, raf = 0, t0 = 0, acc = 0, last = 0, frameN = 0;
   const loop = (now) => {
     if (!running) return;
     if (isPaused()) {                      // freeze: shift the clock so nothing jumps on resume
@@ -583,7 +584,9 @@ export function initWaterDive({ section, device, fishCue, scrollTo, diveLine = n
 
     box = svg.getBoundingClientRect();
     checkImpact();
-    updateSurface(tNow);          // smooth, every display frame
+    // smooth, every display frame (phones: every second one — re-laying the 0/1
+    // text along the moving line is the heaviest part of the dive there)
+    if (!LITE || (frameN++ & 1) === 0) updateSurface(tNow);
     updateClip();
 
     acc += dt * 1000;             // effects: held drawings, 12 a second

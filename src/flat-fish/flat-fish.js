@@ -175,6 +175,18 @@ function mount(stage, opts) {
     shown = p;
     // scale before rotate = stretch along the screen's vertical (the direction of the fall)
     var sx = p.sx || 1, sy = p.sy || 1;
+    if (LITE) {
+      // phones: the whole drawing moves as one composited layer (CSS transform on
+      // the <svg>, rendered once) instead of re-rendering the big SVG every frame
+      var still = !p.x && !p.y && !p.r && sx === 1 && sy === 1;
+      var k = (svg.clientWidth || W) / W;
+      svg.style.transformOrigin = '50% 50%';
+      svg.style.willChange = still ? '' : 'transform';
+      svg.style.transform = still ? '' : 'translate(' + (p.x * k).toFixed(2) + 'px, ' + (p.y * k).toFixed(2) + 'px)' +
+        (sx !== 1 || sy !== 1 ? ' scale(' + sx.toFixed(4) + ', ' + sy.toFixed(4) + ')' : '') +
+        ' rotate(' + p.r.toFixed(3) + 'deg)';
+      return;
+    }
     fishG.setAttribute('transform', 'translate(' + (CX + p.x).toFixed(2) + ' ' + (CY + p.y).toFixed(2) + ')' +
       (sx !== 1 || sy !== 1 ? ' scale(' + sx.toFixed(4) + ' ' + sy.toFixed(4) + ')' : '') +
       ' rotate(' + p.r.toFixed(3) + ') translate(' + (-CX) + ' ' + (-CY) + ')');

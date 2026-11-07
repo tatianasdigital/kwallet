@@ -23,6 +23,9 @@ const TICK = 1000 / FPS;
 const NS = 'http://www.w3.org/2000/svg';
 const rnd = (a, b) => a + Math.random() * (b - a);
 const pick = (arr) => arr[(Math.random() * arr.length) | 0];
+// phones: no line-boil filter (re-rendering the noise displacement 12 times a second
+// made the carousel stutter); the drawings still move off register
+const LITE = window.matchMedia('(max-width: 767px)').matches;
 
 // drawn accents: [scaleX, scaleY, dx, dy] per drawing (held one tick each)
 const A = {
@@ -94,12 +97,12 @@ function drawGroup(g, tickN) {
   }
   if (g.steps.length) { [sx, sy, ax = 0, ay = 0] = g.steps.shift(); g.hold = 0; }
   // now and then repeat the previous drawing (a "slip" of the animator)
-  if (g.prev && !g.steps.length && Math.random() < 0.12) { g.el.style.filter = pick(g.boils); return; }
+  if (g.prev && !g.steps.length && Math.random() < 0.12) { if (!LITE) g.el.style.filter = pick(g.boils); return; }
   const dx = rnd(-g.o.amp, g.o.amp) + ax, dy = rnd(-g.o.amp, g.o.amp) + ay;
   const r = rnd(-g.o.rot, g.o.rot);
   const t = `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) rotate(${r.toFixed(2)}deg) scale(${sx}, ${sy})`;
   g.el.style.transform = t;
-  g.el.style.filter = pick(g.boils);
+  if (!LITE) g.el.style.filter = pick(g.boils);
   g.prev = t;
 }
 
@@ -125,7 +128,7 @@ function animateCard(card, svg, spec, key) {
     if (!isPaused()) {
       tickN++;
       groups.forEach((g) => drawGroup(g, tickN));
-      chains.forEach((c) => { c.step(); c.el.style.filter = pick(boils); });
+      chains.forEach((c) => { c.step(); if (!LITE) c.el.style.filter = pick(boils); });
     }
     timer = setTimeout(loop, TICK);
   };

@@ -9,6 +9,7 @@ import { isPaused } from './site-pause.js';
 
 const SPEED = 30; // curve units per second (1 unit = 1 Figma px)
 const UNIT = '010101 ';
+const LITE = window.matchMedia('(max-width: 767px)').matches;   // phones
 
 export function initBinaryWave(svg) {
   if (!svg) return;
@@ -32,6 +33,7 @@ export function initBinaryWave(svg) {
   document.fonts?.ready.then(fill); // Space Mono metrics once the font is in
 
   let offset = 0;
+  let frames = 0;
   let raf = 0;
   let last = 0;
 
@@ -40,6 +42,8 @@ export function initBinaryWave(svg) {
     last = now;
     if (isPaused()) { raf = window.requestAnimationFrame(frame); return; }
     offset -= (SPEED * dt) / 1000;
+    // phones: the text is moved every second frame (re-laying it along the curve is costly)
+    if (LITE && (frames++ & 1)) { raf = window.requestAnimationFrame(frame); return; }
     if (offset <= -unitWidth) offset += unitWidth; // seamless wrap
     tp.setAttribute('startOffset', offset.toFixed(2));
     raf = window.requestAnimationFrame(frame);
