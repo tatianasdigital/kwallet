@@ -341,6 +341,20 @@ function initSectionGlide(section, { duration = 1.4, onStart, onDone } = {}) {
     },
   });
 }
+/* Desktop: the lower part of the page (device benefits, how it works, pricing,
+   testimonials, press, footer) scrolls about twice as fast per wheel notch as the
+   top of the page — the slow 0.4 felt like too many scrolls there. */
+const WHEEL_SLOW = 0.4, WHEEL_FAST = 0.85;
+if (lenis && !IS_MOBILE && lenis.virtualScroll?.options) {
+  const setWheel = (v) => { lenis.options.wheelMultiplier = v; lenis.virtualScroll.options.wheelMultiplier = v; };
+  ScrollTrigger.create({
+    trigger: document.querySelector('.device-benefits-section'),
+    start: 'top 50%',
+    endTrigger: document.documentElement,
+    end: 'max',
+    onToggle: (self) => setWheel(self.isActive ? WHEEL_FAST : WHEEL_SLOW),
+  });
+}
 initSectionGlide(document.querySelector('.demo-video-section'));
 {
   const featuresSection = document.querySelector('.features-section');
