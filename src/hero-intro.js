@@ -70,7 +70,7 @@ export function initHeroIntro() {
     },
   });
   // 1. wordmark, letter by letter; the tagline a little later
-  if (mobile) { if (wordmark) tl.to(wordmark, { x: 0, duration: 2.0, ease: EASE }, 0); }
+  if (mobile) { if (wordmark) tl.to(wordmark, { x: 0, duration: 1.2, ease: EASE }, 0); }
   else tl.to(letters, { yPercent: 0, duration: 2.0, ease: EASE, stagger: 0.09 }, 0);
   tl.to(taglineParts, { yPercent: 0, duration: 1.7, ease: EASE, stagger: 0.12 }, 0.85);
   // 2. header down, actions up — practically with the wordmark

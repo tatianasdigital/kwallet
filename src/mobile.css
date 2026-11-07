@@ -387,7 +387,9 @@
   .how-it-works-container { height: auto; padding: 20px 0 36px; }   /* + 20 of pricing = 56 */
   .how-it-works-section .section-heading { margin: 0 20px; font-size: 36px; }
   .how-it-works-section .h-scroll-viewport {
-    margin-top: 20px;
+    /* room above the badges: the scroller clips, and their drawn outline sticks out a little */
+    margin-top: 14px;
+    padding-top: 6px;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
