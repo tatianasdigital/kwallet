@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/src/vendor.css" />
     <link rel="stylesheet" href="/src/styles.css" />
     <link rel="stylesheet" href="/src/subpages.css" />
+    <link rel="stylesheet" href="/src/mobile.css" />
     <!-- FAQ entrance (src/subpage.js): title, navigation and questions stay hidden until
          their start positions are set; never longer than 4 s -->
     <script>
@@ -51,7 +52,25 @@
           </div>
           <a class="btn btn--green" href="#">order the devkit<img src="/assets/icon-arrow-right-white.svg" alt="" width="20" height="20" /></a>
         </div>
+        <!-- mobile header (Figma 2859:6624): short order button + menu (src/mobile.js) -->
+        <div class="m-header-actions m-only">
+          <a class="btn btn--green m-order-btn" href="#">order<img src="/assets/icon-arrow-right-white.svg" alt="" width="20" height="20" /></a>
+          <button class="m-menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="m-menu"><i></i><i></i><i></i><i></i></button>
+        </div>
       </div>
+      <nav class="m-menu m-only" id="m-menu" aria-label="Menu" hidden>
+        <div class="m-menu-links">
+          <a aria-current="page" href="/faq/">[ FAQ ]</a>
+          <a href="/delivery/">[ DELIVERY ]</a>
+          <a href="/about/">[ ABOUT US ]</a>
+          <a href="/contact/">[ CONTACT ]</a>
+        </div>
+        <div class="m-menu-social">
+          <a class="ext-link" href="https://twitter.com/kampela_signer" target="_blank" rel="noopener noreferrer">Twitter<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+          <a class="ext-link" href="https://matrix.to/#/%23Kampela:matrix.zymologia.fi" target="_blank" rel="noopener noreferrer">Matrix<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+          <a class="ext-link" href="https://github.com/Kalapaja" target="_blank" rel="noopener noreferrer">Github<img src="/assets/icon-external-arrow.svg" alt="" width="20" height="20" /></a>
+        </div>
+      </nav>
     </header>
       <!-- FAQ (Figma 878:8853) -->
       <section class="sp-section sp-faq-page" aria-labelledby="faq-title">

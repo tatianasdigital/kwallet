@@ -22,7 +22,8 @@ export const isMobile = () => window.matchMedia(MOBILE_QUERY).matches;
 const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ------------------------------------------------------------------ menu */
-function initMenu() {
+// also used by the inner pages (src/subpage.js)
+export function initMenu() {
   const btn = document.querySelector('.m-menu-btn');
   const menu = document.getElementById('m-menu');
   if (!btn || !menu) return;

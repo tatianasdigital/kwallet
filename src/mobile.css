@@ -104,6 +104,7 @@
   .m-menu.is-open { opacity: 1; translate: 0 0; }
   .m-menu-links { display: flex; flex-direction: column; gap: 28px; font-size: 24px; line-height: 1; }
   .m-menu-social { display: flex; gap: 32px; }
+  .m-menu-links a[aria-current="page"] { color: var(--links-hover); }
   html.m-menu-open { overflow: hidden; }
   html.m-menu-open .site-header { translate: 0 0 !important; }
   html.m-menu-open .site-header .header-backdrop { opacity: 1; }
@@ -493,7 +494,7 @@
   .footer-brand-and-legal,
   .footer-navigation-and-social { display: contents; }
   .footer-wordmark { order: 0; height: auto; font-size: 48px; }
-  .footer-tagline { order: 1; margin-top: 8px; width: 190px; white-space: normal; color: #9d9d9d; font-size: 14px; line-height: 1.2; }
+  .footer-tagline { order: 1; margin-top: 8px; width: 200px; white-space: normal; color: #9d9d9d; font-size: 14px; line-height: 1.2; }
   .footer-navigation {
     order: 2;
     position: static;
@@ -519,4 +520,93 @@
     line-height: 1.2;
   }
   .legal-links { gap: 32px; }
+
+  /* ============================== INNER PAGES ============================= */
+  /* Figma About-mobile 2876:6492, FAQ-mobile 2876:6773, Delivery-mobile 2881:6679,
+     Contact-mobile 2881:6883. Header and footer: the same as on the landing page. */
+  .subpage .sp-section { padding: 28px 20px 56px; }
+  .subpage .sp-title { font-size: 48px; font-weight: 500; line-height: 1; }
+  .subpage .sp-h3 { font-size: 36px; line-height: 1; }
+  .subpage .sp-text { font-size: 16px; line-height: 1.2; }
+  .subpage .sp-lead { font-size: 24px; line-height: 1.1; }
+
+  /* two-column pages → one column; the blocks are re-ordered as in Figma */
+  .subpage .sp-split,
+  .subpage .sp-split-aside,
+  .subpage .sp-split-main { display: contents; }
+  .subpage .sp-split { display: flex; flex-direction: column; }
+
+  /* FAQ lists (FAQ, Delivery) */
+  .subpage .sp-faq-group { gap: 32px; scroll-margin-top: 84px; }
+  .subpage .sp-faq-list { gap: 20px; }
+  .subpage .sp-faq-item { padding-bottom: 20px; }
+  .subpage .sp-faq-toggle { gap: 16px; }
+  .subpage .sp-faq-q-text { max-width: none; font-size: 24px; line-height: 1.1; }
+  .subpage .sp-faq-icon { width: 24px; height: 24px; margin-top: 2px; }
+  .subpage .sp-faq-a-inner { padding-top: 12px; padding-right: 40px; font-size: 16px; line-height: 1.2; }
+
+  /* ---- FAQ ---- */
+  .subpage .sp-faq-page { padding-bottom: 56px; }
+  .subpage .sp-faq-columns { flex-direction: column; gap: 48px; }
+  .subpage .sp-faq-aside,
+  html.header-over .subpage .sp-faq-aside { position: static; width: auto; gap: 0; }
+  .subpage .sp-faq-nav { display: none; }
+  .subpage .sp-faq-content { width: auto; gap: 40px; }
+
+  /* ---- Delivery: title, shipping card, text, help line, delivery details ---- */
+  .subpage .sp-delivery-page { padding-left: 20px; }
+  .subpage .sp-delivery-page .sp-split { gap: 20px; }
+  .subpage .sp-delivery-page .sp-title { order: 0; }
+  .subpage .sp-delivery-page .sp-shipping-card { order: 1; }
+  .subpage .sp-delivery-main > .sp-text { order: 2; margin-top: 7px; }
+  .subpage .sp-delivery-page .sp-split-aside > .sp-text { order: 3; margin-top: 7px; }
+  .subpage .sp-delivery-page .sp-faq-group { order: 4; margin-top: 40px; }
+  .subpage .sp-shipping-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    min-height: 0;
+    padding: 32px 24px;
+    border-radius: 12px;
+  }
+  .subpage .sp-shipping-price { flex: none; font-size: 40px; }
+  .subpage .sp-shipping-time { flex: none; font-size: 16px; }
+
+  /* ---- About ---- */
+  .subpage .sp-about-page { gap: 40px; padding-bottom: 56px; }
+  .subpage .sp-about-intro { gap: 20px; }
+  .subpage .sp-about-details { flex-direction: column; gap: 20px; }
+  .subpage .sp-about-details .sp-lead,
+  .subpage .sp-about-company { width: auto; }
+  .subpage .sp-about-video { aspect-ratio: 350 / 196; border-radius: 12px; }
+  .subpage .sp-about-manufacturing { display: block; }
+  .subpage .sp-about-manufacturing-text { width: auto; font-size: 16px; line-height: 1.2; }
+  .subpage .sp-about-planet { display: none; }
+  /* gallery: one picture under another, 350 × 300 */
+  .subpage .sp-about-gallery { height: auto; display: flex; flex-direction: column; gap: 20px; }
+  .subpage .sp-about-gallery img { position: static; width: 100%; height: auto; aspect-ratio: 350 / 300; border-radius: 12px; }
+  /* Figma order: 1, 2, the wide tray photo (5), 4 */
+  .subpage .sp-about-gallery .sp-gallery-3 { display: none; }
+  .subpage .sp-about-gallery .sp-gallery-5 { order: 3; }
+  .subpage .sp-about-gallery .sp-gallery-4 { order: 4; }
+  .subpage .sp-about-gallery .sp-gallery-2 { object-position: 85% 50%; }
+
+  /* ---- Contact: title, text, e-mail / place, the form ---- */
+  .subpage .sp-contact-page .sp-split { gap: 20px; }
+  .subpage .sp-contact-info,
+  .subpage .sp-contact-details,
+  .subpage .sp-contact-details .sp-text { width: auto; }
+  .subpage .sp-contact-details { gap: 20px; }
+  .subpage .sp-contact-list { gap: 12px; }
+  .subpage .sp-contact-list li { gap: 8px; font-size: 16px; }
+  .subpage .sp-contact-list img { width: 20px; }
+  .subpage .sp-contact-form { align-self: stretch; display: flex; flex-direction: column; width: auto; margin-top: 20px; gap: 12px; }
+  .subpage .sp-form-row { flex-direction: column; gap: 12px; }
+  .subpage .sp-field { gap: 8px; }
+  .subpage .sp-label { font-size: 14px; line-height: 1.2; }
+  .subpage .sp-input { height: 48px; padding: 0 14px; border-radius: 8px; font-size: 16px; }
+  .subpage .sp-textarea { height: 200px; padding-top: 12px; padding-bottom: 12px; }
+  .subpage .sp-form-status { text-align: left; font-size: 14px; }
+  .subpage .sp-form-status:empty { display: none; }
+  .subpage .sp-submit { align-self: stretch; width: 100%; margin-top: 8px; }
 }

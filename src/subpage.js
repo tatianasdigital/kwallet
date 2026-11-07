@@ -26,6 +26,7 @@ import { initLinkJitter, initCardTitleFlicker } from './link-jitter.js';
 import { createLineReveal } from './heading-reveal.js';
 import { initStopMotionItems } from './about-stopmotion.js';
 import { initFaqAccordions } from './faq-accordion.js';
+import { initMenu } from './mobile.js';
 
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -58,6 +59,7 @@ initLinkJitter();
 initLogoHover();   // header fish symbol in stop-motion while the logo is hovered
 initBackToTop({ lenis });   // round "back to top" button from the second screen on
 initSiteHeader();    // header: fixed; hides when scrolling down, comes back when scrolling up
+initMenu();          // mobile header: the ≡ menu (src/mobile.js)
 initButtonHover();   // buttons: label flicker + small stop-motion of their shape on hover
 initExtLinkArrows();   // Twitter / Matrix / Github: the ↗ arrow in stop-motion on hover (label flickers as every link)
 initFaqAccordions(document, { lenis });
