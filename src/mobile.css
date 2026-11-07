@@ -112,6 +112,7 @@
   html.m-menu-open { overflow: hidden; }
   html.m-menu-open .site-header { translate: 0 0 !important; }
   html.m-menu-open .site-header .header-backdrop { opacity: 1; }
+  html.m-menu-open .back-to-top { visibility: hidden !important; }   /* no "Up" button over the open menu */
 
   /* ================================= HERO ================================= */
   /* full screen; header 64 (its place kept by ::before), content, marquee 32 */
