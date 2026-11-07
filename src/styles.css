@@ -1393,15 +1393,26 @@ button { font: inherit; color: inherit; }
   position: fixed;
   inset: 0;
   z-index: 2000;
+  /* The dimming and the blur fade in themselves; the overlay is never made
+     transparent with `opacity`: an element at opacity < 1 cannot see the page
+     behind it, so the blur only kicked in at the very end of the fade-in and the
+     screen visibly flashed. */
+  background: rgba(0, 0, 0, 0);
+  -webkit-backdrop-filter: blur(0.1px);   /* not 0: the minifier would write blur(), which not every browser reads */
+  backdrop-filter: blur(0.1px);
+  /* closing: the backdrop fades once the panel has slid out */
+  transition: background-color 300ms ease 560ms, -webkit-backdrop-filter 300ms ease 560ms, backdrop-filter 300ms ease 560ms;
+}
+.modal-overlay[hidden] { display: none; }
+.modal-overlay.is-visible {
   background: rgba(0, 0, 0, 0.7);
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
-  opacity: 0;
-  /* closing: the backdrop fades once the panel has slid out */
-  transition: opacity 300ms ease 560ms;
+  transition: background-color 300ms ease-out, -webkit-backdrop-filter 300ms ease-out, backdrop-filter 300ms ease-out;
 }
-.modal-overlay[hidden] { display: none; }
-.modal-overlay.is-visible { opacity: 1; transition: opacity 300ms ease; }
+/* the grain over the backdrop fades with it */
+.modal-overlay > .grain--modal { opacity: 0; transition: opacity 300ms ease 560ms; }
+.modal-overlay.is-visible > .grain--modal { opacity: var(--grain-opacity); transition: opacity 350ms cubic-bezier(0.6, 0, 1, 1); }   /* slow start: comes in as the dimming lands, never lightens the page */
 .specifications-modal {
   position: absolute;
   top: 0;
@@ -1454,7 +1465,7 @@ html.anims-paused .grain--modal .grain-flicker { animation-play-state: running !
   position: absolute;
   left: calc(-24 * var(--m));
   top: calc(54 * var(--m));
-  z-index: 1;
+  z-index: 2;   /* above the scrolling body, which used to swallow clicks on its right half */
   display: grid;
   place-items: center;
   width: calc(48 * var(--m));
