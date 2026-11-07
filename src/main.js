@@ -408,6 +408,51 @@ initHeroStars(document.querySelector('.hero-content'));
 initSceneArtwork(document.querySelector('.flat-design-section'));
 if (!IS_MOBILE) initDeviceBenefits(document.querySelector('.device-benefits-section'));   // 3D model rises + floats, notes, orbit (mobile: a plain list, src/mobile.css)
 initFlatSea(document.querySelector('.flat-design-section'));   // seaweed sway + fish groups (start after the flounder's bubbles)
+/* Mobile: after the device has dived, the page glides on by itself until the end
+   of about-section is at the top of the screen (the flounder scene fills it), slowly
+   enough to watch the splash and the fish coming out.
+   It starts only once the finger is off the screen, and the page is held
+   (overflow hidden) while it glides: that also stops the momentum of the swipe —
+   otherwise native touch scrolling and the glide fight and the page judders. */
+let mobileTouching = false;
+if (IS_MOBILE) {
+  window.addEventListener('touchstart', () => { mobileTouching = true; }, { passive: true });
+  window.addEventListener('touchend', (e) => { if (!e.touches.length) mobileTouching = false; }, { passive: true });
+  window.addEventListener('touchcancel', () => { mobileTouching = false; }, { passive: true });
+}
+const MOBILE_GLIDE_S = 1.9;
+let mobileGliding = false;
+function mobileGlideAfterDive(opts) {
+  const about = document.querySelector('.about-section');
+  if (!about || mobileGliding) { opts?.onComplete?.(); return; }
+  mobileGliding = true;
+  const html = document.documentElement;
+  const startedAt = performance.now();
+  const go = () => {
+    // wait for the finger to lift (at most 2.5 s)
+    if (mobileTouching && performance.now() - startedAt < 2500) { setTimeout(go, 60); return; }
+    html.style.overflow = 'hidden';            // stops the swipe's momentum, holds the page
+    const from = window.scrollY;
+    const to = about.getBoundingClientRect().bottom + window.scrollY;
+    const block = (e) => { if (e.cancelable) e.preventDefault(); };
+    window.addEventListener('touchmove', block, { passive: false });
+    const end = () => {
+      html.style.overflow = '';
+      window.removeEventListener('touchmove', block);
+      mobileGliding = false;
+      opts?.onComplete?.();
+    };
+    if (to <= from + 4) { end(); return; }
+    const t0 = performance.now();
+    const frame = (now) => {
+      const t = Math.min(1, (now - t0) / (MOBILE_GLIDE_S * 1000));
+      window.scrollTo(0, from + (to - from) * glideEase(t));
+      if (t < 1) requestAnimationFrame(frame); else end();
+    };
+    requestAnimationFrame(frame);
+  };
+  go();
+}
 initWaterDive({
   section: document.querySelector('.flat-design-section'),
   // mobile: the hero device stays in the hero; the one in about dives
@@ -423,10 +468,7 @@ initWaterDive({
   // automatic scroll down to the fish once the device dives (wheel / touch locked meanwhile)
   scrollTo: (top, opts) => {
     if (linkGoal !== null) return;             // a link glides past (to #pricing …): keep going
-    // phones: no automatic scroll at all — it fought the finger (native touch
-    // scrolling + momentum), the page juddered and ran on past the fish to the video;
-    // the device still dives and the flounder still comes out, the visitor scrolls on
-    if (IS_MOBILE) return;
+    if (IS_MOBILE) { mobileGlideAfterDive(opts); return; }
     if (lenis) lenis.scrollTo(top, { ...opts, lock: true, force: true });
     else window.scrollTo({ top, behavior: 'smooth' });
   },

@@ -140,7 +140,8 @@
   /* stars (Figma 2859:6826 / 6832 / 6829) placed from the axis */
   .decorative-star-right,
   .decorative-star-far-left { display: none; }
-  .decorative-star-top { width: 24px; left: calc(50% - 135 * var(--m)); top: calc(var(--m-axis) - 64px - 16px - var(--m-stage-h) * 0.378); }
+  /* the green star stood right behind the 3D device: not on phones */
+  .decorative-star-top { display: none; }
   .decorative-star-left { width: 20px; left: calc(50% + 104 * var(--m)); top: calc(var(--m-axis) - 64px - 16px - var(--m-stage-h) * 0.571); }
   .decorative-star-left.decorative-star-far-right { width: 28px; left: calc(50% + 85 * var(--m)); top: calc(var(--m-axis) - 64px - 16px + var(--m-stage-h) * 0.295); }
   .hero-actions {
@@ -323,6 +324,7 @@
     padding: 0 calc(40 * var(--m));
   }
   .feature-card {
+    scroll-snap-stop: always;   /* one swipe = one card, however fast the flick */
     width: calc(310 * var(--m));
     height: calc(435 * var(--m));
     padding: calc(20 * var(--m));

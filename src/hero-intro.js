@@ -77,8 +77,10 @@ export function initHeroIntro() {
   if (header) tl.to(header, { yPercent: 0, opacity: 1, duration: 1.7, ease: EASE }, 0.15);
   if (actions) tl.to(actions, { y: 0, opacity: 1, duration: 1.7, ease: EASE }, 0.3);
   // 3. the device shoots up (fast start, long smooth slow-down), slightly diagonally
-  tl.to(dev, { x: 0, y: 0, duration: 2.2, ease: 'power4.out', onUpdate: paintDevice }, 0.75);
-  tl.to(dev, { o: 1, duration: 0.45, ease: 'power1.out', onUpdate: paintDevice }, 0.75);
+  // (mobile: sooner and a little quicker)
+  const devAt = mobile ? 0.35 : 0.75;
+  tl.to(dev, { x: 0, y: 0, duration: mobile ? 1.7 : 2.2, ease: 'power4.out', onUpdate: paintDevice }, devAt);
+  tl.to(dev, { o: 1, duration: 0.45, ease: 'power1.out', onUpdate: paintDevice }, devAt);
   // 4. last: the stars pop out of a point, the marquee comes up
   pop.forEach((p, i) => {
     tl.to(p, {
