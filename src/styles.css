@@ -1001,6 +1001,8 @@ button { font: inherit; color: inherit; }
 .pricing-header { position: relative; height: calc(86 * var(--u)); width: calc(1434 * var(--u)); }
 .shipping-information { position: absolute; left: calc(1223 * var(--u)); top: calc(20 * var(--u)); width: calc(211 * var(--u)); }
 .shipping-information p { font-size: var(--fs-20); line-height: 1.23; }
+/* "from €10": the link is a flex box, which drops the space between "from" and <b>€10</b> */
+.shipping-information .text-link { gap: 0.28em; }
 .pricing-cards { display: flex; gap: calc(21 * var(--u)); margin-top: calc(64 * var(--u)); }
 .pricing-card {
   position: relative;

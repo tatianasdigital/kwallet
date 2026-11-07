@@ -223,7 +223,7 @@
     position: relative;
     top: auto;
     z-index: 10;
-    height: calc(556 * var(--m) + 8px + 72px + 56px);
+    height: calc(556 * var(--m) + 8px + 72px + 76px);   /* 76 under the Description (was 56) */
   }
   /* the binary water line: the desktop curve at 0.8 (a crest a little left of the middle) */
   /* zoomed out 1.5× from the desktop scale 0.8 (so a whole crest and both troughs

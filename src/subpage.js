@@ -179,11 +179,16 @@ function riseIn(el) {
 function pageIntro(page, blocksSel, colSel) {
   const blocks = [...page.querySelectorAll(blocksSel)];
   const col = page.querySelector(colSel);
-  const under = blocks.length ? createLineReveal(blocks[0].parentElement, { blocks }) : null;
   // mobile (src/mobile.css): a column with display: contents has no box of its own,
   // so its blocks rise one by one; the Delivery plate rises together with the title
-  const parts = !col ? [] : getComputedStyle(col).display === 'contents' ? [...col.children] : [col];
+  const stacked = !!col && getComputedStyle(col).display === 'contents';
+  // mobile Delivery: the help line ("Need help with your delivery?…") stands under the
+  // description and rises the same way, right after it
+  const riseBlocks = stacked && page.matches('.sp-delivery-page');
+  const under = blocks.length && !riseBlocks ? createLineReveal(blocks[0].parentElement, { blocks }) : null;
+  const parts = !col ? [] : stacked ? [...col.children] : [col];
   const plays = parts.map((el) => [riseIn(el), el.matches('.sp-shipping-card') ? 0 : 0.35]);
+  if (riseBlocks) blocks.forEach((el) => plays.push([riseIn(el), 0.45]));
   return () => {
     under?.show();
     plays.forEach(([play, delay]) => play(delay));
