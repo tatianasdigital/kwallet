@@ -140,8 +140,7 @@
   /* stars (Figma 2859:6826 / 6832 / 6829) placed from the axis */
   .decorative-star-right,
   .decorative-star-far-left { display: none; }
-  /* the green star stood right behind the 3D device: not on phones */
-  .decorative-star-top { display: none; }
+  .decorative-star-top { width: 24px; left: calc(50% - 135 * var(--m)); top: calc(var(--m-axis) - 64px - 16px - var(--m-stage-h) * 0.378); }
   .decorative-star-left { width: 20px; left: calc(50% + 104 * var(--m)); top: calc(var(--m-axis) - 64px - 16px - var(--m-stage-h) * 0.571); }
   .decorative-star-left.decorative-star-far-right { width: 28px; left: calc(50% + 85 * var(--m)); top: calc(var(--m-axis) - 64px - 16px + var(--m-stage-h) * 0.295); }
   .hero-actions {
@@ -171,8 +170,10 @@
   /* Figma 2859:6835: text + benefits; below them the device (2859:6868, 426 tall) */
   .about-section { height: auto; overflow: visible; padding: 40px 20px calc(40px + 8px + 426 * var(--m) + 8px); }
   .about-orbit,
-  .about-star-cluster,
   .about-star-bottom { display: none; }
+  /* the green star cluster (src/about-stopmotion.js swaps it for an inline SVG with
+     display: block in its style, hence !important) stood right behind the device */
+  .about-star-cluster { display: none !important; }
   .about-content { position: relative; left: auto; top: auto; width: auto; gap: 32px; }
   .about-heading { font-size: 24px; line-height: 1.1; }
   .connectivity-benefits-list { grid-template-columns: 154px 154px; column-gap: 20px; row-gap: 8px; }
