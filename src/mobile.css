@@ -405,18 +405,19 @@
   }
   .how-it-works-section .h-scroll-viewport::-webkit-scrollbar { display: none; }
   .transaction-steps-track { gap: calc(20 * var(--m)); padding: 0 20px; }
-  .step { width: calc(241 * var(--m)); gap: 12px; scroll-snap-align: start; }
+  /* Figma 2893:6725: Tiles 316 wide, 20 apart; badge → text → picture 20 apart */
+  .step { width: calc(316 * var(--m)); gap: 20px; scroll-snap-align: start; }
   .step-badge { padding: 4px 8px; border-radius: 27px; font-size: 12px; background: var(--black); }
   /* outlines + connector lines: drawn in JS as on desktop (src/mobile.js → initStepStrokes) */
-  .step-description { width: auto; min-height: 66px; font-size: 20px; line-height: 1.1; }
-  .step-image-container { margin-top: 8px; width: calc(241 * var(--m)); height: calc(251 * var(--m)); border-radius: 12px; }
+  .step-description { width: auto; min-height: 44px; font-size: 20px; line-height: 1.1; }
+  .step-image-container { margin-top: 0; width: calc(316 * var(--m)); height: calc(329 * var(--m)); border-radius: 12px; }
   .step-fill-shape { border-radius: 12px; clip-path: inset(0 round 12px); }
-  /* the desktop photos at 0.43, centred in the smaller picture */
+  /* the desktop photos at 0.564, centred in the smaller picture */
   .step-image {
-    left: calc((var(--l) * 0.43 - 6.35) * var(--m));
-    top: calc((var(--t) * 0.43 + 6.4) * var(--m));
-    width: calc(var(--w) * 0.43 * var(--m));
-    height: calc(var(--h) * 0.43 * var(--m));
+    left: calc((var(--l) * 0.564 - 8.33) * var(--m));
+    top: calc((var(--t) * 0.564 + 8.39) * var(--m));
+    width: calc(var(--w) * 0.564 * var(--m));
+    height: calc(var(--h) * 0.564 * var(--m));
   }
 
   /* ================================= PRICING ============================== */
