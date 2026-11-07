@@ -37,10 +37,13 @@ export function initFeaturesReveal(section) {
   const cards = [...section.querySelectorAll('.feature-card')];
   const st = cards.map(() => ({ y: 1, o: 0 }));   // y: share of the way left to go (1 = waiting off to the right)
   // where they wait: 560 (Figma px) right of their place, as the how-it-works cards
-  const FROM = () => 560 * (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--s')) || 1);
+  // mobile (src/mobile.css, a swiped carousel): they simply rise 80 px from below instead
+  const mobile = window.matchMedia('(max-width: 767px)').matches;
+  const FROM = () => (mobile ? 80 : 560 * (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--s')) || 1));
   const paint = () => cards.forEach((c, i) => {
     const { y, o } = st[i];
-    c.style.translate = y > 0.0005 ? `${(y * FROM()).toFixed(1)}px 0` : '';
+    const d = (y * FROM()).toFixed(1);
+    c.style.translate = y > 0.0005 ? (mobile ? `0 ${d}px` : `${d}px 0`) : '';
     c.style.opacity = o >= 1 ? '' : o.toFixed(3);
   });
   paint();
@@ -65,6 +68,11 @@ export function initFeaturesReveal(section) {
       if (cardsTl) cardsTl.kill();
       cardsTl = gsap.timeline({ delay: 0.25 });
       st.forEach((s, i) => {
+        if (mobile) {   // all together: up from below, fast start, smooth slow-down
+          cardsTl.to(s, { y: 0, duration: 1.2, ease: 'power3.out', onUpdate: paint }, 0);
+          cardsTl.to(s, { o: 1, duration: 0.5, ease: 'power1.out', onUpdate: paint }, 0);
+          return;
+        }
         cardsTl.to(s, { y: 0, duration: 1.3, ease: 'power3.inOut', onUpdate: paint }, i * 0.07);
         cardsTl.to(s, { o: 1, duration: 0.4, ease: 'power1.out', onUpdate: paint }, i * 0.07);
       });
