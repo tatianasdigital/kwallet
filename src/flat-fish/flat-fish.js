@@ -30,6 +30,10 @@ var MOUTH = { x: 222, y: 1036 };    // mouth in artwork units
 var START = { x: 0, y: -820, r: -90 };
 
 function rnd(a, b) { return a + Math.random() * (b - a); }
+// phones: no line-boil filter (feTurbulence + displacement re-rasterises the whole
+// drawing 12 times a second, which made the page stutter there); the misregister stays
+var LITE = window.matchMedia('(max-width: 767px)').matches;
+function boilOn(el, f) { if (!LITE) el.setAttribute('filter', f); }
 function pick(arr) { return arr[(Math.random() * arr.length) | 0]; }
 
 /* ---- smooth intro: one continuous motion, no holds ----
@@ -128,7 +132,7 @@ function mount(stage, opts) {
       var boil = 'url(#kfBoil' + ((Math.random() * 3) | 0) + ')';
       eyeGroups[s].forEach(function (g) {
         g.setAttribute('transform', 'translate(' + dx.toFixed(2) + ' ' + dy.toFixed(2) + ')');
-        g.setAttribute('filter', boil);
+        boilOn(g, boil);
       });
     });
   }
@@ -153,7 +157,7 @@ function mount(stage, opts) {
       var dx = rnd(-2.2, 2.2), dy = rnd(-2.2, 2.2), a = rnd(-0.9, 0.9);
       if (Math.random() < 0.07) { dx *= 2.2; dy *= 2.2; a *= 2; }   // slipped drawing
       p.g.setAttribute('transform', 'translate(' + dx.toFixed(2) + ' ' + dy.toFixed(2) + ') rotate(' + a.toFixed(2) + ' ' + p.cx.toFixed(1) + ' ' + p.cy.toFixed(1) + ')');
-      p.g.setAttribute('filter', 'url(#kfBoil' + ((Math.random() * 3) | 0) + ')');
+      boilOn(p.g, 'url(#kfBoil' + ((Math.random() * 3) | 0) + ')');
     });
   }
   function resetParts() {
@@ -217,7 +221,7 @@ function mount(stage, opts) {
       b.x = b.x0 + Math.sin(b.phase + b.age * 0.55) * b.wob + rnd(-0.7, 0.7);
       var grow = Math.min(1, 0.45 + b.age * 0.14);
       var squash = 1 + (Math.random() < 0.2 ? rnd(-0.08, 0.08) : 0);
-      b.el.setAttribute('filter', 'url(#kfBoil' + ((Math.random() * 3) | 0) + ')');
+      boilOn(b.el, 'url(#kfBoil' + ((Math.random() * 3) | 0) + ')');
       b.el.setAttribute('transform', 'translate(' + b.x.toFixed(1) + ' ' + b.y.toFixed(1) + ') rotate(' + rnd(-4, 4).toFixed(1) + ') scale(' + (grow * squash).toFixed(3) + ' ' + (grow / squash).toFixed(3) + ')');
       if (b.age >= b.life || b.y < 40) b.popping = 1;
     }

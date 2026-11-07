@@ -160,7 +160,8 @@ document.documentElement.classList.remove('sp-intro-pending');   // start states
    CSS `translate` property. Sets the start state now, returns play(delay). */
 function riseIn(el) {
   const st = { y: 1, o: 0 };
-  const RISE = () => 160 * Math.max(1024, innerWidth) / 1920;
+  // 160 Figma px on desktop; 80 px on a phone
+  const RISE = () => (innerWidth < 768 ? 80 : 160 * Math.max(1024, innerWidth) / 1920);
   const paint = () => {
     el.style.translate = st.y > 0.0005 ? `0 ${(st.y * RISE()).toFixed(1)}px` : '';
     el.style.opacity = st.o >= 1 ? '' : st.o.toFixed(3);
@@ -179,18 +180,13 @@ function pageIntro(page, blocksSel, colSel) {
   const blocks = [...page.querySelectorAll(blocksSel)];
   const col = page.querySelector(colSel);
   const under = blocks.length ? createLineReveal(blocks[0].parentElement, { blocks }) : null;
-  const st = { y: 1, o: 0 };
-  const RISE = () => 160 * Math.max(1024, innerWidth) / 1920;
-  const paint = () => {
-    if (!col) return;
-    col.style.translate = st.y > 0.0005 ? `0 ${(st.y * RISE()).toFixed(1)}px` : '';
-    col.style.opacity = st.o >= 1 ? '' : st.o.toFixed(3);
-  };
-  paint();
+  // mobile (src/mobile.css): a column with display: contents has no box of its own,
+  // so its blocks rise one by one; the Delivery plate rises together with the title
+  const parts = !col ? [] : getComputedStyle(col).display === 'contents' ? [...col.children] : [col];
+  const plays = parts.map((el) => [riseIn(el), el.matches('.sp-shipping-card') ? 0 : 0.35]);
   return () => {
     under?.show();
-    gsap.to(st, { y: 0, duration: 1.4, ease: 'power3.out', delay: 0.35, onUpdate: paint });
-    gsap.to(st, { o: 1, duration: 0.7, ease: 'power1.out', delay: 0.35, onUpdate: paint });
+    plays.forEach(([play, delay]) => play(delay));
   };
 }
 

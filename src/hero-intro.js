@@ -36,10 +36,15 @@ export function initHeroIntro() {
   const stars = [...document.querySelectorAll('.decorative-star-top, .decorative-star-right, .decorative-star-left')];
   const marquee = document.querySelector('.product-benefits-marquee');
 
+  // mobile (src/mobile.css): the whole wordmark comes in from the right and stops
+  // in the middle (speeds up, then slows down smoothly) instead of rising
+  const mobile = window.matchMedia('(max-width: 767px)').matches;
+
   // start positions
-  if (wordmark) gsap.set(wordmark, { clipPath: 'inset(-30% -5% 0% -5%)' });   // letters rise out of the line under them
+  if (wordmark && mobile) gsap.set(wordmark, { x: () => innerWidth - wordmark.getBoundingClientRect().left + 10 });
+  else if (wordmark) gsap.set(wordmark, { clipPath: 'inset(-30% -5% 0% -5%)' });   // letters rise out of the line under them
   if (tagline) gsap.set(tagline, { clipPath: 'inset(-40% -10% 0% -10%)' });
-  gsap.set(letters, { yPercent: 115 });
+  if (!mobile) gsap.set(letters, { yPercent: 115 });
   gsap.set(taglineParts, { yPercent: 130 });
   if (header) gsap.set(header, { yPercent: -100, opacity: 0 });
   if (actions) gsap.set(actions, { y: 70, opacity: 0 });
@@ -60,11 +65,13 @@ export function initHeroIntro() {
     paused: true,
     onComplete: () => {
       gsap.set([wordmark, tagline].filter(Boolean), { clearProps: 'clipPath' });
+      if (mobile && wordmark) gsap.set(wordmark, { clearProps: 'transform' });
       gsap.set([...letters, ...taglineParts, header, actions, marquee].filter(Boolean), { clearProps: 'transform,opacity' });
     },
   });
   // 1. wordmark, letter by letter; the tagline a little later
-  tl.to(letters, { yPercent: 0, duration: 2.0, ease: EASE, stagger: 0.09 }, 0);
+  if (mobile) { if (wordmark) tl.to(wordmark, { x: 0, duration: 2.0, ease: EASE }, 0); }
+  else tl.to(letters, { yPercent: 0, duration: 2.0, ease: EASE, stagger: 0.09 }, 0);
   tl.to(taglineParts, { yPercent: 0, duration: 1.7, ease: EASE, stagger: 0.12 }, 0.85);
   // 2. header down, actions up — practically with the wordmark
   if (header) tl.to(header, { yPercent: 0, opacity: 1, duration: 1.7, ease: EASE }, 0.15);

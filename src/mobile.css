@@ -219,11 +219,18 @@
     height: calc(556 * var(--m) + 8px + 72px + 56px);
   }
   /* the binary water line: the desktop curve at 0.8 (a crest a little left of the middle) */
+  /* zoomed out 1.5× from the desktop scale 0.8 (so a whole crest and both troughs
+     are on screen); the crest stays a little left of the middle */
   .flat-design-section {
-    --wave-k: 0.8;
-    --wave-l: -540;
+    --wave-k: 0.5333;
+    --wave-l: -304.8;
     --wave-t: -13;
   }
+  /* performance (the dive used to stutter on phones): the scene's own grain stays,
+     but without its moving flicker layer, which made the whole masked scene repaint */
+  .grain--scene .grain-flicker { display: none; }
+  /* the 0/1 text keeps its size (16 curve units × 0.8) */
+  .binary-wave-text { font-size: 24px; }
   .decorative-binary-wave-text {
     left: calc(var(--wave-l) * var(--m));
     top: calc(var(--wave-t) * var(--m));
@@ -249,13 +256,16 @@
   /* the flounder (Figma 2859:6936): 389 × 349, 149 below the top */
   .flat-device-track { top: calc(149 * var(--m)); height: calc(349 * var(--m)); }
   .flat-device-illustration { width: calc(389 * var(--m)); height: calc(349 * var(--m)); }
-  /* seaweed: right = seaweed3, left = seaweed2 (Figma 2859:7008 / 7022) */
-  .seaweed--1 { display: none; }
+  /* seaweed (Figma 2884:6622 / 2884:6606, 108 × 418): one against the left edge of the
+     screen, one against the right edge; the desktop plants are hidden */
+  .seaweed--1,
+  .seaweed--2,
+  .seaweed--3 { display: none; }
   .seaweed { bottom: auto; }
-  .seaweed--3 { left: calc(263.42 * var(--m)); top: calc(181.76 * var(--m)); width: calc(279.11 * var(--m)); height: calc(423.76 * var(--m)); }
-  .seaweed--3 .seaweed-box { width: calc(212.04 * var(--m)); height: calc(392.01 * var(--m)); transform: rotate(169.63deg) scaleY(-1); }
-  .seaweed--2 { left: calc(-196.6 * var(--m)); top: calc(181.75 * var(--m)); width: calc(330 * var(--m)); height: calc(418.06 * var(--m)); }
-  .seaweed--2 .seaweed-box { width: calc(330 * var(--m)); height: calc(392 * var(--m)); transform: rotate(10.37deg); }
+  .seaweed.m-only { display: block; top: calc(181.75 * var(--m)); width: calc(108 * var(--m)); height: calc(418 * var(--m)); }
+  .seaweed--m-left { left: 0; }
+  .seaweed--m-right { left: auto; right: 0; }
+  .seaweed.m-only .seaweed-box { width: 100%; height: 100%; transform: none; }
   /* small fish: FishGroup3 (Figma 2859:6937) = the desktop group 3 at 0.681,
      a copy of it off to the right (2859:6968, added by src/mobile.js), one fish at the bottom (2859:7030) */
   .fish-group[data-group="1"],
@@ -297,7 +307,7 @@
   /* Figma 2864:7045: heading, a carousel of Tiles (310 wide, the middle one centred),
      pagination, then the device benefits as a list (the desktop device-benefits section) */
   .features-section { height: auto; padding-bottom: 0; }
-  .features-inner { height: auto; padding-top: 20px; }
+  .features-inner { height: auto; padding-top: 56px; }   /* 56 under the demo video */
   .features-star { display: none; }
   .features-heading { margin: 0 20px; width: auto; font-size: 36px; line-height: 1; }
   .features-section .h-scroll-viewport {
@@ -351,7 +361,7 @@
   .m-carousel-pages .is-current { color: var(--white); }
 
   /* device benefits → "Additional features" list (Figma 2864:7260) */
-  .device-benefits-section { height: auto; margin-top: 32px; padding: 20px 20px 20px; overflow: visible; }
+  .device-benefits-section { height: auto; margin-top: 32px; padding: 20px 20px 36px; overflow: visible; }
   .device-benefits-section > * { translate: none; }
   .benefits-orbit,
   .device-photo-container,
@@ -374,7 +384,7 @@
   /* ============================== HOW IT WORKS ============================ */
   /* Figma 2870:4527: badges joined by a line, text, picture 241 × 251; a native carousel */
   .how-it-works-section { height: auto; }
-  .how-it-works-container { height: auto; padding: 20px 0; }
+  .how-it-works-container { height: auto; padding: 20px 0 36px; }   /* + 20 of pricing = 56 */
   .how-it-works-section .section-heading { margin: 0 20px; font-size: 36px; }
   .how-it-works-section .h-scroll-viewport {
     margin-top: 20px;
@@ -388,18 +398,7 @@
   .transaction-steps-track { gap: calc(20 * var(--m)); padding: 0 20px; }
   .step { width: calc(241 * var(--m)); gap: 12px; scroll-snap-align: start; }
   .step-badge { padding: 4px 8px; border-radius: 27px; font-size: 12px; background: var(--black); }
-  .step-badge::after {
-    content: '';
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    width: calc(261 * var(--m) - 100%);
-    height: 1px;
-    background: var(--lines);
-    pointer-events: none;
-  }
-  .step:last-child .step-badge::after { width: calc(241 * var(--m) - 100%); }
-  .step.is-active .step-badge { border-color: var(--white); }
+  /* outlines + connector lines: drawn in JS as on desktop (src/mobile.js → initStepStrokes) */
   .step-description { width: auto; min-height: 66px; font-size: 20px; line-height: 1.1; }
   .step-image-container { margin-top: 8px; width: calc(241 * var(--m)); height: calc(251 * var(--m)); border-radius: 12px; }
   .step-fill-shape { border-radius: 12px; clip-path: inset(0 round 12px); }
@@ -413,7 +412,7 @@
 
   /* ================================= PRICING ============================== */
   /* Figma 2870:4554: heading, delivery line, three Tiles one under another */
-  .pricing-section { padding: 20px; }
+  .pricing-section { padding: 20px 20px 36px; }   /* + 20 of testimonials = 56 */
   .pricing-header { height: auto; width: auto; display: flex; flex-direction: column; gap: 20px; }
   .shipping-information { position: static; width: auto; display: flex; gap: 0.3em; flex-wrap: wrap; }
   .shipping-information p { font-size: 16px; line-height: 1.2; }
@@ -445,7 +444,7 @@
 
   /* ============================== TESTIMONIALS ============================ */
   /* Figma 2870:4819: "What people say", quote mark + quote, author, then the slider */
-  .testimonials-section { padding: 20px 16px; }
+  .testimonials-section { padding: 20px 16px 36px; }   /* + 20 of press = 56 */
   .testimonials-container { width: 100%; min-height: 0; }
   .decorative-quotation-mark { top: 37px; width: 40px; }
   .testimonial-content { margin-left: 0; width: auto; gap: 20px; }
@@ -462,7 +461,7 @@
 
   /* ================================== PRESS =============================== */
   /* Figma 2870:4873: heading, cards 241 wide in a row (swiped) */
-  .press-section { height: auto; padding: 20px 0; }
+  .press-section { height: auto; padding: 20px 0 56px; }   /* 56 above the footer */
   .press-illustration-container { display: none; }
   .press-container { position: static; }
   .press-container .section-heading { margin: 0 20px; width: calc(329 * var(--m)); }

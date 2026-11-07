@@ -15,6 +15,7 @@ const NS = 'http://www.w3.org/2000/svg';
 
 const rnd = (a, b) => a + Math.random() * (b - a);
 const pick = (arr) => arr[(Math.random() * arr.length) | 0];
+const LITE = window.matchMedia('(max-width: 767px)').matches;   // phones
 
 // the green cluster, inlined so its two stars can move separately
 const CLUSTER_SVG = `
@@ -86,7 +87,7 @@ function drawStar(s, tickN) {
   // inside the cluster SVG, CSS px are the SVG's own units
   s.el.style.transform =
     `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) rotate(${rot.toFixed(1)}deg) scale(${scale})`;
-  if (s.boil) s.el.style.filter = `url(#fsBoil${(Math.random() * 3) | 0})`;
+  if (s.boil && !LITE) s.el.style.filter = `url(#fsBoil${(Math.random() * 3) | 0})`;   // phones: no boil filter (performance)
 }
 
 /**

@@ -383,17 +383,23 @@ initSectionHeadings('.section-heading', { skip: '.features-heading, #hiw-heading
 }
 initSpecificationsModal({ lenis });   // "Specifications" links in the pricing cards → Technical Specifications panel
 initPress(document.querySelector('.press-section'));   // whole cards clickable, hover outline + link flicker + drawn underline
-initPressArt(document.querySelector('.press-section'));   // planets pop, then the ribbon fills in and streams
+if (!IS_MOBILE) initPressArt(document.querySelector('.press-section'));   // planets pop, then the ribbon fills in and streams (hidden on mobile)
 initPricing(document.querySelector('.pricing-section'));   // heading + shipping reveal, badge stop-motion, title flicker, hover outline
 initBinaryWave(document.querySelector('.flat-design-section .decorative-binary-wave-text'));
 initHeroIntro();   // hero entrance: wordmark, tagline, header, actions, device, stars, marquee
 initAboutStopMotion(document.querySelector('.about-section'));
 initAboutReveal(document.querySelector('.about-section'));   // heading + list rise, stars / planet pop
-initAboutRibbon(document.querySelector('.about-section'));   // orbit ribbon fills in from its source, then streams
+if (!IS_MOBILE) initAboutRibbon(document.querySelector('.about-section'));   // orbit ribbon fills in from its source, then streams (hidden on mobile)
 initHeroStars(document.querySelector('.hero-content'));
 initSceneArtwork(document.querySelector('.flat-design-section'));
 if (!IS_MOBILE) initDeviceBenefits(document.querySelector('.device-benefits-section'));   // 3D model rises + floats, notes, orbit (mobile: a plain list, src/mobile.css)
 initFlatSea(document.querySelector('.flat-design-section'));   // seaweed sway + fish groups (start after the flounder's bubbles)
+// blocks touch scrolling for `ms` (mobile auto-glide to the flounder)
+function holdTouch(ms) {
+  const block = (e) => { if (e.cancelable) e.preventDefault(); };
+  window.addEventListener('touchmove', block, { passive: false });
+  setTimeout(() => window.removeEventListener('touchmove', block), ms);
+}
 initWaterDive({
   section: document.querySelector('.flat-design-section'),
   // mobile: the hero device stays in the hero; the one in about dives
@@ -409,6 +415,9 @@ initWaterDive({
   // automatic scroll down to the fish once the device dives (wheel / touch locked meanwhile)
   scrollTo: (top, opts) => {
     if (linkGoal !== null) return;             // a link glides past (to #pricing …): keep going
+    // phones: the finger is held off while the page glides (otherwise native touch
+    // scrolling and the glide fight each other and the page judders)
+    if (IS_MOBILE) holdTouch(((opts?.duration || 1.5) + 0.3) * 1000);
     if (lenis) lenis.scrollTo(top, { ...opts, lock: true, force: true });
     else window.scrollTo({ top, behavior: 'smooth' });
   },
@@ -472,7 +481,18 @@ import('./kampela-3d/hero-device-3d.js')
     };
     const redraw = () => { try { stage.jumpTo(progress()); } catch { /* not loaded yet */ } };
     const host = document.querySelector('.hero-device-visual');
-    if (host) new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) redraw(); }).observe(host);
+    // phones: the hero device stays in the hero, so while it is off screen its frames
+    // are not drawn at all (they used to be decoded and drawn all the way down to the
+    // dive, which made the page stutter there); it is redrawn when it comes back
+    let heroOnScreen = true;
+    if (IS_MOBILE && typeof stage.setProgress === 'function') {
+      const set = stage.setProgress.bind(stage);
+      stage.setProgress = (p) => { if (heroOnScreen) set(p); };
+    }
+    if (host) new IntersectionObserver((es) => {
+      heroOnScreen = es.some((e) => e.isIntersecting);
+      if (heroOnScreen) redraw();
+    }).observe(host);
     host?.querySelector('canvas')?.addEventListener('webglcontextrestored', () => setTimeout(redraw, 50));
     window.addEventListener('kampela:scroll-goal', () => setTimeout(redraw, 2600));
   })

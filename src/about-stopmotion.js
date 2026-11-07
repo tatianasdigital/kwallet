@@ -14,6 +14,7 @@
  */
 import { isPaused } from './site-pause.js';
 
+const LITE = window.matchMedia('(max-width: 767px)').matches;   // phones
 const FPS = 12;
 const TICK = 1000 / FPS;
 const NS = 'http://www.w3.org/2000/svg';
@@ -92,7 +93,8 @@ function draw(s, tickN) {
   s.el.style.transform =
     `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) rotate(${rot.toFixed(2)}deg) scale(${scale})`;
   if (s.boil) {
-    s.el.style.filter = `url(#asBoil${(Math.random() * 3) | 0})`;
+    // phones: no boil filter (performance), only the misregister
+    if (!LITE) s.el.style.filter = `url(#asBoil${(Math.random() * 3) | 0})`;
   } else if (s.squash) {
     // big shapes: no filter (too heavy for full-screen fills) — a tiny uneven
     // stretch per drawing gives the same "redrawn by hand" wobble

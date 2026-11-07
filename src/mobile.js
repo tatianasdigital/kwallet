@@ -16,6 +16,7 @@
 import { gsap } from 'gsap';
 import { createStepFill } from './step-fill.js';
 import { createLineReveal } from './heading-reveal.js';
+import { drawnOutline, drawnLine } from './drawn-stroke.js';
 
 export const MOBILE_QUERY = '(max-width: 767px)';
 export const isMobile = () => window.matchMedia(MOBILE_QUERY).matches;
@@ -98,24 +99,76 @@ function watchCentre(scroller, items, onChange) {
 function initFeaturesCarousel() {
   const section = document.querySelector('.features-section');
   const scroller = section?.querySelector('.h-scroll-viewport');
+  const track = section?.querySelector('.feature-cards-track');
   const cards = section ? [...section.querySelectorAll('.feature-card')] : [];
   const pages = section ? [...section.querySelectorAll('.m-carousel-pages span')] : [];
-  if (!scroller || !cards.length) return;
-  // start with the first card in the middle
-  const centre = (i) => {
-    const c = cards[i];
-    scroller.scrollLeft = c.offsetLeft + c.offsetWidth / 2 - scroller.clientWidth / 2;
-  };
-  centre(0);
-  // the middle card plays its illustration + title flicker while the section is on screen
+  if (!scroller || !track || !cards.length) return;
+  const n = cards.length;
+  const MID = Math.floor(n / 2);
+  const left = (c) => c.offsetLeft + c.offsetWidth / 2 - scroller.clientWidth / 2;
+  /* endless both ways: the cards are kept in a ring — when a swipe ends, cards
+     are moved from one end of the track to the other so the one in the middle of
+     the screen is again the middle one of the track (the same elements are moved,
+     so their animations stay attached), and the scroll is shifted by the same
+     amount, so nothing visibly jumps */
+  const order = () => [...track.querySelectorAll('.feature-card')];
+  const pitch = () => { const o = order(); return n > 1 ? o[1].offsetLeft - o[0].offsetLeft : 0; };
+  // start: card 01 in the middle, two cards on each side
+  for (let k = 0; k < MID; k++) track.prepend(order()[n - 1]);
+  scroller.scrollLeft = left(cards[0]);
+
   let inView = false, active = 0;
   const fire = (i, type) => cards[i]?.dispatchEvent(new CustomEvent(type));
-  const w = watchCentre(scroller, cards, (i, prev) => {
+  const centred = () => {
+    const box = scroller.getBoundingClientRect();
+    const mid = box.left + box.width / 2;
+    let best = 0, bestD = Infinity;
+    order().forEach((el, i) => {
+      const r = el.getBoundingClientRect();
+      const d = Math.abs(r.left + r.width / 2 - mid);
+      if (d < bestD) { bestD = d; best = i; }
+    });
+    return best;   // position in the track
+  };
+  const update = () => {
+    const i = cards.indexOf(order()[centred()]);
+    if (i === active) return;
+    const prev = active;
     active = i;
     pages.forEach((p, k) => p.classList.toggle('is-current', k === i));
-    if (prev >= 0) fire(prev, 'kampela:deactivate');
+    fire(prev, 'kampela:deactivate');
     if (inView) fire(i, 'kampela:activate');
-  });
+  };
+  pages.forEach((p, k) => p.classList.toggle('is-current', k === 0));
+  let touching = false, idle = 0;
+  scroller.addEventListener('touchstart', () => { touching = true; }, { passive: true });
+  scroller.addEventListener('touchend', () => { touching = false; }, { passive: true });
+  scroller.addEventListener('touchcancel', () => { touching = false; }, { passive: true });
+  // only once the carousel has come to rest exactly on a card (not mid-swipe / mid-snap)
+  const atRest = () => {
+    const box = scroller.getBoundingClientRect();
+    const r = order()[centred()].getBoundingClientRect();
+    return Math.abs(r.left + r.width / 2 - (box.left + box.width / 2)) < 2;
+  };
+  const recentre = () => {
+    if (touching || !atRest()) { clearTimeout(idle); idle = setTimeout(recentre, 150); return; }
+    let pos = centred();
+    if (pos === MID) return;
+    const el = order()[pos];
+    while (pos > MID) { track.append(order()[0]); pos--; }
+    while (pos < MID) { track.prepend(order()[n - 1]); pos++; }
+    // put the same card back in the middle (absolute, so a browser re-snap after
+    // the DOM change cannot add to it)
+    scroller.scrollLeft = left(el);
+  };
+  let raf = 0;
+  scroller.addEventListener('scroll', () => {
+    if (!raf) raf = requestAnimationFrame(() => { raf = 0; update(); });
+    clearTimeout(idle);
+    idle = setTimeout(recentre, 200);   // the swipe (and its snap) is over
+  }, { passive: true });
+  window.addEventListener('resize', () => { scroller.scrollLeft = left(cards[active]); });
+
   new IntersectionObserver(([e]) => {
     inView = e.isIntersecting;
     fire(active, inView ? 'kampela:activate' : 'kampela:deactivate');
@@ -123,13 +176,99 @@ function initFeaturesCarousel() {
   // the illustrations are swapped for animated SVGs a bit later (src/feature-art.js):
   // re-send the activation once they are in
   section.addEventListener('feature-art:ready', () => { if (inView) fire(active, 'kampela:activate'); });
+  // pagination: the shortest way round to the card
   pages.forEach((p, i) => p.addEventListener('click', () => {
-    const c = cards[i];
-    scroller.scrollTo({ left: c.offsetLeft + c.offsetWidth / 2 - scroller.clientWidth / 2, behavior: 'smooth' });
+    recentre();
+    let d = i - active;
+    if (d > n / 2) d -= n;
+    if (d < -n / 2) d += n;
+    scroller.scrollTo({ left: scroller.scrollLeft + d * pitch(), behavior: 'smooth' });
   }));
-  return w;
 }
 
+/* Badges and the lines between them, drawn as on desktop (src/how-it-works.js):
+   every badge has a grey "boiling" outline; on step k its outline is white and
+   the line to the next badge is white for 80 %, grey after; lines behind it are
+   grey, lines ahead are not drawn. Going one step on: the rest of the line fills
+   in white, then the next badge lights up from the point the line touches. */
+const GREY_OUTLINE = '#333333';
+const GREY_LINE = '#676767';
+const LINE_LEAD = 0.8;
+const FILL_TICKS = 18;
+function initStepStrokes(steps) {
+  const n = steps.length;
+  steps[0].closest('section')?.classList.add('hiw-drawn');
+  const strokes = steps.map((step, i) => {
+    const badge = step.querySelector('.step-badge');
+    drawnOutline(badge, { color: GREY_OUTLINE, ticks: 6 }).show();
+    const outline = drawnOutline(badge, { color: '#fff', ticks: 6, from: i > 0 ? 'left' : undefined });
+    let line = null;
+    if (i < n - 1) {
+      const conn = document.createElement('span');
+      conn.className = 'step-connector';
+      conn.setAttribute('aria-hidden', 'true');
+      step.append(conn);
+      const next = steps[i + 1].querySelector('.step-badge');
+      // from the right edge of this badge to the left edge of the next one
+      const place = () => {
+        const x0 = badge.offsetLeft + badge.offsetWidth;
+        const x1 = steps[i + 1].offsetLeft - step.offsetLeft + next.offsetLeft;
+        conn.style.left = `${x0}px`;
+        conn.style.top = `${badge.offsetTop + badge.offsetHeight / 2}px`;
+        conn.style.width = `${Math.max(0, x1 - x0)}px`;
+        line?.refresh();
+      };
+      place();
+      line = drawnLine(conn, { color: '#fff', baseColor: GREY_LINE, ticks: 9 });
+      const ro = new ResizeObserver(place);
+      ro.observe(step);
+      ro.observe(badge, { box: 'border-box' });
+      ro.observe(next, { box: 'border-box' });
+      document.fonts?.ready.then(place);
+    }
+    return { outline, line };
+  });
+  let gen = 0, current = -1;
+  const settle = (k) => {
+    gen++;
+    strokes.forEach((st, i) => {
+      if (i === k) st.outline.show(); else st.outline.hide();
+      const l = st.line;
+      if (!l) return;
+      if (i < k) { l.setColor(GREY_LINE); l.show(); }
+      else if (i === k) { l.setColor('#fff'); l.show(); l.setFill(LINE_LEAD); }
+      else l.hide();
+    });
+  };
+  const advance = (from, to) => {
+    const l = strokes[from].line;
+    if (!l) { settle(to); return; }
+    const g = ++gen;
+    strokes.forEach((st, i) => {
+      if (i !== from && i !== to) st.outline.hide();
+      if (!st.line || i === from) return;
+      if (i < from) { st.line.setColor(GREY_LINE); st.line.show(); } else st.line.hide();
+    });
+    strokes[from].outline.show();
+    l.setColor('#fff');
+    l.show();
+    l.setFill(1, FILL_TICKS);
+    l.whenFull(() => l.whenFilled(() => {
+      if (g !== gen) return;
+      const o = strokes[to].outline;
+      o.show();
+      o.whenFull(() => { if (g === gen) settle(to); });
+    }));
+  };
+  return {
+    go(k) {
+      if (k === current) return;
+      const from = current;
+      current = k;
+      if (from >= 0 && k === from + 1) advance(from, k); else settle(k);
+    },
+  };
+}
 
 /* How it works: the step at the left of the carousel is the active one — its
    photo gets the #161616 fill growing from the centre (src/step-fill.js), as on desktop.
@@ -140,16 +279,17 @@ function initStepsCarousel() {
   const steps = section ? [...section.querySelectorAll('.step')] : [];
   if (!scroller || !steps.length) return;
   const fills = steps.map((st) => createStepFill(st.querySelector('.step-image-container')));
+  const strokes = initStepStrokes(steps);
   let inView = false, active = 0;
   watchCentre(scroller, steps, (i, prev) => {
     active = i;
     if (prev >= 0) fills[prev].hide();
-    if (inView) fills[i].show();
+    if (inView) { fills[i].show(); strokes.go(i); }
   });
   new IntersectionObserver(([e]) => {
     if (e.isIntersecting === inView) return;
     inView = e.isIntersecting;
-    if (inView) fills[active].show(); else fills[active].hide();
+    if (inView) { fills[active].show(); strokes.go(active); } else fills[active].hide();
   }, { threshold: 0.3 }).observe(scroller);
   // the heading appears line by line, as the other section headings
   const heading = section.querySelector('.section-heading');

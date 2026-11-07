@@ -285,8 +285,6 @@ export function initCardTitleFlicker(cards, titleSelector) {
     card.addEventListener('pointerleave', () => { if (!card.matches(':focus-visible, :has(:focus-visible)')) stop(title); });
     card.addEventListener('focusin', (e) => { if (e.target.matches(':focus-visible')) start(title); });   // keyboard only, not a click
     card.addEventListener('focusout', () => { if (!card.matches(':hover')) stop(title); });
-    // mobile carousel (src/mobile.js): the card in the middle of the screen flickers
-    card.addEventListener('kampela:activate', () => { if (!warmed) { warmed = true; warmUpFaces(); } start(title); });
-    card.addEventListener('kampela:deactivate', () => stop(title));
+    // mobile carousel (src/mobile.js): no title flicker there, only the illustration plays
   });
 }
